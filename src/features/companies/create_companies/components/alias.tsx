@@ -32,14 +32,16 @@ const AliasInput = () => {
             type="text"
             value={alias}
             onChange={(e) => handleAliasChange(index, e.target.value)}
-            className="my-2 w-23"
+            className="my-2 mr-2 w-23"
           />
+          {index !== 0 && (
           <Button
             onClick={() => handleRemoveAlias(index)}
             className="ml-2 my-1 mx-2 bg-red-500 text-white rounded hover:bg-red-700"
           >
             Eliminar
           </Button>
+          )}
         </div>
       ))}
       {aliases.length < 3 && (

@@ -58,7 +58,6 @@ export function InputForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-      {form.formState.isDirty && "dirty"}
         <FormField>
             <OrganizationInput></OrganizationInput>
         </FormField>
