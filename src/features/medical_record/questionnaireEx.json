@@ -3,7 +3,9 @@
   "title": "Patient information",
   "url": "http://hl7.org/fhir/Questionnaire/patient_information02",
   "status": "active",
-  "subjectType": ["Patient"],
+  "subjectType": [
+    "Patient"
+  ],
   "date": "2024-04-26T13:28:17-05:00",
   "item": [
     {
@@ -35,6 +37,30 @@
       "linkId": "name",
       "text": "Nombre",
       "type": "string"
+    },
+    {
+      "linkId": "1",
+      "text": "Contact Information",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "1.1",
+          "text": "Phone",
+          "type": "string"
+        },
+        {
+          "linkId": "1.2",
+          "text": "emails",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "1.2.1",
+              "text": "email1",
+              "type": "string"
+          }
+        ]
+        }
+      ]
     }
   ]
 }

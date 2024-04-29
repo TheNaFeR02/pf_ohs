@@ -16,7 +16,7 @@ const baseItem = z.object({
   
 })
 
-type Item = z.infer<typeof baseItem> & {
+export type Item = z.infer<typeof baseItem> & {
   item?: Item[]
 }
 
