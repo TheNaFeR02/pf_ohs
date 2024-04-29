@@ -6,6 +6,14 @@ const baseItem = z.object({
   linkId: z.string(),
   text: z.string(),
   type: z.string(),
+  required: z.boolean().optional(),
+  answerOption: z.array(z.object({
+    valueCoding: z.object({
+      code: z.string(),
+      display: z.string()
+    })
+  })).optional()
+  
 })
 
 type Item = z.infer<typeof baseItem> & {
@@ -14,7 +22,7 @@ type Item = z.infer<typeof baseItem> & {
 
 const itemSchema: z.ZodType<Item> = baseItem.extend({
   item: z.lazy(() => itemSchema.array()).optional()
-}).strict()
+})
 
 export const questionnarieSchema = z.object({
   resourceType: z.string(),
