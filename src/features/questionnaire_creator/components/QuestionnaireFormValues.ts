@@ -5,7 +5,7 @@ interface QuestionnaireFormValues {
   status: string;
   subjectType: string[];
   date: Date;
-  item: {
+  item?: {
     linkId: string;
     text: string;
     type: string;

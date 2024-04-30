@@ -4,16 +4,6 @@ import React, { FunctionComponent } from "react";
 import useQuestionnaireFormField from "./useQuestionnaireFormField";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-} from "@radix-ui/react-select";
-import useItemsFormField from "./useItemsFormField";
 
 interface QuestionnaireFormFieldProps {
   prefix?: string;
@@ -29,18 +19,10 @@ const QuestionnaireFormField: FunctionComponent<
     statusInputPath,
     subjectTypeInputPath,
     dateInputPath,
-    itemInputPath,
-    itemLinkIdInputPath,
-    itemTextInputPath,
-    itemTypeInputPath,
-    itemAnswerOptionInputPath,
-    itemValueCodingCodeInputPath,
-    itemValueCodingDisplayInputPath,
-    fields,
+    itemFields,
     register,
     addNewItem,
     removeItem,
-    addNewAnswerOption,
   } = useQuestionnaireFormField(prefix);
 
   return (
@@ -51,32 +33,15 @@ const QuestionnaireFormField: FunctionComponent<
       <Input {...register(statusInputPath)} placeholder="Status" />
       <Input {...register(subjectTypeInputPath)} placeholder="Subject Type" />
       <Input {...register(dateInputPath)} placeholder="Date" />
-      <Button onClick={addNewItem}>Add Item</Button>
-      {fields.map((item, index) => (
+      {itemFields.map((item, index) => (
         <div key={item.id}>
-          {/* {fields.map((field, index) => (
-            <div key={field.id} className="flex flex-row space-x-4">
-              <Button variant="destructive" onClick={() => removeItem(index)}>
-                -
-              </Button>
-              <ItemsFormField prefix={`${prefix}item.${index}.`} />
-            </div>
-          ))} */}
+          <Button variant="destructive" onClick={() => removeItem(index)}>
+            - Item
+          </Button>
           <ItemsFormField prefix={`${prefix}item.${index}.`} />
-          {item.answerOption?.map((answerOption, answerOptionIndex) => (
-            <div key={answerOptionIndex}>
-              <Input
-                {...register(itemValueCodingCodeInputPath)}
-                placeholder="Code"
-              />
-              <Input
-                {...register(itemValueCodingDisplayInputPath)}
-                placeholder="Display"
-              />
-            </div>
-          ))}
         </div>
       ))}
+      <Button onClick={addNewItem}>+ Item</Button>
     </div>
   );
 };
@@ -87,36 +52,90 @@ interface ItemsFormFieldProps {
   prefix?: string;
 }
 
+// Nota: Añadir la opción de agregar y eliminar answerOptions
+
 const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
   prefix = "",
 }) => {
   const {
-    fields,
+    itemFields,
+    answerOptionFields,
     register,
     addNewItem,
     removeItem,
-    linkIdInputPath,
-    textInputPath,
-    typeInputPath,
-  } = useItemsFormField(prefix);
+    addNewAnswerOption,
+    removeAnswerOption,
+    itemLinkIdInputPath,
+    itemTextInputPath,
+    itemTypeInputPath,
+    watch,
+  } = useQuestionnaireFormField(prefix);
+
+  const watchType = watch(itemTypeInputPath);
 
   return (
     <div>
+      <h1 className="text-2xl font-bold">{prefix}</h1>
       <div className="space-y-2">
-        <Input {...register(linkIdInputPath)} placeholder="linkId" />
-        <Input {...register(textInputPath)} placeholder="text" />
-        <Input {...register(typeInputPath)} placeholder="Type" />
+        <Input {...register(itemLinkIdInputPath)} placeholder="linkId" />
+        <Input {...register(itemTextInputPath)} placeholder="text" />
+        <Input {...register(itemTypeInputPath)} placeholder="Type" />
 
-        <Button onClick={addNewItem}>+</Button>
+        {watchType === "choice" && (
+          <div className="flex flex-row space-x-4">
+            <Button onClick={() => addNewAnswerOption(1)}>+ Option</Button>
+            {answerOptionFields.map((field, index) => (
+              <div key={field.id}>
+            <Button variant="destructive" onClick={() => removeAnswerOption(index)}>- Option</Button>
+                <AnswerOptionsFormField 
+                  prefix={`${prefix}answerOption.${index}.`}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+        {watchType === "group" && (
+          <div className="flex flex-row space-x-4">
+            <Button onClick={() => addNewItem()}>+ Item</Button>
+            {itemFields.map((field, index) => (
+              <div key={field.id}>
+                <Button variant="destructive" onClick={() => removeItem(index)}>
+                  - .item
+                </Button>
+                <ItemsFormField prefix={`${prefix}item.${index}.`} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-      {fields.map((field, index) => (
-        <div key={field.id} className="flex flex-row space-x-4">
-          <Button variant="destructive" onClick={() => removeItem(index)}>
-            -
-          </Button>
-          <ItemsFormField prefix={`${prefix}item.${index}.`} />
-        </div>
-      ))}
+    </div>
+  );
+};
+
+interface AnswerOptionsFormFieldProps {
+  prefix?: string;
+}
+
+const AnswerOptionsFormField: FunctionComponent<
+  AnswerOptionsFormFieldProps
+> = ({ prefix = "" }) => {
+  const {
+    register,
+    itemValueCodingCodeInputPath,
+    itemValueCodingDisplayInputPath,
+  } = useQuestionnaireFormField(prefix);
+
+  return (
+    <div>
+        <h1 className="text-2xl font-bold">{prefix}</h1>
+        
+      <div className="space-y-2">
+        <Input {...register(itemValueCodingCodeInputPath)} placeholder="Code" />
+        <Input
+          {...register(itemValueCodingDisplayInputPath)}
+          placeholder="Display"
+        />
+      </div>
     </div>
   );
 };
