@@ -1,201 +1,270 @@
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useFieldArray, useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { Button } from "@/components/ui/button"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { toast } from "@/components/ui/use-toast"
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from "@/components/ui/card";
 
+import { Organization, OrganizationSchema } from "@/features/companies/types/organization"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-const ContactInput = () => {
-  const [contacts, setContacts] = useState([{ id: 1 }]);
+export function InputForm() {
 
-  const addContact = () => {
-    const newId = contacts.length + 1;
-    setContacts([...contacts, { id: newId }]);
-  };
+    const form = useForm<z.infer<typeof OrganizationSchema>>({
+        resolver: zodResolver(OrganizationSchema),
+        defaultValues: {
+                resourceType: "",
+                identifier: [],
+                active: false,
+                name: "",
+                alias: [],
+                contact: [
+                    {
+                        telecom: {
+                            system: "",
+                            value: "",
+                            use: "",
+                        },
+                        name: {
+                            use: "",
+                            text: "",
+                            family: "",
+                            given: [],
+                            prefix: [],
+                        },
+                        address: {
+                            use: "",
+                            line: [],
+                            city: "",
+                            postalCode: "",
+                            country: "",
+                        },
+                    },
+                ],
+            },
+    })
+    const { control } = form;
 
-  const removeContact = (idToRemove: number) => {
-    setContacts(contacts.filter(contact => contact.id !== idToRemove));
-  };
-
-  const [positionsystem, setPositionsystem] = React.useState("bottom")
-  const [positionusetypetel, setPositionusetypetel] = React.useState("bottom")
-  const [positionusetypedir, setPositionusetypedir] = React.useState("bottom")
-  const [positionusetypename, setPositionusetypename] = React.useState("bottom")
-
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "contact",
+      });
 
   return (
     <Card className="my-5">
-      <CardHeader>
+        <CardHeader>
         <CardTitle>Contacto</CardTitle>
         <CardDescription>
           Ingrese la información de contacto de la organización
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        {contacts.map((contact, index) => (
-          <div key={contact.id}>
-            <Label htmlFor={`contact-${contact.id}-telecom`} className="my-2 mr-1">
-              Telecom
-            </Label>
-            <div className="flex flex-row mx-2 my-2">
-            <DropdownMenu key={`contact-${contact.id}-system`} >
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">Seleccionar Sistema</Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" >
-                    <DropdownMenuRadioGroup value={positionsystem} onValueChange={setPositionsystem} >
-                      <DropdownMenuRadioItem value="phone">Teléfono</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="fax">Fax</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="email">Email</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="pager">Buscapersonar - Pager</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="url">URL</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="sms">Sms</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="other">Otro</DropdownMenuRadioItem>
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              <Input
-                id={`contact-${contact.id}-numero`}
-                placeholder="Numero"
-                type="text"
-                className="ml-10 mr-10"
-              />
-              <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">Seleccionar Uso</Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" >
-                    <DropdownMenuRadioGroup value={positionusetypetel} onValueChange={setPositionusetypetel} >
-                      <DropdownMenuRadioItem value="home">Casa</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="work">Trabajo</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="temp">Temporal</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="old">Viejo</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="billing">Facturación</DropdownMenuRadioItem>
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
-            <Label htmlFor={`contact-${contact.id}-direccion`} className="my-2 mr-1">
-              Dirección
-            </Label>
-            <div className="flex flex-row mx-2 my-2">
-            <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">Seleccionar Uso</Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" >
-                    <DropdownMenuRadioGroup value={positionusetypedir} onValueChange={setPositionusetypedir} >
-                      <DropdownMenuRadioItem value="home">Casa</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="work">Trabajo</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="temp">Temporal</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="old">Viejo</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="billing">Facturación</DropdownMenuRadioItem>
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              <Input
-                id={`contact-${contact.id}-direccion`}
-                placeholder="Dirección"
-                type="text"
-                className="ml-5 mr-5"
-                />
-              <Input
-                id={`contact-${contact.id}-ciudad`}
-                placeholder="Ciudad"
-                type="text"
-                className="mr-5"
-                />
-              <Input
-                id={`contact-${contact.id}-codigo-postal`}
-                placeholder="Codigo postal"
-                type="text"
-                className="mr-5"
-                />
-              <Input
-                id={`contact-${contact.id}-pais`}
-                placeholder="País"
-                type="text"
-                className=""
-                />
-            </div>
-            <Label htmlFor={`contact-${contact.id}-direccion`} className="my-2 mr-1">
-              Nombre Persona
-            </Label>
-            <div className="flex flex-row mx-2 my-2">
-            <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">Seleccionar Uso</Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" >
-                    <DropdownMenuRadioGroup value={positionusetypename} onValueChange={setPositionusetypename} >
-                      <DropdownMenuRadioItem value="usual">Usual</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="official">Oficial</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="temp">Temporal</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="nickname">Apodo</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="anonymous">Anonimo</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="old">Viejo</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="maiden">Doncella</DropdownMenuRadioItem>
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              <Input
-                id={`contact-${contact.id}-fullname`}
-                placeholder="Nombre"
-                type="text"
-                className="ml-5 mr-5"
-                />
-              <Input
-                id={`contact-${contact.id}-surname`}
-                placeholder="Apellido"
-                type="text"
-                className="mr-5"
-                />
-              <Input
-                id={`contact-${contact.id}-given`}
-                placeholder="Segundo nombre"
-                type="text"
-                className="mr-5"
-                />
-              <Input
-                id={`contact-${contact.id}-prefix`}
-                placeholder="Prefijo"
-                type="text"
-                className=""
-                />
-            </div>
-            {index !== 0 && (
-              <Button onClick={() => removeContact(contact.id) } className="ml-2 my-1 mx-2 bg-red-500 text-white rounded hover:bg-red-700">
-                Eliminar contacto
-              </Button>
-            )}
-          </div>
-          
-        ))}
-        {contacts.length < 3 && (
-        <Button onClick={addContact} className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-4 rounded mt-2" >
-          Agregar otro contacto
-        </Button>
-        )}
-      </CardContent>
+        <CardContent>
+            {fields.map((field, index) => (
+                <div key={field.id}>
+                    <FormLabel>Telecom</FormLabel>
+                    <div className="flex flex-row">
+                        <FormField
+                        control={form.control}
+                        name={`contact.${index}.telecom.system`}
+                        render={({ field }) => (
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl className="w-50 mr-5">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccionar Sistema" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                    <SelectItem value="phone">Teléfono</SelectItem>
+                                    <SelectItem value="fax">Fax</SelectItem>
+                                    <SelectItem value="email">Email</SelectItem>
+                                    <SelectItem value="pager">Buscapersonas - Pager</SelectItem>
+                                    <SelectItem value="url">Url</SelectItem>
+                                    <SelectItem value="sms">Sms</SelectItem>
+                                    <SelectItem value="other">Otro</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                        )}  
+                        /> 
+                        <FormField
+                            control={form.control}
+                            name={`contact.${index}.telecom.value`}
+                            render={({ field }) => (
+                                <FormControl>
+                                    <Input placeholder="Numero" type="text" {...field}/>
+                                </FormControl>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name={`contact.${index}.telecom.system`}
+                            render={({ field }) => (
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl className="w-50 ml-5">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccionar Uso" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                    <SelectItem value="home">Casa</SelectItem>
+                                    <SelectItem value="work">Trabajo</SelectItem>
+                                    <SelectItem value="temp">Temporal</SelectItem>
+                                    <SelectItem value="old">Viejo</SelectItem>
+                                    <SelectItem value="billing">Facturación</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                    </div>
+                    <FormLabel>Dirección</FormLabel>
+                    <div className="flex flex-row">
+                        <FormField
+                            control={form.control}
+                            name={`contact.${index}.address.use`}
+                            render={({ field }) => (
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl className="w-50 mr-5">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccionar Uso" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                    <SelectItem value="home">Casa</SelectItem>
+                                    <SelectItem value="work">Trabajo</SelectItem>
+                                    <SelectItem value="temp">Temporal</SelectItem>
+                                    <SelectItem value="old">Viejo</SelectItem>
+                                    <SelectItem value="billing">Facturación</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name={`contact.${index}.address.line`}
+                            render={({ field }) => (
+                                <FormControl>
+                                    <Input placeholder="Dirección" type="text" className="mx-5"{...field}/>
+                                </FormControl>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name={`contact.${index}.address.city`}
+                            render={({ field }) => (
+                                <FormControl>
+                                    <Input placeholder="Ciudad" type="text" className="mx-5" {...field}/>
+                                </FormControl>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name={`contact.${index}.address.postalCode`}
+                            render={({ field }) => (
+                                <FormControl>
+                                    <Input placeholder="Codigo postal" type="text"  className="mx-5" {...field}/>
+                                </FormControl>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name={`contact.${index}.address.country`}
+                            render={({ field }) => (
+                                <FormControl>
+                                    <Input placeholder="País" type="text" {...field}/>
+                                </FormControl>
+                            )}
+                        />
+                    </div>
+                    <FormLabel>Nombre Persona</FormLabel>
+                    <div className="flex flex-row mb-5">
+                            <FormField
+                                control={form.control}
+                                name={`contact.${index}.name.use`}
+                                render={({ field }) => (
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl className="w-50 mr-5">
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Seleccionar Uso" />
+                                        </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                        <SelectItem value="usual">Usual</SelectItem>
+                                        <SelectItem value="official">Oficial</SelectItem>
+                                        <SelectItem value="temp">Temporal</SelectItem>
+                                        <SelectItem value="nickname">Apodo</SelectItem>
+                                        <SelectItem value="anonymous">Anonimo</SelectItem>
+                                        <SelectItem value="old">Viejo</SelectItem>
+                                        <SelectItem value="maiden">Doncella</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name={`contact.${index}.name.text`}
+                                render={({ field }) => (
+                                    <FormControl>
+                                        <Input placeholder="Nombre" type="text" className="mx-5" {...field}/>
+                                    </FormControl>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name={`contact.${index}.name.family`}
+                                render={({ field }) => (
+                                    <FormControl>
+                                        <Input placeholder="Apellido" type="text" className="mx-5" {...field}/>
+                                    </FormControl>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name={`contact.${index}.name.given`}
+                                render={({ field }) => (
+                                    <FormControl>
+                                        <Input placeholder="Segundo nombre" type="text" className="mx-5" {...field}/>
+                                    </FormControl>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name={`contact.${index}.name.prefix`}
+                                render={({ field }) => (
+                                    <FormControl>
+                                        <Input placeholder="Prefijo" type="text" {...field}/>
+                                    </FormControl>
+                                )}
+                            />
+                    </div>
+                    {index > 0 && (
+                        <Button onClick={() => remove(index)} className="ml-2 my-1 mx-2 bg-red-500 text-white rounded hover:bg-red-700">Eliminar Contacto</Button>
+                    )}
+                </div>
+            ))}
+            <Button onClick={() => append({})} className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-4 rounded mt-2">Añadir Contacto</Button>
+        </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default ContactInput;
+export default InputForm;

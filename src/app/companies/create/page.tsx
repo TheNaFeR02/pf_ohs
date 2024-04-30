@@ -1,11 +1,11 @@
-import OrganizationInput from "@/features/companies/create_companies/components/OrganizationInput";
+import FormOrganization from "@/features/companies/create_companies/components/formDone";
 import React from "react";
 
 
 const Page = () => {
     return (
         <div>
-            <OrganizationInput />
+            <FormOrganization />
         </div>
     );
 };

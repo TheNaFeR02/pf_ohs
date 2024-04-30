@@ -20,24 +20,40 @@ import { toast } from "@/components/ui/use-toast"
 import OrganizationInput from "./OrganizationInput"
 
 
-export function InputForm() {
-  const form = useForm<Organization>({
+export function FormOrganization() {
+  const form = useForm<z.infer<typeof OrganizationSchema>>({
     resolver: zodResolver(OrganizationSchema),
     defaultValues: {
-        resourceType: "",
-        identifier: [
-            {
-            use: "",
-            system: "",
-            value: "",
-            },
-        ],
-        active: false,
-        name: "",
-        alias: [],
-        contact: [],
+            resourceType: "",
+            identifier: [],
+            active: false,
+            name: "",
+            alias: [],
+            contact: [
+                {
+                    telecom: {
+                        system: "",
+                        value: "",
+                        use: "",
+                    },
+                    name: {
+                        use: "",
+                        text: "",
+                        family: "",
+                        given: [],
+                        prefix: [],
+                    },
+                    address: {
+                        use: "",
+                        line: [],
+                        city: "",
+                        postalCode: "",
+                        country: "",
+                    },
+                },
+            ],
         },
-  })
+})
 
 //   function onSubmit(data: ) {
 //     toast({
@@ -51,16 +67,18 @@ export function InputForm() {
 //   }
 
     const onSubmit = (data: Organization) =>
-        console.log("Datos del formulario", data);
+        console.log("Datos del formulario", data.active);
 
     const fieldState = form.getFieldState("name");
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        
-        <Button type="submit">Submit</Button>
+        <OrganizationInput />
+        <Button type="submit" onClick={onSubmit}>Submit</Button>
       </form>
     </Form>
   )
 }
+
+export default FormOrganization;

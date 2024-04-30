@@ -4,13 +4,13 @@ import { NameSchema } from "@/features/companies/types/name";
 
 
 export const ContactSchema = z.object({
-    telecom: z.array(
+    telecom: 
         z.object({
             system: z.string().optional(),
             value: z.string().optional(),
             use: z.string().optional(),
-        })
-    ),
+        }),
+
     name: NameSchema.optional(),
     address: AddressSchema.optional(),
 });
