@@ -1,20 +1,21 @@
 import { z } from "zod";
-import { ContactSchema } from "./contact";
+import { ContactSchema } from "@/features/companies/types/contact";
 
 
 export const OrganizationSchema = z.object({
-    resourceType: z.string(),
+    resourceType: z.string().optional(),
     identifier: z.array(
         z.object({
-            use: z.string(),
-            system: z.string().url(),
-            value: z.string(),
+            use: z.string().optional(),
+            system: z.string().url().optional(),
+            value: z.string().optional(),
         })
-    ),
-    active: z.boolean(),
-    name: z.string(),
-    alias: z.array(z.string()),
-    contact: z.array(ContactSchema),
+    ).optional(),
+    active: z.boolean().optional(),
+    id: z.string().optional(),
+    name: z.string().optional(),
+    alias: z.array(z.string()).optional(),
+    contact: z.array(ContactSchema).optional(),
 });
 
 export type Organization = z.infer<typeof OrganizationSchema>;
