@@ -41,11 +41,11 @@ const OrganizationInput = () => {
             alias: [],
             contact: [
                 {
-                    telecom: {
+                    telecom: [{
                         system: "",
                         value: "",
                         use: "",
-                    },
+                    }],
                     name: {
                         use: "",
                         text: "",

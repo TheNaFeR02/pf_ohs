@@ -20,23 +20,25 @@ export async function getOrganization(): Promise<Organization[]> {
     const organizationEntries = organizationDetails["entry"];
     console.log("Organization details: ", organizationEntries);
     let resources: Organization[] = [];
-    
+
     try {
       organizationEntries.forEach(({ resource }: { resource: jsonverify }) => {
         if (resource) { // Verificar si resource está definido
+          console.log("Resource: ", resource);
           resources.push(OrganizationSchema.parse(resource));
           console.log(resources);
         }
       });
-      
+
       console.log("Organization type correctly parsed. \n Organization details", resources);
       return resources;
     } catch (error) {
       console.error("Error parsing Organization details: ", error);
-      throw new Error(JSON.stringify(error));
+      return [];
     }
   } catch (error) {
     console.error("Error fetching Organization details: ", error);
     throw error;
   }
 }
+

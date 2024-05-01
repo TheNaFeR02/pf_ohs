@@ -31,11 +31,11 @@ export function FormOrganization() {
             alias: [],
             contact: [
                 {
-                    telecom: {
+                    telecom: [{
                         system: "",
                         value: "",
                         use: "",
-                    },
+                    }],
                     name: {
                         use: "",
                         text: "",
@@ -75,7 +75,7 @@ export function FormOrganization() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <OrganizationInput />
-        <Button type="submit" onClick={onSubmit}>Submit</Button>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   )

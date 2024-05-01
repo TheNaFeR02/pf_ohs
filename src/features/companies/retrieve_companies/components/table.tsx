@@ -1,4 +1,3 @@
-
 import { columns } from "@/features/companies/retrieve_companies/components/columns"
 import { DataTable } from "@/features/companies/retrieve_companies/components/data-table"
 import { getOrganization } from "@/features/companies/services/getCompanies"
