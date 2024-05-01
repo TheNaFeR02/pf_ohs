@@ -1,0 +1,151 @@
+{
+    "Questionnaire": {
+        "resourceType": "Questionnaire",
+        "title": "Patient Information",
+        "url": "http://hl7.org/fhir/Questionnaire/patient_information02",
+        "status": "active ",
+        "subjectType": [
+            "Patient"
+        ],
+        "date": "2024-04-29T13:33:43.056Z",
+        "item": [
+            {
+                "linkId": "1",
+                "text": "Tipo de documento",
+                "type": "choice",
+                "required": true,
+                "answerOption": [
+                    {
+                        "valueCoding": {
+                            "code": "CC",
+                            "display": "Cédula de ciudadanía"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "CE",
+                            "display": "Cédula de extranjería"
+                        }
+                    }
+                ]
+            },
+            {
+                "linkId": "2",
+                "text": "Número de dentificaión",
+                "type": "integer"
+            },
+            {
+                "linkId": "3",
+                "text": "Nombre",
+                "type": "string"
+            },
+            {
+                "linkId": "15",
+                "text": "Información de contacto",
+                "type": "group",
+                "item": [
+                    {
+                        "linkId": "15.1",
+                        "text": "Teléfono",
+                        "type": "string"
+                    },
+                    {
+                        "linkId": "15.2",
+                        "text": "Celular",
+                        "type": "string"
+                    },
+                    {
+                        "linkId": "15.3",
+                        "text": "Email",
+                        "type": "group",
+                        "item": [
+                            {
+                                "linkId": "15.3.1",
+                                "text": "email1",
+                                "type": "string"
+                            },
+                            {
+                                "linkId": "15.3.2",
+                                "text": "email2",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    {
+                        "linkId": "15.4",
+                        "text": "Dirección",
+                        "type": "string"
+                    }
+                ]
+            }
+        ]
+    },
+    "QuestionnaireResponse": {
+        "resourceType": "QuestionnaireResponse",
+        "questionnaire": "http://hl7.org/fhir/Questionnaire/patient_information02",
+        "status": "completed",
+        "authored": "2024-04-26T14:30:00Z",
+        "author": {
+            "reference": "Practitioner/355",
+            "type": "Practitioner"
+        },
+        "item": [
+            {
+                "linkId": "1",
+                "answer": [
+                    {
+                        "valueCoding": {
+                            "code": "",
+                            "display": ""
+                        }
+                    }
+                ]
+            },
+            {
+                "linkId": "2",
+                "answer": [
+                    {
+                        "valueInteger": 0
+                    }
+                ]
+            },
+            {
+                "linkId": "3",
+                "answer": [
+                    {
+                        "valueString": ""
+                    }
+                ]
+            },
+            {
+                "linkId": "15",
+                "item": [
+                    {
+                        "linkId": "15.1",
+                        "answer": [
+                            {
+                                "valueString": ""
+                            }
+                        ]
+                    },
+                    {
+                        "linkId": "15.2",
+                        "answer": [
+                            {
+                                "valueString": ""
+                            }
+                        ]
+                    },
+                    {
+                        "linkId": "15.3",
+                        "answer": [
+                            {
+                                "valueString": ""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

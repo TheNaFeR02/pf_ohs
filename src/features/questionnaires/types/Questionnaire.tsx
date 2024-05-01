@@ -11,7 +11,7 @@ const baseItem = z.object({
     valueCoding: z.object({
       code: z.string(),
       display: z.string()
-    })
+    }) 
   })).optional()
   
 })
@@ -24,7 +24,7 @@ const itemSchema: z.ZodType<Item> = baseItem.extend({
   item: z.lazy(() => itemSchema.array()).optional()
 })
 
-export const questionnarieSchema = z.object({
+export const questionnaireSchema = z.object({
   resourceType: z.string(),
   title: z.string(),
   url: z.string().url(),
@@ -34,5 +34,5 @@ export const questionnarieSchema = z.object({
   item: itemSchema.array(),
 })
 
-export type Questionnarie = z.infer<typeof questionnarieSchema>
+export type Questionnaire = z.infer<typeof questionnaireSchema>
 
