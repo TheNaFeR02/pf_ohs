@@ -6,13 +6,13 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
-  QuestionnaireFormValues,
-  QuestionnaireFormValuesSchema,
-} from "@/features/questionnaire_creator/types/QuestionnaireFormValues";
+  questionnaireSchema,
+  Questionnaire,
+} from "@/types/Questionnaire";
 
 const QuestionnaireForm = () => {
-  const form = useForm<QuestionnaireFormValues>({
-    resolver: zodResolver(QuestionnaireFormValuesSchema),
+  const form = useForm<Questionnaire>({
+    resolver: zodResolver(questionnaireSchema),
     defaultValues: {
       resourceType: "Questionnaire",
       title: "Mi Title",
@@ -24,7 +24,7 @@ const QuestionnaireForm = () => {
     },
   });
 
-  const onSubmit = (data: QuestionnaireFormValues) => {
+  const onSubmit = (data: Questionnaire) => {
     console.log("Datos del formulario", data);
   };
 

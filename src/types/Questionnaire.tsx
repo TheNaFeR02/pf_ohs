@@ -5,15 +5,15 @@ import { z } from 'zod'
 const baseItem = z.object({
   linkId: z.string(),
   text: z.string(),
-  type: z.string(),
+  type: z.enum(["group", "string", "choice", "integer"]), // attachment, boolean, decimal, text,
   required: z.boolean().optional(),
   answerOption: z.array(z.object({
     valueCoding: z.object({
       code: z.string(),
       display: z.string()
-    }) 
+    })
   })).optional()
-  
+
 })
 
 export type Item = z.infer<typeof baseItem> & {
@@ -28,9 +28,9 @@ export const questionnaireSchema = z.object({
   resourceType: z.string(),
   title: z.string(),
   url: z.string().url(),
-  status: z.string(),
-  subjectType: z.array(z.string()), 
-  date: z.string(),
+  status: z.enum(["draft", "active", "retired", "unknown"]),
+  subjectType: z.array(z.string()).or(z.string()),
+  date: z.date(),
   item: itemSchema.array(),
 })
 

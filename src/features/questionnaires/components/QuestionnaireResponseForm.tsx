@@ -1,7 +1,7 @@
 "use client"
 import React, { FC, ReactElement } from "react";
-import { Item, Questionnaire } from "../types/Questionnaire";
-import { QuestionnaireResponse, questionnaireResponseSchema } from "../types/QuestionnaireResponse";
+import { Item, Questionnaire } from "../../../types/Questionnaire";
+import { QuestionnaireResponse, questionnaireResponseSchema } from "../../../types/QuestionnaireResponse";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generateDefaultQuestionnaireResponse } from "../utils/generateDefaultQuestionnaireResponse";
