@@ -1,22 +1,38 @@
-'use client';
+"use client";
 import React from "react";
+import { Form } from "@/components/ui/form";
+import QuestionnaireFormField from "@/features/questionnaire_creator/components/QuestionnaireFormField";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import useQuestionnaireForm from "./useQuestionnaireForm";
-import QuestionnaireFormField from "./QuestionnaireFormField";
+  QuestionnaireFormValues,
+  QuestionnaireFormValuesSchema,
+} from "@/features/questionnaire_creator/types/QuestionnaireFormValues";
 
 const QuestionnaireForm = () => {
-  const { handleSubmit, methods } = useQuestionnaireForm();
+  const form = useForm<QuestionnaireFormValues>({
+    resolver: zodResolver(QuestionnaireFormValuesSchema),
+    defaultValues: {
+      resourceType: "Questionnaire",
+      title: "Mi Title",
+      url: "http:url.com",
+      status: "draft",
+      subjectType: "Patient",
+      date: new Date(),
+      item: [],
+    },
+  });
+
+  const onSubmit = (data: QuestionnaireFormValues) => {
+    console.log("Datos del formulario", data);
+  };
+
   return (
-    <Form {...methods}>
-      <form onSubmit={handleSubmit}>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <QuestionnaireFormField />
-        <button type="submit">Submit</button>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );

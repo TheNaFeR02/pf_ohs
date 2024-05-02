@@ -1,141 +1,176 @@
-// Questionnaire Form Field Component
-
 import React, { FunctionComponent } from "react";
-import useQuestionnaireFormField from "./useQuestionnaireFormField";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import { QuestionnaireFormValues } from "@/features/questionnaire_creator/types/QuestionnaireFormValues";
+import ItemsFormField from "@/features/questionnaire_creator/components/ItemsFormField";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+} from "@/components/ui/form";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@radix-ui/react-popover";
+import { format } from "date-fns";
 
-interface QuestionnaireFormFieldProps {
-  prefix?: string;
-}
+const QuestionnaireFormField: FunctionComponent = () => {
+  const { control, watch } =
+    useFormContext<QuestionnaireFormValues>();
 
-const QuestionnaireFormField: FunctionComponent<
-  QuestionnaireFormFieldProps
-> = ({ prefix = "" }) => {
   const {
-    resourceTypeInputPath,
-    titleInputPath,
-    urlInputPath,
-    statusInputPath,
-    subjectTypeInputPath,
-    dateInputPath,
-    itemFields,
-    register,
-    addNewItem,
-    removeItem,
-  } = useQuestionnaireFormField(prefix);
+    fields: itemFields,
+    append: itemAppend,
+    remove: itemRemove,
+  } = useFieldArray({
+    control,
+    name: "item",
+  });
+
+  const addNewItem = () => {
+    itemAppend({
+      linkId: "",
+      text: "",
+      type: "string",
+      answerOption: [],
+    });
+  };
+
+  const removeItem = (index: number) => {
+    itemRemove(index);
+  };
 
   return (
     <div>
-      <Input {...register(resourceTypeInputPath)} placeholder="Questionnaire" />
-      <Input {...register(titleInputPath)} placeholder="Title" />
-      <Input {...register(urlInputPath)} placeholder="URL" />
-      <Input {...register(statusInputPath)} placeholder="Status" />
-      <Input {...register(subjectTypeInputPath)} placeholder="Subject Type" />
-      <Input {...register(dateInputPath)} placeholder="Date" />
+      <FormField
+        control={control}
+        name="resourceType"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Resource type</FormLabel>
+            <FormControl>
+              <Input placeholder="Resource Type" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="title"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Title</FormLabel>
+            <FormControl>
+              <Input placeholder="Title" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="url"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>URL</FormLabel>
+            <FormControl>
+              <Input placeholder="URL" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="status"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Status</FormLabel>
+            <FormControl>
+              <Input placeholder="Status" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name="date"
+        render={({ field }) => (
+          <FormItem className="flex flex-col">
+            <FormLabel>Date</FormLabel>
+            <Popover>
+              <PopoverTrigger asChild>
+                <FormControl>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-[240px] pl-3 text-left font-normal",
+                      !field.value && "text-muted-foreground"
+                    )}
+                  >
+                    {field.value ? (
+                      format(field.value, "PPP")
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  </Button>
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={field.value}
+                  onSelect={field.onChange}
+                  disabled={(date) =>
+                    date > new Date() || date < new Date("1900-01-01")
+                  }
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      
       {itemFields.map((item, index) => (
         <div key={item.id}>
-          <Button variant="destructive" onClick={() => removeItem(index)}>
+          Item {index}
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => removeItem(index)}
+          >
             - Item
           </Button>
-          <ItemsFormField prefix={`${prefix}item.${index}.`} />
+          <ItemsFormField
+            prefix={`item.${index}.`}
+            watch={watch}
+            control={control}
+          />
         </div>
       ))}
-      <Button onClick={addNewItem}>+ Item</Button>
+      <Button type="button" onClick={addNewItem}>
+        + Item
+      </Button>
     </div>
   );
 };
 
 export default QuestionnaireFormField;
-
-interface ItemsFormFieldProps {
-  prefix?: string;
-}
-
-// Nota: Añadir la opción de agregar y eliminar answerOptions
-
-const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
-  prefix = "",
-}) => {
-  const {
-    itemFields,
-    answerOptionFields,
-    register,
-    addNewItem,
-    removeItem,
-    addNewAnswerOption,
-    removeAnswerOption,
-    itemLinkIdInputPath,
-    itemTextInputPath,
-    itemTypeInputPath,
-    watch,
-  } = useQuestionnaireFormField(prefix);
-
-  const watchType = watch(itemTypeInputPath);
-
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">{prefix}</h1>
-      <div className="space-y-2">
-        <Input {...register(itemLinkIdInputPath)} placeholder="linkId" />
-        <Input {...register(itemTextInputPath)} placeholder="text" />
-        <Input {...register(itemTypeInputPath)} placeholder="Type" />
-
-        {watchType === "choice" && (
-          <div className="flex flex-row space-x-4">
-            <Button onClick={() => addNewAnswerOption(1)}>+ Option</Button>
-            {answerOptionFields.map((field, index) => (
-              <div key={field.id}>
-            <Button variant="destructive" onClick={() => removeAnswerOption(index)}>- Option</Button>
-                <AnswerOptionsFormField 
-                  prefix={`${prefix}answerOption.${index}.`}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-        {watchType === "group" && (
-          <div className="flex flex-row space-x-4">
-            <Button onClick={() => addNewItem()}>+ Item</Button>
-            {itemFields.map((field, index) => (
-              <div key={field.id}>
-                <Button variant="destructive" onClick={() => removeItem(index)}>
-                  - .item
-                </Button>
-                <ItemsFormField prefix={`${prefix}item.${index}.`} />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-interface AnswerOptionsFormFieldProps {
-  prefix?: string;
-}
-
-const AnswerOptionsFormField: FunctionComponent<
-  AnswerOptionsFormFieldProps
-> = ({ prefix = "" }) => {
-  const {
-    register,
-    itemValueCodingCodeInputPath,
-    itemValueCodingDisplayInputPath,
-  } = useQuestionnaireFormField(prefix);
-
-  return (
-    <div>
-        <h1 className="text-2xl font-bold">{prefix}</h1>
-        
-      <div className="space-y-2">
-        <Input {...register(itemValueCodingCodeInputPath)} placeholder="Code" />
-        <Input
-          {...register(itemValueCodingDisplayInputPath)}
-          placeholder="Display"
-        />
-      </div>
-    </div>
-  );
-};
