@@ -12,10 +12,10 @@ const QuestionnaireForm = () => {
     resolver: zodResolver(questionnaireSchema),
     defaultValues: {
       resourceType: "Questionnaire",
-      title: "Mi Title",
-      url: "http:url.com",
+      title: "",
+      url: "",
       status: "draft",
-      subjectType: "Patient",
+      subjectType: "",
       date: new Date(),
       item: [],
     },

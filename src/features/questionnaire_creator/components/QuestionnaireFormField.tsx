@@ -38,7 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import formatTextToUrl from "@/features/questionnaire_creator/utils/formatTextToUrl";
 import statusCodeDisplay from "@/features/questionnaire_creator/utils/statusCodeDisplay";
 import subjectTypesCodeDisplay from "@/features/questionnaire_creator/utils/subjectTypesCodeDisplay";
 
@@ -67,21 +67,23 @@ const QuestionnaireFormField: FunctionComponent = () => {
     itemRemove(index);
   };
 
+  const watchTitle = watch("title");
+
   return (
     <div>
-      <FormField
+      {/* <FormField
         control={control}
         name="resourceType"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Resource type</FormLabel>
             <FormControl>
-              <Input placeholder="Resource Type" {...field} />
+              <Input placeholder="Resource Type" {...field} type="hidden"/>
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
-      />
+      /> */}
 
       <FormField
         control={control}
@@ -90,14 +92,27 @@ const QuestionnaireFormField: FunctionComponent = () => {
           <FormItem>
             <FormLabel>Title</FormLabel>
             <FormControl>
-              <Input placeholder="Title" {...field} />
+              <Input
+                placeholder="Title"
+                {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  setValue(
+                    "url",
+                    formatTextToUrl(
+                      e.target.value,
+                      "http://hl7.org/fhir/Questionnaire/"
+                    )
+                  );
+                }}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
 
-      <FormField
+      {/* <FormField
         control={control}
         name="url"
         render={({ field }) => (
@@ -109,7 +124,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
             <FormMessage />
           </FormItem>
         )}
-      />
+      /> */}
 
       <FormField
         control={control}
@@ -197,7 +212,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
         )}
       />
 
-      <FormField
+      {/* <FormField
         control={control}
         name="date"
         render={({ field }) => (
@@ -238,7 +253,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
             <FormMessage />
           </FormItem>
         )}
-      />
+      /> */}
 
       {itemFields.map((item, index) => (
         <div key={item.id}>

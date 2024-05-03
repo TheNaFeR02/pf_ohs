@@ -31,14 +31,15 @@ const itemSchema: z.ZodType<Item> = baseItem.extend({
 });
 
 export const questionnaireSchema = z.object({
-  resourceType: z.string(),
-  title: z.string(),
+  resourceType: z.literal("Questionnaire"),
+  title: z.string().min(1, { message: "Title is required" }),
   url: z.string().url(),
   status: z.enum(
-    JSON.parse(JSON.stringify(statusCodeDisplay.map((item) => item.code)))
+    JSON.parse(JSON.stringify(statusCodeDisplay.map((item) => item.code))),
+    { message: "Status is required" }
   ),
   subjectType: z.enum(
-    JSON.parse(JSON.stringify(subjectTypesCodeDisplay.map((item) => item.code)))
+    JSON.parse(JSON.stringify(subjectTypesCodeDisplay.map((item) => item.code))), { message: "Subject Type is required" }
   ),
   date: z.date(),
   item: itemSchema.array(),
