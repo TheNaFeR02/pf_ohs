@@ -107,6 +107,20 @@ const QuestionnaireFormField: FunctionComponent = () => {
 
       <FormField
         control={control}
+        name="subjectType"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Subject Type</FormLabel>
+            <FormControl>
+              <Input placeholder="Subject Type" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
         name="date"
         render={({ field }) => (
           <FormItem className="flex flex-col">
