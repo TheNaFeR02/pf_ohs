@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from "zod";
 
 // Recursive Types: https://github.com/colinhacks/zod#recursive-types
 
@@ -7,22 +7,25 @@ const baseItem = z.object({
   text: z.string(),
   type: z.enum(["group", "string", "choice", "integer"]), // attachment, boolean, decimal, text,
   required: z.boolean().optional(),
-  answerOption: z.array(z.object({
-    valueCoding: z.object({
-      code: z.string(),
-      display: z.string()
-    })
-  })).optional()
-
-})
+  answerOption: z
+    .array(
+      z.object({
+        valueCoding: z.object({
+          code: z.string(),
+          display: z.string(),
+        }),
+      })
+    )
+    .optional(),
+});
 
 export type Item = z.infer<typeof baseItem> & {
-  item?: Item[]
-}
+  item?: Item[];
+};
 
 const itemSchema: z.ZodType<Item> = baseItem.extend({
-  item: z.lazy(() => itemSchema.array()).optional()
-})
+  item: z.lazy(() => itemSchema.array()).optional(),
+});
 
 export const questionnaireSchema = z.object({
   resourceType: z.string(),
@@ -32,7 +35,6 @@ export const questionnaireSchema = z.object({
   subjectType: z.array(z.string()).or(z.string()),
   date: z.date(),
   item: itemSchema.array(),
-})
+});
 
-export type Questionnaire = z.infer<typeof questionnaireSchema>
-
+export type Questionnaire = z.infer<typeof questionnaireSchema>;

@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { FunctionComponent } from "react";
 import { Control, UseFormRegister } from "react-hook-form";
-import { QuestionnaireFormValues } from "../types/QuestionnaireFormValues";
+import { Questionnaire } from "@/types/Questionnaire"
 import {
   FormField,
   FormItem,
@@ -12,7 +12,7 @@ import {
 
 interface AnswerOptionsFormFieldProps {
   prefix?: string;
-  control: Control<QuestionnaireFormValues> | undefined;
+  control: Control<Questionnaire> | undefined;
 }
 
 const AnswerOptionsFormField: FunctionComponent<

@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { QuestionnaireFormValues } from "@/features/questionnaire_creator/types/QuestionnaireFormValues";
+import { Questionnaire } from "@/types/Questionnaire";
 import ItemsFormField from "@/features/questionnaire_creator/components/ItemsFormField";
 import {
   FormField,
@@ -23,8 +23,7 @@ import {
 import { format } from "date-fns";
 
 const QuestionnaireFormField: FunctionComponent = () => {
-  const { control, watch } =
-    useFormContext<QuestionnaireFormValues>();
+  const { control, watch } = useFormContext<Questionnaire>();
 
   const {
     fields: itemFields,
@@ -148,7 +147,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
           </FormItem>
         )}
       />
-      
+
       {itemFields.map((item, index) => (
         <div key={item.id}>
           Item {index}

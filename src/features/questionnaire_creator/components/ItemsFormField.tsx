@@ -2,12 +2,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FunctionComponent } from "react";
 import {
-  UseFormRegister,
   UseFormWatch,
   Control,
   useFieldArray,
 } from "react-hook-form";
-import { QuestionnaireFormValues } from "../types/QuestionnaireFormValues";
+import { Questionnaire } from "@/types/Questionnaire";
 import AnswerOptionsFormField from "@/features/questionnaire_creator/components/AnswerOptionsFormField";
 import {
   FormField,
@@ -20,8 +19,8 @@ import {
 
 interface ItemsFormFieldProps {
   prefix: string;
-  watch: UseFormWatch<QuestionnaireFormValues>;
-  control: Control<QuestionnaireFormValues> | undefined;
+  watch: UseFormWatch<Questionnaire>;
+  control: Control<Questionnaire> | undefined;
 }
 
 const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({

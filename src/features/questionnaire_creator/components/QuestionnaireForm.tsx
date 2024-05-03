@@ -5,10 +5,7 @@ import QuestionnaireFormField from "@/features/questionnaire_creator/components/
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  questionnaireSchema,
-  Questionnaire,
-} from "@/types/Questionnaire";
+import { questionnaireSchema, Questionnaire } from "@/types/Questionnaire";
 
 const QuestionnaireForm = () => {
   const form = useForm<Questionnaire>({
