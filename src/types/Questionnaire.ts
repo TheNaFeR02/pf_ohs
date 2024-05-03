@@ -1,13 +1,14 @@
 import { z } from "zod";
-import subjectTypes from "@/features/questionnaire_creator/data/subjectTypes.json";
+import itemTypesCodeDisplay from "@/features/questionnaire_creator/utils/itemTypesCodeDisplay";
+import statusCodeDisplay from "@/features/questionnaire_creator/utils/statusCodeDisplay";
+import subjectTypesCodeDisplay from "@/features/questionnaire_creator/utils/subjectTypesCodeDisplay";
 
 // Recursive Types: https://github.com/colinhacks/zod#recursive-types
-
 
 const baseItem = z.object({
   linkId: z.string(),
   text: z.string(),
-  type: z.enum(["group", "string", "choice", "integer"]), // attachment, boolean, decimal, text,
+  type: z.enum(JSON.parse(JSON.stringify(itemTypesCodeDisplay))),
   required: z.boolean().optional(),
   answerOption: z
     .array(
@@ -29,16 +30,16 @@ const itemSchema: z.ZodType<Item> = baseItem.extend({
   item: z.lazy(() => itemSchema.array()).optional(),
 });
 
-const subjectTypeFromJson = (content: string) => {
-  return z.enum(JSON.parse(content));
-}
-
 export const questionnaireSchema = z.object({
   resourceType: z.string(),
   title: z.string(),
   url: z.string().url(),
-  status: z.enum(["draft", "active", "retired", "unknown"]),
-  subjectType: subjectTypeFromJson(JSON.stringify(subjectTypes.concept.map((item) => item.code))),
+  status: z.enum(
+    JSON.parse(JSON.stringify(statusCodeDisplay.map((item) => item.code)))
+  ),
+  subjectType: z.enum(
+    JSON.parse(JSON.stringify(subjectTypesCodeDisplay.map((item) => item.code)))
+  ),
   date: z.date(),
   item: itemSchema.array(),
 });

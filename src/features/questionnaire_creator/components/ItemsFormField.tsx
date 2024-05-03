@@ -1,11 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FunctionComponent } from "react";
-import {
-  UseFormWatch,
-  Control,
-  useFieldArray,
-} from "react-hook-form";
+import { FunctionComponent, use, useEffect } from "react";
+import { UseFormWatch, Control, useFieldArray } from "react-hook-form";
 import { Questionnaire } from "@/types/Questionnaire";
 import AnswerOptionsFormField from "@/features/questionnaire_creator/components/AnswerOptionsFormField";
 import {
@@ -16,6 +12,15 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import itemTypesCodeDisplay from "@/features/questionnaire_creator/utils/itemTypesCodeDisplay";
 
 interface ItemsFormFieldProps {
   prefix: string;
@@ -116,10 +121,21 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
           name={itemTypeInputPath}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Type</FormLabel>
-              <FormControl>
-                <Input placeholder="Type" {...field} />
-              </FormControl>
+              <FormLabel>Status</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a Type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {itemTypesCodeDisplay.map((item) => (
+                    <SelectItem key={item.code} value={item.code}>
+                      {item.display}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

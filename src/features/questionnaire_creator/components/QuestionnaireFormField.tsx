@@ -1,3 +1,4 @@
+"use client";
 import React, { FunctionComponent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -17,13 +18,32 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
-} from "@radix-ui/react-popover";
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { format } from "date-fns";
+import { Check, ChevronsUpDown, Link } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import statusCodeDisplay from "@/features/questionnaire_creator/utils/statusCodeDisplay";
+import subjectTypesCodeDisplay from "@/features/questionnaire_creator/utils/subjectTypesCodeDisplay";
 
 const QuestionnaireFormField: FunctionComponent = () => {
-  const { control, watch } = useFormContext<Questionnaire>();
+  const { control, watch, setValue } = useFormContext<Questionnaire>();
 
   const {
     fields: itemFields,
@@ -97,9 +117,20 @@ const QuestionnaireFormField: FunctionComponent = () => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Status</FormLabel>
-            <FormControl>
-              <Input placeholder="Status" {...field} />
-            </FormControl>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a verified email to display" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {statusCodeDisplay.map((item) => (
+                  <SelectItem key={item.code} value={item.code}>
+                    {item.display}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <FormMessage />
           </FormItem>
         )}
@@ -109,11 +140,58 @@ const QuestionnaireFormField: FunctionComponent = () => {
         control={control}
         name="subjectType"
         render={({ field }) => (
-          <FormItem>
-            <FormLabel>Subject Type</FormLabel>
-            <FormControl>
-              <Input placeholder="Subject Type" {...field} />
-            </FormControl>
+          <FormItem className="flex flex-col">
+            <FormLabel>Subject type</FormLabel>
+            <Popover>
+              <PopoverTrigger asChild>
+                <FormControl>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className={cn(
+                      "w-[200px] justify-between",
+                      !field.value && "text-muted-foreground"
+                    )}
+                  >
+                    {field.value
+                      ? subjectTypesCodeDisplay.find(
+                          (subjectType) => subjectType.code === field.value
+                        )?.display
+                      : "Select Subject type"}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0">
+                <Command>
+                  <CommandInput placeholder="Search Subject type..." />
+                  <CommandEmpty>No Subject type found.</CommandEmpty>
+                  <CommandGroup>
+                    {subjectTypesCodeDisplay.map((subjectType) => (
+                      <CommandList key={subjectType.code}>
+                        <CommandItem
+                          value={subjectType.display}
+                          key={subjectType.code}
+                          onSelect={() => {
+                            setValue("subjectType", subjectType.code);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              subjectType.code === field.value
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {subjectType.display}
+                        </CommandItem>
+                      </CommandList>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
             <FormMessage />
           </FormItem>
         )}
