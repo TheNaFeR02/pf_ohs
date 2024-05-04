@@ -1,14 +1,16 @@
 import { z } from "zod";
-import itemTypesCodeDisplay from "@/features/questionnaire_creator/utils/itemTypesCodeDisplay";
-import statusCodeDisplay from "@/features/questionnaire_creator/utils/statusCodeDisplay";
-import subjectTypesCodeDisplay from "@/features/questionnaire_creator/utils/subjectTypesCodeDisplay";
+import itemTypesCodeDisplay from "@/features/questionnaire_creator/constants/itemTypesCodeDisplay";
+import statusCodeDisplay from "@/features/questionnaire_creator/constants/statusCodeDisplay";
+import subjectTypesCodeDisplay from "@/features/questionnaire_creator/constants/subjectTypesCodeDisplay";
 
 // Recursive Types: https://github.com/colinhacks/zod#recursive-types
 
 const baseItem = z.object({
   linkId: z.string(),
   text: z.string(),
-  type: z.enum(JSON.parse(JSON.stringify(itemTypesCodeDisplay))),
+  type: z.enum(
+    JSON.parse(JSON.stringify(itemTypesCodeDisplay.map((item) => item.code)))
+  ),
   required: z.boolean().optional(),
   answerOption: z
     .array(
@@ -35,7 +37,7 @@ export const questionnaireSchema = z.object({
   title: z
     .string()
     .min(1, { message: "Title is required" })
-    .regex(/^[a-zA-Z0-9\s]+$/, {
+    .regex(/^[\p{L}\p{N} ]+$/u, {
       message: "Title must be alphanumeric",
     }),
 

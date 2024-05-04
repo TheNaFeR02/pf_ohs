@@ -39,8 +39,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import formatTextToUrl from "@/features/questionnaire_creator/utils/formatTextToUrl";
-import statusCodeDisplay from "@/features/questionnaire_creator/utils/statusCodeDisplay";
-import subjectTypesCodeDisplay from "@/features/questionnaire_creator/utils/subjectTypesCodeDisplay";
+import statusCodeDisplay from "@/features/questionnaire_creator/constants/statusCodeDisplay";
+import subjectTypesCodeDisplay from "@/features/questionnaire_creator/constants/subjectTypesCodeDisplay";
 
 const QuestionnaireFormField: FunctionComponent = () => {
   const { control, watch, setValue } = useFormContext<Questionnaire>();
@@ -268,6 +268,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
           <ItemsFormField
             prefix={`item.${index}.`}
             watch={watch}
+            setValue={setValue}
             control={control}
           />
         </div>

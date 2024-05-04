@@ -1,7 +1,12 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FunctionComponent, use, useEffect } from "react";
-import { UseFormWatch, Control, useFieldArray } from "react-hook-form";
+import {
+  UseFormWatch,
+  Control,
+  useFieldArray,
+  UseFormSetValue,
+} from "react-hook-form";
 import { Questionnaire } from "@/types/Questionnaire";
 import AnswerOptionsFormField from "@/features/questionnaire_creator/components/AnswerOptionsFormField";
 import {
@@ -20,17 +25,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import itemTypesCodeDisplay from "@/features/questionnaire_creator/utils/itemTypesCodeDisplay";
+import itemTypesCodeDisplay from "@/features/questionnaire_creator/constants/itemTypesCodeDisplay";
 
 interface ItemsFormFieldProps {
   prefix: string;
   watch: UseFormWatch<Questionnaire>;
+  setValue: UseFormSetValue<Questionnaire>;
   control: Control<Questionnaire> | undefined;
 }
 
 const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
   prefix,
   watch,
+  setValue,
   control,
 }) => {
   const itemLinkIdInputPath = `${prefix}linkId` as `item.${number}.linkId`;
@@ -90,19 +97,24 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
       <h1 className="text-2xl font-bold">{prefix}</h1>
 
       <div className="space-y-2">
-        <FormField
+        {/* <FormField
           control={control}
           name={itemLinkIdInputPath}
           render={({ field }) => (
             <FormItem>
               <FormLabel>link Id</FormLabel>
               <FormControl>
-                <Input placeholder="link Id" {...field} />
+                <Input
+                  placeholder="link Id"
+                  type="hidden"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
+
         <FormField
           control={control}
           name={itemTextInputPath}
@@ -110,12 +122,17 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
             <FormItem>
               <FormLabel>Text</FormLabel>
               <FormControl>
-                <Input placeholder="Text" {...field} />
+                <Input placeholder="Text" {...field} 
+                onBlur={()=>{
+                  setValue(itemLinkIdInputPath, prefix.replace(/item\./g, "").slice(0, -1))
+                }
+                }/>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={control}
           name={itemTypeInputPath}
@@ -180,6 +197,7 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
                 <ItemsFormField
                   prefix={`${prefix}item.${index}.`}
                   watch={watch}
+                  setValue={setValue}
                   control={control}
                 />
               </div>
