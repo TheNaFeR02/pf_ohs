@@ -26,8 +26,6 @@ const AnswerOptionsFormField: FunctionComponent<
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">{prefix}</h1>
-      {itemValueCodingCodeInputPath}
       <div className="space-y-2">
         <FormField
           control={control}

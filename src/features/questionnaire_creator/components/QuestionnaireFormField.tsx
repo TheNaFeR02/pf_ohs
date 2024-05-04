@@ -67,8 +67,6 @@ const QuestionnaireFormField: FunctionComponent = () => {
     itemRemove(index);
   };
 
-  const watchTitle = watch("title");
-
   return (
     <div>
       {/* <FormField
@@ -257,13 +255,12 @@ const QuestionnaireFormField: FunctionComponent = () => {
 
       {itemFields.map((item, index) => (
         <div key={item.id}>
-          Item {index}
           <Button
             type="button"
             variant="destructive"
             onClick={() => removeItem(index)}
           >
-            - Item
+            ➖
           </Button>
           <ItemsFormField
             prefix={`item.${index}.`}
@@ -273,8 +270,8 @@ const QuestionnaireFormField: FunctionComponent = () => {
           />
         </div>
       ))}
-      <Button type="button" onClick={addNewItem}>
-        + Item
+      <Button type="button"  onClick={addNewItem}>
+        ➕
       </Button>
     </div>
   );

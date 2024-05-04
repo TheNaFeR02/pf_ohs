@@ -94,9 +94,7 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">{prefix}</h1>
-
-      <div className="space-y-2">
+      <div className="space-y-4">
         {/* <FormField
           control={control}
           name={itemLinkIdInputPath}
@@ -114,7 +112,6 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
             </FormItem>
           )}
         /> */}
-
         <FormField
           control={control}
           name={itemTextInputPath}
@@ -122,11 +119,16 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
             <FormItem>
               <FormLabel>Text</FormLabel>
               <FormControl>
-                <Input placeholder="Text" {...field} 
-                onBlur={()=>{
-                  setValue(itemLinkIdInputPath, prefix.replace(/item\./g, "").slice(0, -1))
-                }
-                }/>
+                <Input
+                  placeholder="Text"
+                  {...field}
+                  onBlur={() => {
+                    setValue(
+                      itemLinkIdInputPath,
+                      prefix.replace(/item\./g, "").slice(0, -1)
+                    );
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -159,40 +161,46 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
         />
 
         {watchType === "choice" && (
-          <div className="flex flex-row space-x-4">
-            <Button type="button" onClick={() => addNewAnswerOption()}>
-              + Option
-            </Button>
+          <div>
             <br />
-            {answerOptionFields.map((field, index) => (
-              <div key={field.id}>
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={() => removeAnswerOption(index)}
-                >
-                  - Option
-                </Button>
-                <AnswerOptionsFormField
-                  prefix={`${prefix}answerOption.${index}.`}
-                  control={control}
-                />
-              </div>
-            ))}
+            <div className="grid md:grid-cols-2 space-x-4 w-full space-y-2">
+              {answerOptionFields.map((field, index) => (
+                <div key={field.id}>
+                  <Button
+                    className="bg-rose-400"
+                    type="button"
+                    variant="destructive"
+                    onClick={() => removeAnswerOption(index)}
+                  >
+                    ➖
+                  </Button>
+                  <AnswerOptionsFormField
+                    prefix={`${prefix}answerOption.${index}.`}
+                    control={control}
+                  />
+                </div>
+              ))}
+              <Button
+                className="bg-green-400"
+                type="button"
+                onClick={() => addNewAnswerOption()}
+              >
+                ➕
+              </Button>
+            </div>
           </div>
         )}
         {watchType === "group" && (
-          <div className="flex flex-row space-x-4">
-            <Button onClick={() => addNewItem()}>+ .Item</Button>
+          <div className="grid md:grid-cols-2 space-x-4 w-full space-y-2">
             {itemFields.map((field, index) => (
               <div key={field.id}>
-                group item {index}
                 <Button
+                  className="bg-orange-400"
                   type="button"
                   variant="destructive"
                   onClick={() => removeItem(index)}
                 >
-                  - .item
+                  ➖
                 </Button>
                 <ItemsFormField
                   prefix={`${prefix}item.${index}.`}
@@ -202,9 +210,19 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
                 />
               </div>
             ))}
+            <Button
+              className="bg-blue-400"
+              type="button"
+              onClick={() => addNewItem()}
+            >
+              ➕
+            </Button>
           </div>
         )}
       </div>
+      <br />
+      <hr />
+      <br />
     </div>
   );
 };
