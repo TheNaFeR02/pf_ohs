@@ -17,7 +17,7 @@ const itemSchema: z.ZodType<Item> = baseItem.extend({
 })
 
 const answerSchema = z.object({
-  // valueBoolean: z.boolean().optional(),
+  valueBoolean: z.boolean().optional(),
   // valueDecimal: z.number().optional(),
   valueInteger: z.number().int().optional(),
   // valueDate: z.string().date().optional(),

@@ -90,13 +90,28 @@ const QuestionnairePage: FC = async (): Promise<ReactElement> => {
                                     "type": "string"
                                 }
                             ]
-                        },
-                        {
-                            "linkId": "15.4",
-                            "text": "Dirección",
-                            "type": "string"
                         }
                     ]
+                },
+                {
+                    "linkId": "15.4",
+                    "text": "Dirección",
+                    "type": "string"
+                },
+                {
+                    "linkId": "15.5",
+                    "text": "Obeso?",
+                    "type": "boolean"
+                },
+                {
+                    "linkId": "15.6",
+                    "text": "Price",
+                    "type": "decimal"
+                },
+                {
+                    "linkId": "15.7",
+                    "text": "Observaciones",
+                    "type": "text"
                 }
             ]
         }`;

@@ -5,7 +5,7 @@ import { z } from 'zod'
 const baseItem = z.object({
   linkId: z.string(),
   text: z.string(),
-  type: z.enum(["group", "string", "choice", "integer"]), // attachment, boolean, decimal, text,
+  type: z.enum(["group", "string", "choice", "integer", "boolean", "decimal", "text"]), // attachment, text,
   required: z.boolean().optional(),
   answerOption: z.array(z.object({
     valueCoding: z.object({
