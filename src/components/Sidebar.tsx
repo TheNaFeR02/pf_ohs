@@ -131,7 +131,7 @@ export default function SidebarDemo() {
                     </div>
                 </div>
             </div>
-            
+
         </div>
     )
 }
