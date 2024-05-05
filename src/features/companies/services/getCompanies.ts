@@ -18,15 +18,15 @@ export async function getOrganization(): Promise<Organization[]> {
 
     const organizationDetails = await res.json(); // response gives the Organization details.
     const organizationEntries = organizationDetails["entry"];
-    console.log("Organization details: ", organizationEntries);
+    // console.log("Organization details: ", organizationEntries);
     let resources: Organization[] = [];
 
     try {
       organizationEntries.forEach(({ resource }: { resource: jsonverify }) => {
         if (resource) { // Verificar si resource está definido
-          console.log("Resource: ", resource);
+          // console.log("Resource: ", resource);
           resources.push(OrganizationSchema.parse(resource));
-          console.log(resources);
+          // console.log(resources);
         }
       });
 

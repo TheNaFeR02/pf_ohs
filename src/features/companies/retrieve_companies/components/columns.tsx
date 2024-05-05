@@ -18,9 +18,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-  
-  
-  export const columns: ColumnDef<Organization>[] = [
+import DataTableRowActions from "./DataTableRowActions"
+   
+  interface columnsProps {
+    onEdit: (organization: Organization) => void
+    onDelete: (organization: Organization) => void
+  }
+  export const columns= ({onEdit,onDelete}: columnsProps): ColumnDef<Organization>[] => [
     
     {
       accessorKey: "id",
@@ -40,30 +44,8 @@ import {
     },
     {
       id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {  
-        const orga = row.original
-        const handleDeleteOrganization = () => {
-          deleteOrganizationById(orga.id || "");
-          window.location.reload();
-        };
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Actualizar organizacion</DropdownMenuItem>
-              <DropdownMenuItem onClick={()=> handleDeleteOrganization()} >Eliminar organizacion</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )
+      cell: ({ row }) => <DataTableRowActions row={row} onEdit={onEdit} onDelete={onDelete}/>,
+      size: 50,
       },
-    },
   ]
   

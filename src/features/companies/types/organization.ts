@@ -7,7 +7,7 @@ export const OrganizationSchema = z.object({
     identifier: z.array(
         z.object({
             use: z.string().optional(),
-            system: z.string().url().optional(),
+            system: z.string().optional(),
             value: z.string().optional(),
         })
     ).optional(),
