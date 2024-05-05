@@ -1,5 +1,4 @@
 import { FhirError } from "@/errors/FhirError";
-import { generateQResponseFromQuestionnaire } from "@/features/medical_record/utils/generateQResponseFromQuestionnaire";
 import QuestionnaireResponseForm from "@/features/questionnaires/components/QuestionnaireResponseForm";
 import getQuestionnaire from "@/features/questionnaires/server/getQuestionnaire";
 import { FC, ReactElement } from "react";
