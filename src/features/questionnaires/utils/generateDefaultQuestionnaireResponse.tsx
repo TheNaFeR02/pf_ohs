@@ -33,7 +33,7 @@ export function generateDefaultQuestionnaireResponse(questionnaire: { item: Ques
       defaultItem.item = item.item.map(subItem => generateDefaultItem(subItem));
     } else {
       switch (item.type) {
-        case 'string':
+        case 'string' && 'text':
           defaultItem.answer = [{ valueString: '' }];
           break;
         case 'integer':
@@ -42,9 +42,13 @@ export function generateDefaultQuestionnaireResponse(questionnaire: { item: Ques
         case 'choice':
           defaultItem.answer = [{ valueCoding: { code: '', display: '' } }]
           break;
-        default:
-          defaultItem.answer = [{ valueString: '' }];
-          break;
+        case 'boolean':
+          defaultItem.answer = [{ valueBoolean: false }]
+        case 'decimal':
+          defaultItem.answer = [{ valueDecimal: 0.00 }]
+        // default:
+        //   defaultItem.answer = [{ valueString: '' }];
+        //   break;
       }
     }
 
