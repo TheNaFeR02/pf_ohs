@@ -43,13 +43,13 @@ const answerSchema = z.object({
 });
 
 export const questionnaireResponseSchema = z.object({
-  resourceType: z.string(),
-  questionnaire: z.string(),
-  authored: z.string(),
+  resourceType: z.string().optional(),
+  questionnaire: z.string().optional(),
+  authored: z.string().optional(),
   author: z.object({
-    reference: z.string(),
-    type: z.string(),
-  }),
+    reference: z.string().optional(),
+    type: z.string().optional(),
+  }).optional(),
   status: z
     .string()
     .refine((status) =>
@@ -60,7 +60,7 @@ export const questionnaireResponseSchema = z.object({
         "entered-in-error",
         "stopped",
       ].includes(status)
-    ),
+    ).optional(),
   item: itemSchema.array().optional(),
 });
 

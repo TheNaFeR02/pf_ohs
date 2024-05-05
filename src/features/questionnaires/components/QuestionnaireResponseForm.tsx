@@ -24,7 +24,7 @@ type QuestionnaireResponseFormProps = {
 }
 
 const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({ questionnaire }): ReactElement => {
-    // console.log("response from q: ", generateDefaultQuestionnaireResponse(questionnaire))
+    console.log("response from q: ", generateDefaultQuestionnaireResponse(questionnaire))
     const form = useForm<QuestionnaireResponse>({
         resolver: zodResolver(questionnaireResponseSchema),
         // defaultValues: initializeResponseWithQuestionnaireDefaults(questionnaire)
@@ -209,7 +209,7 @@ const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({ questio
     return (
         <Form {...form} >
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <QuestionnaireResponseLayout title={questionnaire.title} >
+                <QuestionnaireResponseLayout >
 
                     <div className="flex flex-col justify-center pt-4">
                         <div className="grid sm:grid-cols-2 grid-cols-1">
