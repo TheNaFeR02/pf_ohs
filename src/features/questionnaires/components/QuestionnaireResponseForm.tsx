@@ -101,7 +101,7 @@ const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({ questio
                                                 </FormControl>
                                                 <SelectContent>
                                                     {itemObj.answerOption?.map((option, index) => (
-                                                        <SelectItem key={index} value={JSON.stringify(option.valueCoding)}>{option.valueCoding.display}</SelectItem>
+                                                        option && <SelectItem key={index} value={JSON.stringify(option.valueCoding)}>{option.valueCoding.display}</SelectItem>
                                                     ))}
                                                 </SelectContent>
                                             </Select>
@@ -213,7 +213,7 @@ const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({ questio
 
                     <div className="flex flex-col justify-center pt-4">
                         <div className="grid sm:grid-cols-2 grid-cols-1">
-                            {renderQuestionnaireResponse(questionnaire.item, "")}
+                            {questionnaire.item && renderQuestionnaireResponse(questionnaire.item, "")}
                         </div>
                         <Button className="shadow-xl self-end"
                             type="submit">Submit</Button>
