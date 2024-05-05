@@ -7,7 +7,7 @@ import subjectTypes from "@/features/questionnaire_creator/data/subjectTypes.jso
 const baseItem = z.object({
   linkId: z.string(),
   text: z.string(),
-  type: z.enum(["group", "string", "choice", "integer"]), // attachment, boolean, decimal, text,
+  type: z.enum(["group", "string", "choice", "integer", "boolean", "decimal", "text"]), // attachment, decimal, text,
   required: z.boolean().optional(),
   answerOption: z
     .array(
