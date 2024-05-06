@@ -16,7 +16,7 @@ const QuestionnaireForm = () => {
       url: "http:url.com",
       status: "draft",
       subjectType: "Patient",
-      date: new Date(),
+      // date: new Date().toISOString(),
       item: [],
     },
   });

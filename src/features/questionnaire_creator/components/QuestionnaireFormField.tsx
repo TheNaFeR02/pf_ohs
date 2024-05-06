@@ -119,7 +119,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
         )}
       />
 
-      <FormField
+      {/* <FormField
         control={control}
         name="date"
         render={({ field }) => (
@@ -160,7 +160,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
             <FormMessage />
           </FormItem>
         )}
-      />
+      /> */}
 
       {itemFields.map((item, index) => (
         <div key={item.id}>
