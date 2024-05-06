@@ -24,7 +24,7 @@ type QuestionnaireResponseFormProps = {
 }
 
 const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({ questionnaire }): ReactElement => {
-    console.log("response from q: ", generateDefaultQuestionnaireResponse(questionnaire))
+    // console.log("response from q: ", generateDefaultQuestionnaireResponse(questionnaire))
     const form = useForm<QuestionnaireResponse>({
         resolver: zodResolver(questionnaireResponseSchema),
         // defaultValues: initializeResponseWithQuestionnaireDefaults(questionnaire)
