@@ -15,14 +15,15 @@ import {
 } from "@/components/ui/form";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { CalendarIcon } from "@radix-ui/react-icons";
+import { CalendarIcon, StarIcon } from "@radix-ui/react-icons";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { Check, ChevronsUpDown, Link } from "lucide-react";
+import { CaretSortIcon, CheckIcon, TrashIcon } from "@radix-ui/react-icons";
+
 import {
   Command,
   CommandEmpty,
@@ -41,6 +42,13 @@ import {
 import formatTextToUrl from "@/features/questionnaire_creator/utils/formatTextToUrl";
 import statusCodeDisplay from "@/features/questionnaire_creator/constants/statusCodeDisplay";
 import subjectTypesCodeDisplay from "@/features/questionnaire_creator/constants/subjectTypesCodeDisplay";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const QuestionnaireFormField: FunctionComponent = () => {
   const { control, watch, setValue } = useFormContext<Questionnaire>();
@@ -68,21 +76,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
   };
 
   return (
-    <div>
-      {/* <FormField
-        control={control}
-        name="resourceType"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Resource type</FormLabel>
-            <FormControl>
-              <Input placeholder="Resource Type" {...field} type="hidden"/>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      /> */}
-
+    <div className="space-y-4">
       <FormField
         control={control}
         name="title"
@@ -109,20 +103,6 @@ const QuestionnaireFormField: FunctionComponent = () => {
           </FormItem>
         )}
       />
-
-      {/* <FormField
-        control={control}
-        name="url"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>URL</FormLabel>
-            <FormControl>
-              <Input placeholder="URL" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      /> */}
 
       <FormField
         control={control}
@@ -171,7 +151,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
                           (subjectType) => subjectType.code === field.value
                         )?.display
                       : "Select Subject type"}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </FormControl>
               </PopoverTrigger>
@@ -189,7 +169,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
                             setValue("subjectType", subjectType.code);
                           }}
                         >
-                          <Check
+                          <CheckIcon
                             className={cn(
                               "mr-2 h-4 w-4",
                               subjectType.code === field.value
@@ -209,70 +189,47 @@ const QuestionnaireFormField: FunctionComponent = () => {
           </FormItem>
         )}
       />
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-4 ">
+        {itemFields.map((item, index) => (
+          <Accordion type="multiple" defaultValue={[item.id]} key={item.id} className="lg:col-span-2 col-span-1 border border-neutral-400 rounded-md p-5">
+            <AccordionItem
+              value={item.id}
+            >
+              <div className="flex justify-between items-center">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => removeItem(index)}
+                >
+                  <TrashIcon color="red" />
+                </Button>
+                <div>
+                  <AccordionTrigger>Item {index}</AccordionTrigger>
+                </div>
+              </div>
 
-      {/* <FormField
-        control={control}
-        name="date"
-        render={({ field }) => (
-          <FormItem className="flex flex-col">
-            <FormLabel>Date</FormLabel>
-            <Popover>
-              <PopoverTrigger asChild>
-                <FormControl>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-[240px] pl-3 text-left font-normal",
-                      !field.value && "text-muted-foreground"
-                    )}
-                  >
-                    {field.value ? (
-                      format(field.value, "PPP")
-                    ) : (
-                      <span>Pick a date</span>
-                    )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </FormControl>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={field.value}
-                  onSelect={field.onChange}
-                  disabled={(date) =>
-                    date > new Date() || date < new Date("1900-01-01")
-                  }
-                  initialFocus
+              <AccordionContent>
+                <ItemsFormField
+                  prefix={`item.${index}.`}
+                  watch={watch}
+                  setValue={setValue}
+                  control={control}
+                  index={index}
                 />
-              </PopoverContent>
-            </Popover>
-
-            <FormMessage />
-          </FormItem>
-        )}
-      /> */}
-
-      {itemFields.map((item, index) => (
-        <div key={item.id}>
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={() => removeItem(index)}
-          >
-            ➖
-          </Button>
-          <ItemsFormField
-            prefix={`item.${index}.`}
-            watch={watch}
-            setValue={setValue}
-            control={control}
-          />
-        </div>
-      ))}
-      <Button type="button"  onClick={addNewItem}>
-        ➕
-      </Button>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        ))}
+        <Button
+          type="button"
+          variant='outline'
+          onClick={addNewItem}
+          className="lg:col-span-2"
+        >
+          Add Item
+        </Button>
+      </div>
     </div>
   );
 };

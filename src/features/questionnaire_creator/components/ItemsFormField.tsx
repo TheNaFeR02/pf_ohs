@@ -26,12 +26,20 @@ import {
 } from "@/components/ui/select";
 
 import itemTypesCodeDisplay from "@/features/questionnaire_creator/constants/itemTypesCodeDisplay";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 interface ItemsFormFieldProps {
   prefix: string;
   watch: UseFormWatch<Questionnaire>;
   setValue: UseFormSetValue<Questionnaire>;
   control: Control<Questionnaire> | undefined;
+  index: number;
 }
 
 const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
@@ -39,6 +47,7 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
   watch,
   setValue,
   control,
+  index,
 }) => {
   const itemLinkIdInputPath = `${prefix}linkId` as `item.${number}.linkId`;
   const itemTextInputPath = `${prefix}text` as `item.${number}.text`;
@@ -67,6 +76,7 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
   };
 
   const removeItem = (index: number) => {
+    console.log("index", index);
     itemRemove(index);
   };
 
@@ -93,136 +103,137 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
   };
 
   return (
-    <div>
-      <div className="space-y-4">
-        {/* <FormField
-          control={control}
-          name={itemLinkIdInputPath}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>link Id</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="link Id"
-                  type="hidden"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-        <FormField
-          control={control}
-          name={itemTextInputPath}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Text</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Text"
-                  {...field}
-                  onBlur={() => {
-                    setValue(
-                      itemLinkIdInputPath,
-                      prefix.replace(/item\./g, "").slice(0, -1)
-                    );
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <div className="space-y-4">
+      <FormField
+        control={control}
+        name={itemTextInputPath}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Text</FormLabel>
+            <FormControl>
+              <Input
+                placeholder="Text"
+                {...field}
+                onBlur={() => {
+                  setValue(
+                    itemLinkIdInputPath,
+                    prefix.replace(/item\./g, "").slice(0, -1)
+                  );
+                }}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
-        <FormField
-          control={control}
-          name={itemTypeInputPath}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Status</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a Type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {itemTypesCodeDisplay.map((item) => (
-                    <SelectItem key={item.code} value={item.code}>
-                      {item.display}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <FormField
+        control={control}
+        name={itemTypeInputPath}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Type</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a Type" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {itemTypesCodeDisplay.map((item) => (
+                  <SelectItem key={item.code} value={item.code}>
+                    {item.display}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
-        {watchType === "choice" && (
-          <div>
-            <br />
-            <div className="grid md:grid-cols-2 space-x-4 w-full space-y-2">
-              {answerOptionFields.map((field, index) => (
-                <div key={field.id}>
+      {watchType === "choice" && (
+        <div className="ml-8">
+          {answerOptionFields.map((field, index) => (
+            <Accordion type="multiple" key={field.id} defaultValue={[field.id]}>
+              <AccordionItem value={field.id}>
+                <div className="flex justify-between items-center">
                   <Button
-                    className="bg-rose-400"
                     type="button"
-                    variant="destructive"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => removeAnswerOption(index)}
                   >
-                    ➖
+                    <TrashIcon color="red" />
                   </Button>
+                  <div>
+                    <AccordionTrigger>
+                      Option {prefix.replace(/item\./g, "").slice(0, -1)}.
+                      {index}
+                    </AccordionTrigger>
+                  </div>
+                </div>
+                <AccordionContent>
                   <AnswerOptionsFormField
                     prefix={`${prefix}answerOption.${index}.`}
                     control={control}
                   />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ))}
+          <Button
+            className="w-full mt-4"
+            type="button"
+            variant="outline"
+            onClick={() => addNewAnswerOption()}
+          >
+            ➕
+          </Button>
+        </div>
+      )}
+      {watchType === "group" && (
+        <div className="ml-8">
+          {itemFields.map((field, index) => (
+            <Accordion type="multiple" key={field.id} defaultValue={[field.id]}>
+              <AccordionItem value={field.id}>
+                <div className="flex justify-between items-center">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeItem(index)}
+                  >
+                    <TrashIcon color="red" />
+                  </Button>
+                  <div>
+                    <AccordionTrigger>
+                      Item {prefix.replace(/item\./g, "").slice(0, -1)}.{index}
+                    </AccordionTrigger>
+                  </div>
                 </div>
-              ))}
-              <Button
-                className="bg-green-400"
-                type="button"
-                onClick={() => addNewAnswerOption()}
-              >
-                ➕
-              </Button>
-            </div>
-          </div>
-        )}
-        {watchType === "group" && (
-          <div className="grid md:grid-cols-2 space-x-4 w-full space-y-2">
-            {itemFields.map((field, index) => (
-              <div key={field.id}>
-                <Button
-                  className="bg-orange-400"
-                  type="button"
-                  variant="destructive"
-                  onClick={() => removeItem(index)}
-                >
-                  ➖
-                </Button>
-                <ItemsFormField
-                  prefix={`${prefix}item.${index}.`}
-                  watch={watch}
-                  setValue={setValue}
-                  control={control}
-                />
-              </div>
-            ))}
-            <Button
-              className="bg-blue-400"
-              type="button"
-              onClick={() => addNewItem()}
-            >
-              ➕
-            </Button>
-          </div>
-        )}
-      </div>
-      <br />
-      <hr />
-      <br />
+                <AccordionContent>
+                  <ItemsFormField
+                    prefix={`${prefix}item.${index}.`}
+                    watch={watch}
+                    setValue={setValue}
+                    control={control}
+                    index={index}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ))}
+          <Button
+            className="w-full mt-4"
+            type="button"
+            variant="outline"
+            onClick={() => addNewItem()}
+          >
+            ➕
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
