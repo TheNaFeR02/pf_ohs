@@ -17,8 +17,8 @@ const QuestionnaireForm = () => {
       title: "",
       url: "",
       status: "draft",
-      subjectType: "",
-      date: new Date(),
+      subjectType: "Patient",
+      // date: new Date().toISOString(),
       item: [],
     },
   });

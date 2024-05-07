@@ -1,6 +1,6 @@
 import { parseURL } from "@/utils/parseURL";
 import { Questionnaire, questionnaireSchema } from "@/types/Questionnaire"
-import { OperationOutcomeSchema } from "@/types/fhirError";
+import { OperationOutcomeSchema } from "@/types/OperationOutcomeSchema";
 import { FhirError } from "@/errors/FhirError";
 
 

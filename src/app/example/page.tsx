@@ -22,7 +22,7 @@ import { fakePatient, FakePatient } from "./types/fakePatient";
 import { createPatient } from "@/server/createPatient";
 
 
-export default function profileForm() {
+export default function ProfileForm() {
   // 1. Define your form.
   const form = useForm<FakePatient>({
     resolver: zodResolver(fakePatient),

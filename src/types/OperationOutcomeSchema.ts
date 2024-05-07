@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// This is the anatomy of the errors that are returned by the server
 export const OperationOutcomeSchema = z.object({
     resourceType: z.literal("OperationOutcome"),
     text: z.object({

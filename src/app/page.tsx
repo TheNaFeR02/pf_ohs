@@ -4,7 +4,7 @@ import QuestionnaireForm from "@/features/questionnaire_creator/components/Quest
 import { getQuestionnaires } from "@/features/questionnaire_creator/server/getQuestionnaires";
 import { Button } from "@/components/ui/button";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div>
       <QuestionnaireForm />

@@ -1,7 +1,7 @@
 import PageHeader from "@/components/PageHeader";
 import { ReactElement } from "react";
 
-export default function QuestionnaireResponseLayout({ title, children }: { title: string, children: ReactElement }): ReactElement {
+export default function QuestionnaireResponseLayout({children}: {children: ReactElement }): ReactElement {
     return (
         <div className="w-full">
 

@@ -1,5 +1,4 @@
 import { FhirError } from "@/errors/FhirError";
-import { generateQResponseFromQuestionnaire } from "@/features/medical_record/utils/generateQResponseFromQuestionnaire";
 import QuestionnaireResponseForm from "@/features/questionnaires/components/QuestionnaireResponseForm";
 import getQuestionnaire from "@/features/questionnaires/server/getQuestionnaire";
 import { FC, ReactElement } from "react";
@@ -95,8 +94,23 @@ const QuestionnairePage: FC = async (): Promise<ReactElement> => {
                             "linkId": "15.4",
                             "text": "Dirección",
                             "type": "string"
-                        }
+                        }                        
                     ]
+                },
+                {
+                    "linkId": "16",
+                    "text": "Diabético?",
+                    "type": "boolean"
+                },
+                {
+                    "linkId": "17",
+                    "text": "Ingresa Decimal",
+                    "type": "decimal"
+                },
+                {
+                    "linkId": "18",
+                    "text": "Observaciones",
+                    "type": "text"
                 }
             ]
         }`;
