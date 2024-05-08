@@ -21,7 +21,7 @@ const DataTableRowActions = <TData,>({row,onEdit,onDelete}:DataTableRowActionsPr
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={()=> onEdit(row.original)}>Actualizar</DropdownMenuItem>
+              <DropdownMenuItem onClick={()=> onEdit(row.original) }>Actualizar</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={()=> onDelete(row.original)} >Eliminar</DropdownMenuItem>
             </DropdownMenuContent>

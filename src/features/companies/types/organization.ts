@@ -14,7 +14,7 @@ export const OrganizationSchema = z.object({
     active: z.boolean().optional(),
     id: z.string().optional(),
     name: z.string().optional(),
-    alias: z.array(z.string()).optional(),
+    alias: z.array(z.string().optional()).optional(),
     contact: z.array(ContactSchema).optional(),
 });
 

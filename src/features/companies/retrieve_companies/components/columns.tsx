@@ -27,10 +27,6 @@ import DataTableRowActions from "./DataTableRowActions"
   export const columns= ({onEdit,onDelete}: columnsProps): ColumnDef<Organization>[] => [
     
     {
-      accessorKey: "id",
-      header: "Id",
-    },
-    {
       accessorKey: "resourceType",
       header: "Tipo de recurso",
     },

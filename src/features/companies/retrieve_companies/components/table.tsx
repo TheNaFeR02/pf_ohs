@@ -7,6 +7,11 @@ import { Organization } from '@/features/companies/types/organization';
 import { deleteOrganizationById } from '@/features/companies/services/deleteCompanies';
 import { useQueryClient, useMutation, InvalidateQueryFilters } from '@tanstack/react-query';
 import { useToast } from '@/components/ui/use-toast';
+import { FormOrganizationupdate } from '@/features/companies/update_companies/components/formDone';
+import router from 'next/router';
+import Link from 'next/link'
+import { Button } from '@/components/ui/button';
+
 
 export default function DemoPage() {
     const [data, setData] = useState<Organization[]>([]);
@@ -45,8 +50,10 @@ export default function DemoPage() {
         await queryClient.invalidateQueries({});
     }, []);
 
-    const onEdit = useCallback((organization: Organization) => alert(`Editing organization with id: ${organization.id}`), []);
-
+    const onEdit = useCallback((organization: Organization) => {
+        // Assuming FormOrganizationupdate is a component that takes props
+       
+    }, []);
     const column = useMemo(() => columns({ onEdit, onDelete }), [onEdit, onDelete]);
     
     if (loading) {
@@ -54,7 +61,13 @@ export default function DemoPage() {
     }
 
     return (
+
         <div className="container mx-auto py-10">
+            <div className="mb-5 text-right" >
+                <Button className='bg-blue-500 hover:bg-blue-700'>
+                    <Link href="/companies/create">Añadir organización</Link>
+                </Button>
+            </div>
             <DataTable data={data} columns={column}  />
         </div>
     );

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -30,16 +30,20 @@ import { Organization, OrganizationSchema } from "@/features/companies/types/org
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createOrganization } from "@/features/companies/services/createCompanies";
+import { getOrganizationById } from "@/features/companies/services/getCompany";
+import { updateOrganization } from "@/features/companies/services/updateCompanies";
 
-export function FormOrganization() {
+export function FormOrganizationupdate({ id }: { id: string }) {
+  id = "3";
+
   const form = useForm<z.infer<typeof OrganizationSchema>>({
     resolver: zodResolver(OrganizationSchema),
     defaultValues: {
             resourceType: "Organization",
             identifier: [{
-                use: "",
-                system: "",
-                value: "",
+              use: "",
+              system: "",
+              value: "",
             }],
             active: false,
             name: "",
@@ -70,11 +74,24 @@ export function FormOrganization() {
         },
 })
 
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const data = await getOrganizationById(id);
+      form.reset(data); 
+    } catch (error) {
+      console.error("Error fetching organization data:", error);
+    }
+  };
+
+  fetchData();
+}, [form]);
+
 
 
 function onSubmit(values: Organization) {
   console.log("values", values);
-  createOrganization(values);
+  updateOrganization(id, values);
 }
 
     const { control } = form;
@@ -207,7 +224,7 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                   )}
               />
               <div className="flex flex-row my-5">
-                {aliases.map((field, index) => (
+              {aliases.map((field,index) => (
                   <div key={index} className="flex flex-row">
                     <FormField
                       control={form.control}
@@ -433,7 +450,7 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
           </div>
         </CardContent>
         <div className="flex mb-50 justify-center">
-          <Button type="submit" className="bg-green-500 hover:bg-green-700 mb-10">Crear</Button>
+          <Button type="submit" className="bg-green-500 hover:bg-green-700 mb-10">Actualizar</Button>
         </div>
       </Card>
       </form>
@@ -441,4 +458,4 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
   )
 }
 
-export default FormOrganization;
+export default FormOrganizationupdate;
