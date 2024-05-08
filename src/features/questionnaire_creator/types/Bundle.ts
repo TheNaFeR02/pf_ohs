@@ -76,3 +76,4 @@ export const BundleSchema = z.object({
 });
 
 export type Bundle = z.infer<typeof BundleSchema>;
+export type BundleEntry = z.infer<typeof BundleEntrySchema>;
