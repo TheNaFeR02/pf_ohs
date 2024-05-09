@@ -43,7 +43,7 @@ export function FormOrganization() {
             }],
             active: false,
             name: "",
-            alias: [],
+            alias: ["","",""],
             contact: [
                 {
                     telecom: [{
@@ -84,20 +84,6 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
     name: "identifier",
   });
 
-  const [aliases, setAliases] = useState([""]);
-  
-  const handleAddAlias = () => {
-    if (aliases.length < 4) { // Cambiar la condición según tus requisitos
-      setAliases([...aliases, ""]);
-    }
-  };
-
-  const handleRemoveAlias = (index: number) => {
-    const newAliases = [...aliases];
-    newAliases.splice(index, 1);
-    setAliases(newAliases);
-  };
-
   const { fields: contactFields, append: contactAppend, remove: contactRemove } = useFieldArray({
     control,
     name: "contact",
@@ -114,15 +100,6 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
         <CardContent>
           <div className="my-4 mx-6">
             <div className="my-2 mx-2" >
-                <FormField
-                  control={form.control}
-                  name={`resourceType`}
-                  render={({ field }) => (
-                      <FormControl>
-                          <Input placeholder="Organization" type="text" defaultValue="Organization" readOnly/>
-                      </FormControl>
-                  )}
-                />
               <Card className="my-5">
                 <CardHeader>
                   <CardTitle>Identificador</CardTitle>
@@ -171,12 +148,13 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                       )}
                     />
                                 {index > 0 && (
-                                <Button onClick={() => removeIdentifier(index)} className="ml-2 my-1 mx-2 bg-red-500 text-white rounded hover:bg-red-700">Eliminar Contacto</Button>
+                                <Button type="button" onClick={() => removeIdentifier(index)} className="ml-2 my-1 mx-2 bg-red-500 text-white rounded hover:bg-red-700">Eliminar Contacto</Button>
                             )}
                       </div>
                     </div>
               ))}
                 <Button
+                  type="button"
                   onClick={() => appendIdentifier({})}
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-4 rounded mt-2"
                 >
@@ -207,35 +185,33 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                   )}
               />
               <div className="flex flex-row my-5">
-                {aliases.map((field, index) => (
-                  <div key={index} className="flex flex-row">
-                    <FormField
-                      control={form.control}
-                      name={`alias.${index}`}
-                      render={({ field }) => (
-                        <FormControl>
-                          <Input placeholder="Alias" type="text" {...field} className="my-2 mr-2 w-23" />
-                        </FormControl>
-                      )}
-                    />
-                    {index > 0 && (
-                      <Button
-                        onClick={() => handleRemoveAlias(index)}
-                        className="ml-2 my-1 mx-2 bg-red-500 text-white rounded hover:bg-red-700"
-                      >
-                        Eliminar Alias
-                      </Button>
-                    )}
-                  </div>
-                ))}
-                {aliases.length < 3 && (
-                  <Button
-                    onClick={handleAddAlias}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-4 rounded mt-2"
-                  >
-                    Añadir Alias
-                  </Button>
+              <FormField
+                control={form.control}
+                name={`alias.0`}
+                render={({ field }) => (
+                  <FormControl>
+                    <Input placeholder="Alias" type="text" {...field} className="my-2 mr-2 w-23" />
+                  </FormControl>
                 )}
+              />
+              <FormField
+                control={form.control}
+                name={`alias.1`}
+                render={({ field }) => (
+                  <FormControl>
+                    <Input placeholder="Alias" type="text" {...field} className="my-2 mr-2 w-23" />
+                  </FormControl>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={`alias.2`}
+                render={({ field }) => (
+                  <FormControl>
+                    <Input placeholder="Alias" type="text" {...field} className="my-2 mr-2 w-23" />
+                  </FormControl>
+                )}
+              />
               </div>
               <Card className="my-5">
                 <CardHeader>
@@ -422,11 +398,11 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                                     />
                             </div>
                             {index > 0 && (
-                                <Button onClick={() => contactRemove(index)} className="ml-2 my-1 mx-2 bg-red-500 text-white rounded hover:bg-red-700">Eliminar Contacto</Button>
+                                <Button type="button" onClick={() => contactRemove(index)} className="ml-2 my-1 mx-2 bg-red-500 text-white rounded hover:bg-red-700">Eliminar Contacto</Button>
                             )}
                         </div>
                     ))}
-                    <Button onClick={() => contactAppend({telecom: [{}]})} className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-4 rounded mt-2">Añadir Contacto</Button>
+                    <Button type="button" onClick={() => contactAppend({telecom: [{}]})} className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-4 rounded mt-2">Añadir Contacto</Button>
                 </CardContent>
             </Card>
             </div>
