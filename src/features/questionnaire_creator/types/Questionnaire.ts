@@ -1,12 +1,13 @@
 import { z } from "zod";
-import { IdentifierSchema } from "@/features/questionnaire_creator/types/Identifier";
-import { CodingSchema } from "@/features/questionnaire_creator/types/Coding";
-import { CodeableConceptSchema } from "@/features/questionnaire_creator/types/CodeableConcept";
-import { ReferenceSchema } from "@/features/questionnaire_creator/types/Reference";
-import { PeriodSchema } from "@/features/questionnaire_creator/types/Period";
-import { QuantitySchema } from "@/features/questionnaire_creator/types/Quantity";
+import { identifierSchema } from "@/features/questionnaire_creator/types/Identifier";
+import { codingSchema } from "@/features/questionnaire_creator/types/Coding";
+import { codeableConceptSchema } from "@/features/questionnaire_creator/types/CodeableConcept";
+import { referenceSchema } from "@/features/questionnaire_creator/types/Reference";
+import { periodSchema } from "@/features/questionnaire_creator/types/Period";
+import { quantitySchema } from "@/features/questionnaire_creator/types/Quantity";
 import { attachmentSchema } from "@/features/questionnaire_creator/types/Attachment";
-import { ContactDetailSchema } from "@/features/questionnaire_creator/types/ContactDetail";
+import { contactDetailSchema } from "@/features/questionnaire_creator/types/ContactDetail";
+import { usageContextSchema } from "@/features/questionnaire_creator/types/UsageContext";
 import {
   booleanSchema,
   integerSchema,
@@ -24,13 +25,12 @@ import subjectTypesCodeDisplay from "@/features/questionnaire_creator/constants/
 import statusCodeDisplay from "@/features/questionnaire_creator/constants/statusCodeDisplay";
 import itemTypesCodeDisplay from "@/features/questionnaire_creator/constants/itemTypesCodeDisplay";
 import questionnaireEnableOperatorCodeDisplay from "@/features/questionnaire_creator/constants/questionnaireEnableOperatorCodeDisplay";
-import questionnaireEnableBehaviorCodeDisplay from "../constants/questionnaireEnableOperatorCoodeDisplay";
-import UsageContextSchema from "@/features/questionnaire_creator/types/UsageContext";
+import questionnaireEnableBehaviorCodeDisplay from "@/features/questionnaire_creator/constants/questionnaireEnableBehaviorCodeDisplay";
 
-const BaseQuestionnaireItemSchema = z.object({
-  linkId: stringSchema.optional(),
+const baseQuestionnaireItemSchema = z.object({
+  linkId: stringSchema,
   definition: uriSchema.optional(),
-  code: z.array(CodingSchema).optional(),
+  code: z.array(codingSchema).optional(),
   prefix: stringSchema.optional(),
   text: stringSchema.optional(),
   type: z.enum(
@@ -41,7 +41,7 @@ const BaseQuestionnaireItemSchema = z.object({
   enableWhen: z
     .array(
       z.object({
-        question: stringSchema.optional(),
+        question: stringSchema,
         operator: z.enum(
           JSON.parse(
             JSON.stringify(
@@ -58,19 +58,23 @@ const BaseQuestionnaireItemSchema = z.object({
         answerDateTime: dateTimeSchema.optional(),
         answerTime: timeSchema.optional(),
         answerString: stringSchema.optional(),
-        answerCoding: CodingSchema.optional(),
-        answerQuantity: QuantitySchema.optional(),
-        answerReference: ReferenceSchema.optional(),
+        answerCoding: codingSchema.optional(),
+        answerQuantity: quantitySchema.optional(),
+        answerReference: referenceSchema.optional(),
       })
     )
     .optional(),
-  enableBehavior: z.enum(
-    JSON.parse(
-      JSON.stringify(
-        questionnaireEnableBehaviorCodeDisplay.map((behavior) => behavior.code)
+  enableBehavior: z
+    .enum(
+      JSON.parse(
+        JSON.stringify(
+          questionnaireEnableBehaviorCodeDisplay.map(
+            (behavior) => behavior.code
+          )
+        )
       )
     )
-  ),
+    .optional(),
   required: booleanSchema.optional(),
   repeats: booleanSchema.optional(),
   readOnly: booleanSchema.optional(),
@@ -83,8 +87,8 @@ const BaseQuestionnaireItemSchema = z.object({
         valueDate: dateSchema.optional(),
         valueTime: timeSchema.optional(),
         valueString: stringSchema.optional(),
-        valueCoding: CodingSchema.optional(),
-        valueReference: ReferenceSchema.optional(),
+        valueCoding: codingSchema.optional(),
+        valueReference: referenceSchema.optional(),
         initialSelected: booleanSchema.optional(),
       })
     )
@@ -101,27 +105,27 @@ const BaseQuestionnaireItemSchema = z.object({
         valueString: stringSchema.optional(),
         valueUri: uriSchema.optional(),
         valueAttachment: attachmentSchema.optional(),
-        valueCoding: CodingSchema.optional(),
-        valueQuantity: QuantitySchema.optional(),
-        valueReference: ReferenceSchema.optional(),
+        valueCoding: codingSchema.optional(),
+        valueQuantity: quantitySchema.optional(),
+        valueReference: referenceSchema.optional(),
       })
     )
     .optional(),
 });
 
-export type QuestionnaireItem = z.infer<typeof BaseQuestionnaireItemSchema> & {
+export type QuestionnaireItem = z.infer<typeof baseQuestionnaireItemSchema> & {
   item?: QuestionnaireItem[];
 };
 
-const QuestionnaireItemSchema: z.ZodType<QuestionnaireItem> =
-  BaseQuestionnaireItemSchema.extend({
-    item: z.lazy(() => QuestionnaireItemSchema.array()).optional(),
+const questionnaireItemSchema: z.ZodType<QuestionnaireItem> =
+  baseQuestionnaireItemSchema.extend({
+    item: z.lazy(() => questionnaireItemSchema.array()).optional(),
   });
 
-const QuestionnaireSchema = z.object({
+export const questionnaireSchema = z.object({
   resourceType: z.literal("Questionnaire"),
   url: urlSchema.optional(),
-  identifier: z.array(IdentifierSchema).optional(),
+  identifier: z.array(identifierSchema).optional(),
   version: stringSchema.optional(),
   name: stringSchema.optional(),
   title: stringSchema.optional(),
@@ -130,26 +134,30 @@ const QuestionnaireSchema = z.object({
     JSON.parse(JSON.stringify(statusCodeDisplay.map((status) => status.code)))
   ),
   experimental: booleanSchema.optional(),
-  subjectType: z.enum(
-    JSON.parse(
-      JSON.stringify(
-        subjectTypesCodeDisplay.map((subjectType) => subjectType.code)
+  subjectType: z
+    .array(
+      z.enum(
+        JSON.parse(
+          JSON.stringify(
+            subjectTypesCodeDisplay.map((subjectType) => subjectType.code)
+          )
+        )
       )
     )
-  ),
+    .optional(),
   date: dateSchema.optional(),
   publisher: stringSchema.optional(),
-  contact: z.array(ContactDetailSchema).optional(),
+  contact: z.array(contactDetailSchema).optional(),
   description: markdownSchema.optional(),
-  useContext: z.array(UsageContextSchema).optional(),
-  jurisdiction: z.array(CodeableConceptSchema).optional(),
+  useContext: z.array(usageContextSchema).optional(),
+  jurisdiction: z.array(codeableConceptSchema).optional(),
   purpose: markdownSchema.optional(),
   copyright: markdownSchema.optional(),
   approvalDate: dateSchema.optional(),
   lastReviewDate: dateSchema.optional(),
-  effectivePeriod: PeriodSchema.optional(),
-  code: z.array(CodingSchema).optional(),
-  item: z.array(QuestionnaireItemSchema),
+  effectivePeriod: periodSchema.optional(),
+  code: z.array(codingSchema).optional(),
+  item: z.array(questionnaireItemSchema).optional(),
 });
 
-export { QuestionnaireSchema };
+export type Questionnaire = z.infer<typeof questionnaireSchema>;

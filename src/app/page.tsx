@@ -32,6 +32,7 @@ export default function HomePage() {
 
   return (
     <div>
+      <QuestionnaireForm />
       {data?.total && <p>Total: {data.total}</p>}
       <QuestionnaireDataTable
         columns={QuestionnairesColumns}

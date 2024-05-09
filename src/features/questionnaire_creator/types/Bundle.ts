@@ -1,79 +1,82 @@
 import { z } from "zod";
-import { IdentifierSchema } from "@/features/questionnaire_creator/types/Identifier";
-import { ResourceSchema } from "@/features/questionnaire_creator/types/Resource";
-import { SignatureSchema } from "@/features/questionnaire_creator/types/Signature";
+import { identifierSchema } from "@/features/questionnaire_creator/types/Identifier";
+import { resourceSchema } from "@/features/questionnaire_creator/types/Resource";
+import { signatureSchema } from "@/features/questionnaire_creator/types/Signature";
+import {
+  decimalSchema,
+  instantSchema,
+  stringSchema,
+  unsignedIntSchema,
+  uriSchema,
+} from "@/features/questionnaire_creator/types/dataTypes";
+import searchEntryModeCodeDisplay from "@/features/questionnaire_creator/constants/searchEntryModeCodeDisplay";
+import httpVerbCodeDisplay from "@/features/questionnaire_creator/constants/httpVerbCodeDisplay";
+import bundleTypeCodeDisplay from "@/features/questionnaire_creator/constants/bundleTypeCodeDisplay";
 
-const BundleLinkSchema = z.object({
-  relation: z.enum(["self", "alternate", "prev", "next"]),
-  url: z.string().url(),
+const bundleLinkSchema = z.object({
+  relation: stringSchema, // R!
+  url: uriSchema, // R! The reference details for the link
 });
 
-const BundleSearchSchema = z.object({
-  mode: z.enum(["match", "include", "outcome"]),
-  score: z.number().min(0).max(1),
-});
-
-const BundleRequestSchema = z.object({
-  method: z.enum(["GET", "HEAD", "POST", "PUT", "DELETE", "PATCH"]),
-  url: z.string().url(),
-  ifNoneMatch: z.string().optional(),
-  ifModifiedSince: z
-    .string()
-    .regex(
-      /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))/
+const bundleSearchSchema = z.object({
+  mode: z
+    .enum(
+      JSON.parse(
+        JSON.stringify(
+          searchEntryModeCodeDisplay.map(
+            (searchEntryMode) => searchEntryMode.code
+          )
+        )
+      )
     )
     .optional(),
-  ifMatch: z.string().optional(),
-  ifNoneExist: z.string().optional(),
+  score: decimalSchema.min(0).max(1).optional(),
 });
 
-const BundleResponseSchema = z.object({
-  status: z.string(),
-  location: z.string().url().optional(),
+const bundleRequestSchema = z.object({
+  method: z.enum(
+    JSON.parse(
+      JSON.stringify(httpVerbCodeDisplay.map((httpVerb) => httpVerb.code))
+    )
+  ), // R!  GET | HEAD | POST | PUT | DELETE | PATCH
+  url: uriSchema, // R!  URL for the resource
+  ifNoneMatch: stringSchema.optional(),
+  ifModifiedSince: instantSchema.optional(),
+  ifMatch: stringSchema.optional(),
+  ifNoneExist: stringSchema.optional(),
+});
+
+const bundleResponseSchema = z.object({
+  status: stringSchema, // R!  Status response code (text optional)
+  location: uriSchema.optional(),
   etag: z.string().optional(),
-  lastModified: z
-    .string()
-    .regex(
-      /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))/
-    )
-    .optional(),
-  outcome: ResourceSchema.optional(),
+  lastModified: instantSchema.optional(),
+  outcome: resourceSchema.optional(),
 });
 
-const BundleEntrySchema = z.object({
-  link: z.array(BundleLinkSchema).optional(),
-  fullUrl: z.string().url().optional(),
-  resource: ResourceSchema.optional(),
-  search: BundleSearchSchema.optional(),
-  request: BundleRequestSchema.optional(),
-  response: BundleResponseSchema.optional(),
+const bundleEntrySchema = z.object({
+  link: z.array(bundleLinkSchema).optional(),
+  fullUrl: uriSchema.optional(),
+  resource: resourceSchema.optional(),
+  search: bundleSearchSchema.optional(),
+  request: bundleRequestSchema.optional(),
+  response: bundleResponseSchema.optional(),
 });
 
-export const BundleSchema = z.object({
+export const bundleSchema = z.object({
   resourceType: z.literal("Bundle"),
-  identifier: z.array(IdentifierSchema).optional(),
-  type: z.enum([
-    "document",
-    "message",
-    "transaction",
-    "transaction-response",
-    "batch",
-    "batch-response",
-    "history",
-    "searchset",
-    "collection",
-  ]),
-  timestamp: z
-    .string()
-    .regex(
-      /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))/
+  identifier: z.array(identifierSchema).optional(),
+  type: z.enum(
+    JSON.parse(
+      JSON.stringify(bundleTypeCodeDisplay.map((bundleType) => bundleType.code))
     )
-    .optional(),
-  total: z.number().int().positive().optional(), // Total number of entries in the bundle form 0 to infinity
-  link: z.array(BundleLinkSchema),
-  entry: z.array(BundleEntrySchema),
-  signature: SignatureSchema.optional(),
+  ), // R!  document | message | transaction ...
+  timestamp: instantSchema.optional(),
+  total: unsignedIntSchema.optional(),
+  link: z.array(bundleLinkSchema).optional(),
+  entry: z.array(bundleEntrySchema).optional(),
+  signature: signatureSchema.optional(),
 });
 
-export type Bundle = z.infer<typeof BundleSchema>;
-export type BundleEntry = z.infer<typeof BundleEntrySchema>;
+export type Bundle = z.infer<typeof bundleSchema>;
+export type BundleEntry = z.infer<typeof bundleEntrySchema>;

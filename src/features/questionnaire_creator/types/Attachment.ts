@@ -1,5 +1,4 @@
 import { z } from "zod";
-
 import {
   codeSchema,
   base64BinarySchema,
@@ -8,14 +7,15 @@ import {
   stringSchema,
   dateTimeSchema,
 } from "@/features/questionnaire_creator/types/dataTypes";
-
-import languagesCodeDisplay from "@/features/questionnaire_creator/constants/languajesCodeDisplay";
+import languagesCodeDisplay from "@/features/questionnaire_creator/constants/languagesCodeDisplay";
 
 export const attachmentSchema = z.object({
   contentType: codeSchema.optional(),
   language: z.enum(
-    JSON.parse(JSON.stringify(languagesCodeDisplay.map((language) => language.code)))
-  ),
+    JSON.parse(
+      JSON.stringify(languagesCodeDisplay.map((language) => language.code))
+    )
+  ).optional(),
   data: base64BinarySchema.optional(),
   url: urlSchema.optional(),
   size: unsignedIntSchema.optional(),

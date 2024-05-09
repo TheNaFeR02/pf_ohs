@@ -142,10 +142,10 @@ const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({ questio
                                                         </FormControl>
                                                         <div className="space-y-1 leading-none">
                                                             <FormLabel>
-                                                                Diabético?
+                                                                {itemObj.text}
                                                             </FormLabel>
                                                             <FormDescription>
-                                                                Estás Diabético?
+                                                                {itemObj.text}
                                                             </FormDescription>
                                                         </div>
                                                     </FormItem>

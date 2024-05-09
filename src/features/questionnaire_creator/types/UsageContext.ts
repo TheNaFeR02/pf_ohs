@@ -1,17 +1,17 @@
 import { z } from "zod";
-import { CodingSchema } from "@/features/questionnaire_creator/types/Coding";
-import { CodeableConceptSchema } from "@/features/questionnaire_creator/types/CodeableConcept";
-import { ReferenceSchema } from "@/features/questionnaire_creator/types/Reference";
-import { QuantitySchema } from "@/features/questionnaire_creator/types/Quantity";
-import { RangeSchema } from "@/features/questionnaire_creator/types/Range";
+import { codingSchema } from "@/features/questionnaire_creator/types/Coding";
+import { codeableConceptSchema } from "@/features/questionnaire_creator/types/CodeableConcept";
+import { referenceSchema } from "@/features/questionnaire_creator/types/Reference";
+import { quantitySchema } from "@/features/questionnaire_creator/types/Quantity";
+import { rangeSchema } from "@/features/questionnaire_creator/types/Range";
 
-const usageContextSchema = z.object({
-  code: CodingSchema,
+export const usageContextSchema = z.object({
+  code: codingSchema,
   // value[x]: Value that defines the context. One of these 4:
-  valueCodeableConcept: CodeableConceptSchema.optional(),
-  valueQuantity: QuantitySchema.optional(),
-  valueRange: RangeSchema.optional(),
-  valueReference: ReferenceSchema.optional(),
+  valueCodeableConcept: codeableConceptSchema.optional(),
+  valueQuantity: quantitySchema.optional(),
+  valueRange: rangeSchema.optional(),
+  valueReference: referenceSchema.optional(),
 });
 
-export default usageContextSchema;
+export type UsageContext = z.infer<typeof usageContextSchema>;

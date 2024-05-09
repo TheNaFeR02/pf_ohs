@@ -1,11 +1,24 @@
 import { z } from "zod";
+import {
+  decimalSchema,
+  stringSchema,
+  uriSchema,
+  codeSchema,
+} from "@/features/questionnaire_creator/types/dataTypes";
+import quantityComparatorCodeDisplay from "@/features/questionnaire_creator/constants/quantityComparatorCodeDisplay";
 
-export const QuantitySchema = z.object({
-  value: z.number(),
-  comparator: z.enum(["<", "<=", ">=", ">"]).optional(),
-  unit: z.string(),
-  system: z.string().url().optional(),
-  code: z.string().optional(),
+export const quantitySchema = z.object({
+  value: decimalSchema.optional(),
+  comparator: z
+    .enum(
+      JSON.parse(
+        JSON.stringify(quantityComparatorCodeDisplay.map((item) => item.code))
+      )
+    )
+    .optional(),
+  unit: stringSchema.optional(),
+  system: uriSchema.optional(),
+  code: codeSchema.optional(),
 });
 
-export type Quantity = z.infer<typeof QuantitySchema>;
+export type Quantity = z.infer<typeof quantitySchema>;

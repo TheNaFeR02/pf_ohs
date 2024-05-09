@@ -1,12 +1,24 @@
 import { z } from "zod";
-import { MetaSchema } from "@/features/questionnaire_creator/types/Meta";
+import { metaSchema } from "@/features/questionnaire_creator/types/Meta";
+import {
+  stringSchema,
+  uriSchema,
+  idSchema,
+} from "@/features/questionnaire_creator/types/dataTypes";
+import languagesCodeDisplay from "@/features/questionnaire_creator/constants/languagesCodeDisplay";
 
-export const ResourceSchema = z.object({
-  resourceType: z.string().optional(),
-  id: z.string().optional(),
-  meta: MetaSchema.optional(),
-  implicitRules: z.string().url().optional(),
-  language: z.string().optional(),
+export const resourceSchema = z.object({
+  resourceType: stringSchema.optional(),
+  id: idSchema.optional(),
+  meta: metaSchema.optional(),
+  implicitRules: uriSchema.optional(),
+  language: z
+    .enum(
+      JSON.parse(
+        JSON.stringify(languagesCodeDisplay.map((language) => language.code))
+      )
+    )
+    .optional(),
 });
 
-export type Resource = z.infer<typeof ResourceSchema>;
+export type Resource = z.infer<typeof resourceSchema>;
