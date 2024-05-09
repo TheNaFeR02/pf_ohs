@@ -15,11 +15,8 @@ const QuestionnaireForm = () => {
     defaultValues: {
       resourceType: "Questionnaire",
       title: "",
-      url: "",
       status: "draft",
-      subjectType: [],
-      // date: new Date().toISOString(),
-      item: [],
+      date: new Date().toISOString(),
     },
   });
 

@@ -145,7 +145,7 @@ export const questionnaireSchema = z.object({
       )
     )
     .optional(),
-  date: dateSchema.optional(),
+  date: dateTimeSchema.optional(),
   publisher: stringSchema.optional(),
   contact: z.array(contactDetailSchema).optional(),
   description: markdownSchema.optional(),

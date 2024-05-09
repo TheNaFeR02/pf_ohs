@@ -7,7 +7,6 @@ const QuestionnairesColumns: ColumnDef<BundleEntry>[] = [
   {
     accessorKey: "resource.id",
     header: "ID",
-    // i need the cell to be a link nextjs component
     cell: ({ row }) => {
       return (
         <Link className="text-blue-600 hover:underline" href={`/questionnaires/${row.original.resource?.id}`}>

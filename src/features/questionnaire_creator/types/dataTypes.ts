@@ -18,7 +18,7 @@ const uriSchema = z.string().url();
 const urlSchema = z
   .string()
   .regex(/^(http|https):\/\/[^\s|]+\|?[^\s#|]*([#][^\s]*)?$/); // URL with optional fragment | NEED TO BE CHECKED
-  // const urlSchema = z.string().url() || z.string().regex(/#\w+/);
+// const urlSchema = z.string().url() || z.string().regex(/#\w+/);
 const canonicalSchema = z.string();
 const base64BinarySchema = z.string().regex(/(\s*([0-9a-zA-Z\+\=]){4}\s*)+/);
 const instantSchema = z.string().regex(instantRegex);

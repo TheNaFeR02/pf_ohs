@@ -18,7 +18,7 @@ export default function HomePage() {
       try {
         const result = await getQuestionnaires();
         setData(result);
-        setentryData(result.entry);
+        setentryData(result.entry || []);
         console.log("result:", result.entry);
 
       } catch (error) {
