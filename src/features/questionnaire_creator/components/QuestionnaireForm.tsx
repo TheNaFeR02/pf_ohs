@@ -5,7 +5,7 @@ import QuestionnaireFormField from "@/features/questionnaire_creator/components/
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { questionnaireSchema, Questionnaire } from "@/types/Questionnaire";
+import { Questionnaire, questionnaireSchema } from "@/features/questionnaire_creator/types/Questionnaire";
 import QuestionnaireFormLayout from "@/features/questionnaire_creator/components/QuestionnaireFormLayout";
 import { createQuestionnaire } from "../server/createQuestionnaire";
 
@@ -17,7 +17,7 @@ const QuestionnaireForm = () => {
       title: "",
       url: "",
       status: "draft",
-      subjectType: "Patient",
+      subjectType: [],
       // date: new Date().toISOString(),
       item: [],
     },

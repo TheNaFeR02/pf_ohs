@@ -1,24 +1,21 @@
-import {Questionnaire} from '@/types/Questionnaire';
+import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
 import { parseURL } from "@/utils/parseURL";
 
-
 export async function createQuestionnaire(questionnaire: Questionnaire) {
-  console.log("parsed url:", parseURL('/Questionnaire'))
+  console.log("parsed url:", parseURL("/Questionnaire"));
   try {
-    const res = await fetch(parseURL('/Questionnaire'), {
-      method: 'POST',
+    const res = await fetch(parseURL("/Questionnaire"), {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(questionnaire)
-    })
+      body: JSON.stringify(questionnaire),
+    });
 
-    const data = await res.json()
+    const data = await res.json();
 
-    console.log('Response:', data)
-
+    console.log("Response:", data);
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-
-} 
+}
