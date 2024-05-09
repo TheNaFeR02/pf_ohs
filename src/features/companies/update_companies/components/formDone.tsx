@@ -32,10 +32,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { createOrganization } from "@/features/companies/services/createCompanies";
 import { getOrganizationById } from "@/features/companies/services/getCompany";
 import { updateOrganization } from "@/features/companies/services/updateCompanies";
+import { useRouter } from "next/router";
 
 export function FormOrganizationupdate({ id }: { id: string }) {
-  id = "6";
-
+  
+  const router = useRouter();
+  const { idorg } = router.query;
+  console.log(idorg);
   const form = useForm<z.infer<typeof OrganizationSchema>>({
     resolver: zodResolver(OrganizationSchema),
     defaultValues: {
@@ -111,7 +114,7 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
       <Card className="m-5">
         <CardHeader>
-          <CardTitle>Crear compañia</CardTitle>
+          <CardTitle>Actualizar compañia</CardTitle>
           <CardDescription>Ingrese la información de la compañia</CardDescription>
         </CardHeader>
         <CardContent>
