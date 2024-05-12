@@ -26,6 +26,8 @@ import statusCodeDisplay from "@/features/questionnaire_creator/constants/status
 import itemTypesCodeDisplay from "@/features/questionnaire_creator/constants/itemTypesCodeDisplay";
 import questionnaireEnableOperatorCodeDisplay from "@/features/questionnaire_creator/constants/questionnaireEnableOperatorCodeDisplay";
 import questionnaireEnableBehaviorCodeDisplay from "@/features/questionnaire_creator/constants/questionnaireEnableBehaviorCodeDisplay";
+import { resourceSchema } from "./Resource";
+import { domainResourceSchema } from "./DomainResource";
 
 const baseQuestionnaireItemSchema = z.object({
   linkId: stringSchema,
@@ -122,7 +124,7 @@ const questionnaireItemSchema: z.ZodType<QuestionnaireItem> =
     item: z.lazy(() => questionnaireItemSchema.array()).optional(),
   });
 
-export const questionnaireSchema = z.object({
+const baseQuestionnaireSchema = z.object({
   resourceType: z.literal("Questionnaire"),
   url: urlSchema.optional(),
   identifier: z.array(identifierSchema).optional(),
@@ -159,5 +161,10 @@ export const questionnaireSchema = z.object({
   code: z.array(codingSchema).optional(),
   item: z.array(questionnaireItemSchema).optional(),
 });
+
+export const questionnaireSchema = resourceSchema
+  .omit({ resourceType: true })
+  .merge(domainResourceSchema.omit({ resourceType: true, resource: true }))
+  .merge(baseQuestionnaireSchema);
 
 export type Questionnaire = z.infer<typeof questionnaireSchema>;

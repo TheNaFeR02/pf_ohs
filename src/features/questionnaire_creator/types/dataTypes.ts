@@ -14,12 +14,11 @@ const booleanSchema = z.boolean();
 const integerSchema = z.number().int();
 const stringSchema = z.string().max(1024 * 1024); // Maximum size of 1MB
 const decimalSchema = z.number();
-const uriSchema = z.string().url();
+const uriSchema = z.string().regex(/\S*/);
 const urlSchema = z
-  .string()
-  .regex(/^(http|https):\/\/[^\s|]+\|?[^\s#|]*([#][^\s]*)?$/); // URL with optional fragment | NEED TO BE CHECKED
-// const urlSchema = z.string().url() || z.string().regex(/#\w+/);
-const canonicalSchema = z.string();
+  .string().url()
+// const canonicalSchema = z.string().url() || z.string().regex(/#\w+/);
+const canonicalSchema =  z.string().regex(/^(http|https):\/\/[^\s|]+\|?[^\s#|]*([#][^\s]*)?$/); // URL with optional fragment | NEED TO BE CHECKED
 const base64BinarySchema = z.string().regex(/(\s*([0-9a-zA-Z\+\=]){4}\s*)+/);
 const instantSchema = z.string().regex(instantRegex);
 const dateSchema = z.string().regex(dateRegex);

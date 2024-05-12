@@ -17,6 +17,7 @@ const bundleLinkSchema = z.object({
   relation: stringSchema, // R!
   url: uriSchema, // R! The reference details for the link
 });
+type BundleLink = z.infer<typeof bundleLinkSchema>;
 
 const bundleSearchSchema = z.object({
   mode: z
@@ -32,6 +33,7 @@ const bundleSearchSchema = z.object({
     .optional(),
   score: decimalSchema.min(0).max(1).optional(),
 });
+type BundleSearch = z.infer<typeof bundleSearchSchema>;
 
 const bundleRequestSchema = z.object({
   method: z.enum(
@@ -46,6 +48,8 @@ const bundleRequestSchema = z.object({
   ifNoneExist: stringSchema.optional(),
 });
 
+type BundleRequest = z.infer<typeof bundleRequestSchema>;
+
 const bundleResponseSchema = z.object({
   status: stringSchema, // R!  Status response code (text optional)
   location: uriSchema.optional(),
@@ -54,14 +58,27 @@ const bundleResponseSchema = z.object({
   outcome: resourceSchema.optional(),
 });
 
-const bundleEntrySchema = z.object({
-  link: z.array(bundleLinkSchema).optional(),
-  fullUrl: uriSchema.optional(),
-  resource: resourceSchema.optional(),
-  search: bundleSearchSchema.optional(),
-  request: bundleRequestSchema.optional(),
-  response: bundleResponseSchema.optional(),
-});
+type BundleResponse = z.infer<typeof bundleResponseSchema>;
+
+export type BundleEntry<T> = {
+  link?: BundleLink[];
+  fullUrl?: string;
+  resource?: T;
+  search?: BundleSearch;
+  request?: BundleRequest;
+  response?: BundleResponse;
+};
+
+// Crear un esquema Zod basado en el tipo BundleEntry
+export const bundleEntrySchema = <T>(resourceSchema: z.ZodType<T>) =>
+  z.object({
+    link: z.array(bundleLinkSchema).optional(),
+    fullUrl: stringSchema.optional(),
+    resource: resourceSchema.optional(),
+    search: bundleSearchSchema.optional(),
+    request: bundleRequestSchema.optional(),
+    response: bundleResponseSchema.optional(),
+  });
 
 export const bundleSchema = z.object({
   resourceType: z.literal("Bundle"),
@@ -74,9 +91,8 @@ export const bundleSchema = z.object({
   timestamp: instantSchema.optional(),
   total: unsignedIntSchema.optional(),
   link: z.array(bundleLinkSchema).optional(),
-  entry: z.array(bundleEntrySchema).optional(),
+  entry: z.array(bundleEntrySchema(z.any())).optional(),
   signature: signatureSchema.optional(),
 });
 
 export type Bundle = z.infer<typeof bundleSchema>;
-export type BundleEntry = z.infer<typeof bundleEntrySchema>;

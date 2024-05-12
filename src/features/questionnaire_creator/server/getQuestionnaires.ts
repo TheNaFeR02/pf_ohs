@@ -1,7 +1,6 @@
 import { parseURL } from "@/utils/parseURL";
 import {
   Bundle,
-  BundleEntry,
 } from "@/features/questionnaire_creator/types/Bundle";
 
 export async function getQuestionnaires(): Promise<Bundle> {

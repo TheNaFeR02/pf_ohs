@@ -1,36 +1,109 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { Bundle, BundleEntry } from "@/features/questionnaire_creator/types/Bundle";
-import { Questionnaire } from "@/types/Questionnaire";
+import { BundleEntry } from "@/features/questionnaire_creator/types/Bundle";
+import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
 import Link from "next/link";
-const QuestionnairesColumns: ColumnDef<BundleEntry>[] = [
+import { Badge } from "@/components/ui/badge";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { deleteQuestionnaire } from "../server/deleteQuestionnaire";
+import { useToast } from "@/components/ui/use-toast";
+
+interface QuestionnairesColumnsProps {
+  data: BundleEntry<Questionnaire>[];
+  setData: (data: BundleEntry<Questionnaire>[]) => void;
+}
+
+
+const QuestionnairesColumns = (
+  props: QuestionnairesColumnsProps
+): ColumnDef<BundleEntry<Questionnaire>>[] => [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "resource.id",
-    header: "ID",
+    id: "ID",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          ID
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       return (
-        <Link className="text-blue-600 hover:underline" href={`/questionnaires/${row.original.resource?.id}`}>
-            {row.original.resource?.id}
+        <Link
+          className="text-blue-600 hover:underline"
+          href={`/questionnaires/${row.original.resource?.id}`}
+        >
+          {row.original.resource?.id}
         </Link>
       );
     },
   },
   {
     accessorKey: "resource.title",
+    id: "title",
     header: "Title",
   },
   {
     accessorKey: "resource.status",
     header: "Status",
     cell: ({ row }) => {
-      {row.original.request?.method
-        ? row.original.request.method
-        : "GET"}
-    }
+      return <Badge variant="outline">{row.original.resource?.status}</Badge>;
+    },
   },
   {
     accessorKey: "resource.subjectType",
+    id: "subject Type",
     header: "Subject Type",
+    cell: ({ row }) => {
+      return row.original.resource?.subjectType ?? "No Subject type";
+    },
   },
   {
     accessorKey: "resource.meta.versionId",
@@ -39,11 +112,102 @@ const QuestionnairesColumns: ColumnDef<BundleEntry>[] = [
   {
     accessorKey: "resource.date",
     header: "Creation Date",
+    cell: ({ row }) => {
+      return new Date(row.original.resource?.date ?? "").toLocaleDateString();
+    },
   },
   {
     accessorKey: "resource.meta.lastUpdated",
     header: "Last Updated",
+    cell: ({ row }) => {
+      return new Date(
+        row.original.resource?.meta?.lastUpdated ?? ""
+      ).toLocaleDateString();
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row, table }) => {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <Link href={`/questionnaires/edit/${row.original.resource?.id}`}>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+            </Link>
+            <DropdownMenuSeparator />
+            <Link href={`/questionnaires/${row.original.resource?.id}`}>
+              <DropdownMenuItem>See preview</DropdownMenuItem>
+            </Link>
+            <DeleteAlertDialog
+              id={row.original.resource?.id ?? ""}
+              index={row.index}
+              data={props.data}
+              setData={props.setData}
+            />
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
 ];
 
 export default QuestionnairesColumns;
+
+interface deleteAlertProps {
+  id: string;
+  index: number;
+  data: BundleEntry<Questionnaire>[];
+  setData: (data: BundleEntry<Questionnaire>[]) => void;
+}
+
+function DeleteAlertDialog({ id, index, data, setData }: deleteAlertProps) {
+  const { toast } = useToast();
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive" className="w-full">
+          Delete
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => {
+              try {
+                toast({
+                  title: `Questionnaire ${id} deleted`,
+                  description: "The questionnaire has been deleted",
+                  variant: "destructive",
+                });
+                deleteQuestionnaire(id ?? "");
+                const dataCopy = [...data];
+                setData(dataCopy);
+
+              } catch (error) {
+                console.error(error);
+              }
+            }}
+          >
+            Delete
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
