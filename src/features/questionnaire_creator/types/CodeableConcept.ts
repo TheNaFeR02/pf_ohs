@@ -1,9 +1,10 @@
 import { z } from 'zod';
-import { CodingSchema } from "@/features/questionnaire_creator/types/Coding";
+import { codingSchema } from "@/features/questionnaire_creator/types/Coding";
+import { stringSchema } from "@/features/questionnaire_creator/types/dataTypes";
 
-export const CodeableConceptSchema = z.object({
-    coding: z.array(CodingSchema),
-    text: z.string(),
+export const codeableConceptSchema = z.object({
+    coding: z.array(codingSchema).optional(),
+    text: stringSchema.optional(),
   });
 
-export type CodeableConcept = z.infer<typeof CodeableConceptSchema>;
+export type CodeableConcept = z.infer<typeof codeableConceptSchema>;

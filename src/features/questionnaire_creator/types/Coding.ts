@@ -1,13 +1,12 @@
 import { z } from 'zod';
+import { stringSchema, booleanSchema, uriSchema, codeSchema} from "@/features/questionnaire_creator/types/dataTypes";
 
-export const CodingSchema = z.object({
-    system: z.string().url().optional(),
-    version: z.string().optional(),
-    code: z.string().optional(),
-    display: z.string().optional(),
-    userSelected: z.boolean().optional(),
+export const codingSchema = z.object({
+    system: uriSchema.optional(),
+    version: stringSchema.optional(),
+    code: codeSchema.optional(),
+    display: stringSchema.optional(),
+    userSelected: booleanSchema.optional(),
   });
 
-export type Coding = z.infer<typeof CodingSchema>;
-
-  
+export type Coding = z.infer<typeof codingSchema>;

@@ -1,14 +1,9 @@
 import { z } from "zod";
-import { QuantitySchema } from "@/features/questionnaire_creator/types/Quantity";
+import { dateTimeSchema } from "@/features/questionnaire_creator/types/dataTypes";
 
-export const PeriodSchema = z.object({
-  origin: QuantitySchema,
-  period: z.number(),
-  factor: z.number().optional(),
-  lowerLimit: z.number().optional(),
-  upperLimit: z.number().optional(),
-  dimensions: z.number().int().positive(),
-  data: z.string().optional(),
+export const periodSchema = z.object({
+  start: dateTimeSchema.optional(),
+  end: dateTimeSchema.optional(),
 });
 
-export type Period = z.infer<typeof PeriodSchema>;
+export type Period = z.infer<typeof periodSchema>;

@@ -1,15 +1,26 @@
 import { z } from "zod";
-import { CodeableConceptSchema } from "@/features/questionnaire_creator/types/CodeableConcept";
-import { PeriodSchema } from "@/features/questionnaire_creator/types/Period";
-import { AssignerSchema } from "@/features/questionnaire_creator/types/Assigner";
+import { codeableConceptSchema } from "@/features/questionnaire_creator/types/CodeableConcept";
+import { periodSchema } from "@/features/questionnaire_creator/types/Period";
+import { assignerSchema } from "@/features/questionnaire_creator/types/Assigner";
+import {
+  uriSchema,
+  stringSchema,
+} from "@/features/questionnaire_creator/types/dataTypes";
+import identifierUseCodeDisplay from "@/features/questionnaire_creator/constants/identifierUseCodeDisplay";
 
-export const IdentifierSchema = z.object({
-  use: z.enum(["usual", "official", "temp", "secondary", "old"]),
-  type: CodeableConceptSchema,
-  system: z.string().url(),
-  value: z.string(),
-  period: PeriodSchema.optional(),
-  assigner: AssignerSchema.optional(),
+export const identifierSchema = z.object({
+  use: z
+    .enum(
+      JSON.parse(
+        JSON.stringify(identifierUseCodeDisplay.map((item) => item.code))
+      )
+    )
+    .optional(),
+  type: codeableConceptSchema.optional(),
+  system: uriSchema.optional(),
+  value: stringSchema.optional(),
+  period: periodSchema.optional(),
+  assigner: assignerSchema.optional(),
 });
 
-export type Identifier = z.infer<typeof IdentifierSchema>;
+export type Identifier = z.infer<typeof identifierSchema>;

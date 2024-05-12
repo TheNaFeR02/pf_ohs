@@ -1,13 +1,13 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FunctionComponent, use, useEffect } from "react";
+import { FunctionComponent } from "react";
 import {
   UseFormWatch,
   Control,
   useFieldArray,
   UseFormSetValue,
 } from "react-hook-form";
-import { Questionnaire } from "@/types/Questionnaire";
+import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
 import AnswerOptionsFormField from "@/features/questionnaire_creator/components/AnswerOptionsFormField";
 import {
   FormField,
@@ -24,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import itemTypesCodeDisplay from "@/features/questionnaire_creator/constants/itemTypesCodeDisplay";
 import {
   Accordion,

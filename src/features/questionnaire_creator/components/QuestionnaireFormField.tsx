@@ -3,7 +3,7 @@ import React, { FunctionComponent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Questionnaire } from "@/types/Questionnaire";
+import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
 import ItemsFormField from "@/features/questionnaire_creator/components/ItemsFormField";
 import {
   FormField,
@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { CaretSortIcon, CheckIcon, TrashIcon } from "@radix-ui/react-icons";
-
 import {
   Command,
   CommandEmpty,
@@ -48,7 +47,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Checkbox } from "@/components/ui/checkbox";
 
 const QuestionnaireFormField: FunctionComponent = () => {
   const { control, watch, setValue } = useFormContext<Questionnaire>();
@@ -148,7 +146,9 @@ const QuestionnaireFormField: FunctionComponent = () => {
                   >
                     {field.value
                       ? subjectTypesCodeDisplay.find(
-                          (subjectType) => subjectType.code === field.value
+                          (subjectType) =>
+                            Array.isArray(field.value) &&
+                            field.value.includes(subjectType.code)
                         )?.display
                       : "Select Subject type"}
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -166,13 +166,15 @@ const QuestionnaireFormField: FunctionComponent = () => {
                           value={subjectType.display}
                           key={subjectType.code}
                           onSelect={() => {
-                            setValue("subjectType", subjectType.code);
+                            setValue("subjectType", [subjectType.code]);
                           }}
                         >
                           <CheckIcon
                             className={cn(
                               "mr-2 h-4 w-4",
-                              subjectType.code === field.value
+                              Array.isArray(field.value)
+                                ? field.value.includes(subjectType.code)
+                                : subjectType.code === field.value
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}
@@ -191,10 +193,13 @@ const QuestionnaireFormField: FunctionComponent = () => {
       />
       <div className="grid gap-4 grid-cols-1 lg:grid-cols-4 ">
         {itemFields.map((item, index) => (
-          <Accordion type="multiple" defaultValue={[item.id]} key={item.id} className="lg:col-span-2 col-span-1 border border-neutral-400 rounded-md p-5">
-            <AccordionItem
-              value={item.id}
-            >
+          <Accordion
+            type="multiple"
+            defaultValue={[item.id]}
+            key={item.id}
+            className="lg:col-span-2 col-span-1 border border-neutral-400 rounded-md p-5"
+          >
+            <AccordionItem value={item.id}>
               <div className="flex justify-between items-center">
                 <Button
                   type="button"
@@ -223,7 +228,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
         ))}
         <Button
           type="button"
-          variant='outline'
+          variant="outline"
           onClick={addNewItem}
           className="lg:col-span-2"
         >

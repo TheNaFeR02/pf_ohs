@@ -1,11 +1,17 @@
 import { z } from "zod";
+import { identifierSchema } from "@/features/questionnaire_creator/types/Identifier";
 
-
-export const AssignerSchema = z.object({
+const baseAssignerSchema = z.object({
   reference: z.string().optional(),
-  type: z.string().url(),
-  //   identifier: IdentifierSchema.optional(),
+  type: z.string().url().optional(),
   display: z.string().optional(),
 });
 
-export type Assigner = z.infer<typeof AssignerSchema>;
+type BaseAssigner = z.infer<typeof baseAssignerSchema>;
+
+export const assignerSchema: z.ZodType<BaseAssigner> =
+  baseAssignerSchema.extend({
+    identifier: z.lazy(() => identifierSchema).optional(),
+  });
+
+export type Assigner = z.infer<typeof assignerSchema>;

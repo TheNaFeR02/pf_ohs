@@ -1,18 +1,19 @@
 import { z } from "zod";
-import { CodingSchema } from "@/features/questionnaire_creator/types/Coding";
+import { codingSchema } from "@/features/questionnaire_creator/types/Coding";
+import {
+  idSchema,
+  instantSchema,
+  uriSchema,
+  canonicalSchema,
+} from "@/features/questionnaire_creator/types/dataTypes";
 
-export const MetaSchema = z.object({
-  versionId: z.string().optional(),
-  lastUpdated: z
-    .string()
-    .regex(
-      /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))/
-    )
-    .optional(),
-  source: z.string().url().optional(),
-  profile: z.array(z.string().url()).optional(),
-  security: z.array(CodingSchema).optional(),
-  tag: z.array(CodingSchema).optional(),
+export const metaSchema = z.object({
+  versionId: idSchema.optional(),
+  lastUpdated: instantSchema.optional(),
+  source: uriSchema.optional(),
+  profile: z.array(canonicalSchema).optional(),
+  security: z.array(codingSchema).optional(),
+  tag: z.array(codingSchema).optional(),
 });
 
-export type Meta = z.infer<typeof MetaSchema>;
+export type Meta = z.infer<typeof metaSchema>;

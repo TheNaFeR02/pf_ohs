@@ -1,11 +1,12 @@
 import { z } from "zod";
-import { IdentifierSchema } from "@/features/questionnaire_creator/types/Identifier";
+import { identifierSchema } from "@/features/questionnaire_creator/types/Identifier";
+import { stringSchema, uriSchema } from "@/features/questionnaire_creator/types/dataTypes";
 
-export const ReferenceSchema = z.object({
-  reference: z.string().optional(),
-  type: z.string().url(),
-  identifier: IdentifierSchema.optional(),
-  display: z.string().optional(),
+export const referenceSchema = z.object({
+  reference: stringSchema.optional(),
+  type: uriSchema.optional(),
+  identifier: identifierSchema.optional(),
+  display: stringSchema.optional(),
 });
 
-export type Reference = z.infer<typeof ReferenceSchema>;
+export type Reference = z.infer<typeof referenceSchema>;
