@@ -1,9 +1,9 @@
 import { parseURL } from "@/utils/parseURL";
-import { Questionnaire, questionnaireSchema } from "@/types/Questionnaire";
-import { OperationOutcomeSchema } from "@/types/OperationOutcomeSchema";
+import { Questionnaire, questionnaireSchema } from "@/features/questionnaire_creator/types/Questionnaire"; 
+import { OperationOutcomeSchema } from "@/types/OperationOutcome";
 import { FhirError } from "@/errors/FhirError";
 
-async function getQuestionnaire(id?:string): Promise<Questionnaire> {
+async function getQuestionnaire(id:string): Promise<Questionnaire> {
   // console.log(parseURL("https://mpba1805f7e1ac736364.free.beeceptor.com"))
   try {
     const res = await fetch(`http://localhost:8080/fhir/Questionnaire/${id}`, {

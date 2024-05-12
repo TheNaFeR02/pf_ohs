@@ -16,7 +16,7 @@ export default async function QuestionnairesIdPage({ params }: { params: { id: s
     } catch (error) {
         if (error instanceof FhirError) {
             // show here Fhir Error
-            return <div>{error.errorSchema?.text.div}</div>
+            return <div>{error.errorSchema?.text?.div ?? ''}</div>
         }
         return <div>Error fetching questionnaire.</div>
     }
