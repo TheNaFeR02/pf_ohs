@@ -119,7 +119,7 @@ export type QuestionnaireItem = z.infer<typeof baseQuestionnaireItemSchema> & {
   item?: QuestionnaireItem[];
 };
 
-const questionnaireItemSchema: z.ZodType<QuestionnaireItem> =
+export const questionnaireItemSchema: z.ZodType<QuestionnaireItem> =
   baseQuestionnaireItemSchema.extend({
     item: z.lazy(() => questionnaireItemSchema.array()).optional(),
   });
