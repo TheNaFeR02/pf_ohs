@@ -279,7 +279,7 @@ export default function PatientForm() {
                               <Button
                                 variant={"outline"}
                                 className={cn(
-                                  "w-[240px] pl-3 text-left font-normal w-full", // w-full just to match the entire width.
+                                  "pl-3 text-left font-normal w-full", // w-full just to match the entire width.
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
