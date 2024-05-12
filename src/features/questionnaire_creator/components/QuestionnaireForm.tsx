@@ -5,31 +5,70 @@ import QuestionnaireFormField from "@/features/questionnaire_creator/components/
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { questionnaireSchema, Questionnaire } from "@/types/Questionnaire";
+import {
+  Questionnaire,
+  questionnaireSchema,
+} from "@/features/questionnaire_creator/types/Questionnaire";
+import QuestionnaireFormLayout from "@/features/questionnaire_creator/components/QuestionnaireFormLayout";
+import { createQuestionnaire } from "@/features/questionnaire_creator/server/createQuestionnaire";
+import { uptateQuestionnaire } from "@/features/questionnaire_creator/server/updateQuestionnaire";
+interface QuestionnaireFormProps {
+  data?: Questionnaire;
+  id?: string;
+}
 
-const QuestionnaireForm = () => {
+const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
+
   const form = useForm<Questionnaire>({
     resolver: zodResolver(questionnaireSchema),
-    defaultValues: {
-      resourceType: "Questionnaire",
-      title: "Mi Title",
-      url: "http:url.com",
-      status: "draft",
-      subjectType: "Patient",
-      // date: new Date().toISOString(),
-      item: [],
-    },
+    defaultValues: data
+      ? data
+      : {
+          resourceType: "Questionnaire",
+          title: "",
+          status: "draft",
+          date: new Date().toISOString(),
+        },
   });
 
-  const onSubmit = (data: Questionnaire) => {
-    console.log("Datos del formulario", data);
-  };
+  async function onSubmit(questionnaire: Questionnaire) {
+    try {
+      await form.handleSubmit(async (data) => {
+        data
+          ? console.log("Updating questionnaire", id)
+          : console.log("Creating questionnaire");
+        console.log(JSON.stringify(questionnaire));
+        if (data && id) {
+          await uptateQuestionnaire({ id: id, data: questionnaire });
+        } else {
+          await createQuestionnaire(questionnaire);
+        }
+      })();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <QuestionnaireFormField />
-        <Button type="submit">Submit</Button>
+        <div className="space-y-4">
+          <QuestionnaireFormLayout>
+            <div className="w-full">
+              <QuestionnaireFormField />
+            </div>
+          </QuestionnaireFormLayout>
+          <div className="flex justify-end">
+            <Button type="submit">Submit</Button>
+          </div>
+          {form.formState.errors && (
+            <div>
+              {Object.keys(form.formState.errors).map((fieldName: string, index) => (
+                <p key={index}>{fieldName}</p>
+              ))}
+            </div>
+          )}
+        </div>
       </form>
     </Form>
   );

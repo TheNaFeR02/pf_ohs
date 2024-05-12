@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { FunctionComponent } from "react";
-import { Control, UseFormRegister } from "react-hook-form";
-import { Questionnaire } from "@/types/Questionnaire"
+import { Control } from "react-hook-form";
+import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
 import {
   FormField,
   FormItem,
@@ -17,21 +17,14 @@ interface AnswerOptionsFormFieldProps {
 
 const AnswerOptionsFormField: FunctionComponent<
   AnswerOptionsFormFieldProps
-> = ({
-  prefix,
-  control,
-}) => {
-
+> = ({ prefix, control }) => {
   const itemValueCodingCodeInputPath =
-  `${prefix}valueCoding.code` as `item.${number}.answerOption.${number}.valueCoding.code`;
-const itemValueCodingDisplayInputPath =
-  `${prefix}valueCoding.display` as `item.${number}.answerOption.${number}.valueCoding.display`;
-
+    `${prefix}valueCoding.code` as `item.${number}.answerOption.${number}.valueCoding.code`;
+  const itemValueCodingDisplayInputPath =
+    `${prefix}valueCoding.display` as `item.${number}.answerOption.${number}.valueCoding.display`;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">{prefix}</h1>
-      {itemValueCodingCodeInputPath}
       <div className="space-y-2">
         <FormField
           control={control}

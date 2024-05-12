@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,16 +26,12 @@ export default function RootLayout({
           <Sidebar />
           <div className="scroll-smooth relative flex flex-1 flex-col">
             <Header />
-            <main className="mx-auto h-screen max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            <main className="mx-auto h-screen min-w-full max-w-screen-2xl p-4 md:p-6 2xl:p-10">
               {children}
+              <Toaster />
             </main>
           </div>
         </div>
-
-
-
-
-
       </body>
       {/* </div> */}
     </html>
