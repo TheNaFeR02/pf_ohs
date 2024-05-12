@@ -30,7 +30,7 @@ test('Questionnaire Test -> Neonate record from New South Wales, Australia "My P
 
 test("Questionnaire Test -> Glasgow Coma Score example form", () => {
   const result = questionnaireSchema.safeParse(GlasgowComaScoreExample);
-  console.error(result.error);
+  // console.error(result.error);
 
   expect(result.success).toBe(true);
 });
