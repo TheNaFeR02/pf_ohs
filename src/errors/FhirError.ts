@@ -1,4 +1,4 @@
-import { OperationOutcome } from "@/types/OperationOutcomeSchema";
+import { OperationOutcome } from "@/types/OperationOutcome";
 
 export class FhirError extends Error {
     errorSchema?: OperationOutcome;

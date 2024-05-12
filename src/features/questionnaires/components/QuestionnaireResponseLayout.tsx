@@ -1,4 +1,3 @@
-import PageHeader from "@/components/PageHeader";
 import { ReactElement } from "react";
 
 export default function QuestionnaireResponseLayout({children}: {children: ReactElement }): ReactElement {
