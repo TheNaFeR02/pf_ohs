@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
-import { BundleEntry } from "../types/Bundle";
+import { BundleEntry } from "@/features/questionnaire_creator/types/Bundle";
 
 interface QuestionnairesDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -37,9 +37,9 @@ function QuestionnaireTableView<TData, TValue>({
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter questionnaire..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("Title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
+            table.getColumn("Title")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

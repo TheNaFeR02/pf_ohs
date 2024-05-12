@@ -26,14 +26,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { deleteQuestionnaire } from "../server/deleteQuestionnaire";
+import { deleteQuestionnaire } from "@/features/questionnaire_creator/server/deleteQuestionnaire";
 import { useToast } from "@/components/ui/use-toast";
 
 interface QuestionnairesColumnsProps {
   data: BundleEntry<Questionnaire>[];
   setData: (data: BundleEntry<Questionnaire>[]) => void;
 }
-
 
 const QuestionnairesColumns = (
   props: QuestionnairesColumnsProps
@@ -87,19 +86,24 @@ const QuestionnairesColumns = (
   },
   {
     accessorKey: "resource.title",
-    id: "title",
+    id: "Title",
     header: "Title",
   },
   {
     accessorKey: "resource.status",
     header: "Status",
+    id: "Status",
     cell: ({ row }) => {
-      return <Badge variant="outline">{row.original.resource?.status}</Badge>;
+      return (
+        <Badge variant="outline">
+          {row.original.resource?.status.toUpperCase()}
+        </Badge>
+      );
     },
   },
   {
     accessorKey: "resource.subjectType",
-    id: "subject Type",
+    id: "Subject Type",
     header: "Subject Type",
     cell: ({ row }) => {
       return row.original.resource?.subjectType ?? "No Subject type";
@@ -108,10 +112,12 @@ const QuestionnairesColumns = (
   {
     accessorKey: "resource.meta.versionId",
     header: "Version",
+    id: "Version",
   },
   {
     accessorKey: "resource.date",
     header: "Creation Date",
+    id: "Creation Date",
     cell: ({ row }) => {
       return new Date(row.original.resource?.date ?? "").toLocaleDateString();
     },
@@ -119,6 +125,7 @@ const QuestionnairesColumns = (
   {
     accessorKey: "resource.meta.lastUpdated",
     header: "Last Updated",
+    id: "Last Updated",
     cell: ({ row }) => {
       return new Date(
         row.original.resource?.meta?.lastUpdated ?? ""
@@ -127,7 +134,8 @@ const QuestionnairesColumns = (
   },
   {
     id: "actions",
-    cell: ({ row, table }) => {
+    header: "Actions",
+    cell: ({ row }) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -145,9 +153,9 @@ const QuestionnairesColumns = (
             <Link href={`/questionnaires/${row.original.resource?.id}`}>
               <DropdownMenuItem>See preview</DropdownMenuItem>
             </Link>
+            <DropdownMenuSeparator />
             <DeleteAlertDialog
               id={row.original.resource?.id ?? ""}
-              index={row.index}
               data={props.data}
               setData={props.setData}
             />
@@ -162,12 +170,11 @@ export default QuestionnairesColumns;
 
 interface deleteAlertProps {
   id: string;
-  index: number;
   data: BundleEntry<Questionnaire>[];
   setData: (data: BundleEntry<Questionnaire>[]) => void;
 }
 
-function DeleteAlertDialog({ id, index, data, setData }: deleteAlertProps) {
+function DeleteAlertDialog({ id, data, setData }: deleteAlertProps) {
   const { toast } = useToast();
 
   return (
@@ -198,7 +205,6 @@ function DeleteAlertDialog({ id, index, data, setData }: deleteAlertProps) {
                 deleteQuestionnaire(id ?? "");
                 const dataCopy = [...data];
                 setData(dataCopy);
-
               } catch (error) {
                 console.error(error);
               }

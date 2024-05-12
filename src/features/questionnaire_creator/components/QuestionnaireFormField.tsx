@@ -47,7 +47,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Checkbox } from "@/components/ui/checkbox";
 
 const QuestionnaireFormField: FunctionComponent = () => {
   const { control, watch, setValue } = useFormContext<Questionnaire>();
