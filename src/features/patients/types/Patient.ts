@@ -46,7 +46,7 @@ const basePatientSchema = z.object({
   name: z.array(humanNameSchema).optional(),
   telecom: z.array(contactPointSchema).optional(),
   gender: z.enum(JSON.parse(JSON.stringify(administrativeGenderCodeDisplay.map((administrativeGender) => administrativeGender.code)))).optional(),
-  birthDate: dateSchema.optional(), //<date>
+  birthDate: dateSchema.optional().or(z.date({ required_error: "A date of birth is required." }).optional()).optional(), //<date>
   deceasedBoolean: booleanSchema.optional(),
   deceasedDateTime: dateTimeSchema.optional(),// <dateTime>
   address: z.array(addressSchema).optional(),

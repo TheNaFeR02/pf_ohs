@@ -28,6 +28,8 @@ const videoConstraints = {
   facingMode: "user"
 };
 
+const defaultPhoto = "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"
+
 export default function PatientForm() {
   const form = useForm<Patient>({
     resolver: zodResolver(patientSchema),
@@ -35,38 +37,38 @@ export default function PatientForm() {
       resourceType: 'Patient',
       // identifier: [],
       active: true,
-      name: [{ family: "", given: "" }],
+      name: [{ family: "Garcia", given: ["Fernando", "Acuña"] }],
       telecom: [
         {
           system: "phone",
-          value: ""
+          value: "3114002600"
         },
         {
           system: "email",
-          value: ""
+          value: "acunafer.02@gmail.com"
         }
       ],
       gender: 'male',
       birthDate: new Date(),
       address: [
         {
-          text: "",
-          city: "",
-          district: "",
-          country: ""
+          text: "Calle 64 # 45 - 23",
+          city: "Barranquilla",
+          district: "Atlántico",
+          country: "Colombia"
         }
       ],
       maritalStatus: { text: 'soltero' },
       photo: [
         {
-          data: "",
+          data: defaultPhoto,
         }
       ],
       contact: [
         {
           name: {
             family: "Barbosa",
-            given: "Dayanna"
+            given: ["Dayanna"]
           },
           telecom: [
             {
@@ -103,10 +105,18 @@ export default function PatientForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
 
+    // We extract the base64 image from the url. Basically we are eliminating the header -> 'data:image/jpeg;base64,/9j/4AAQSk...'
+    let base64Image = "";
+    if (url !== defaultPhoto) {
+      let parts = url?.split(",");
+      base64Image = parts ? parts[parts.length - 1] : "";
+    }
+
+
     // We append the photo data to the final values.
     const finalValues = {
       ...values,
-      photo: [{ data: url }]
+      photo: [{ data: base64Image || defaultPhoto }]
     }
     console.log(finalValues)
   }
@@ -126,7 +136,7 @@ export default function PatientForm() {
   }, [webcamRef]);
 
 
-  
+
   // useEffect(() => {
   //   setDate(new Date("1990-03-09"));
   // }, [])
@@ -160,7 +170,7 @@ export default function PatientForm() {
                           videoConstraints={videoConstraints}
                         />
                       }
-                      {url && isCaptureEnable === false && <Image src={url} alt="Captured" />}
+                      {url && isCaptureEnable === false && <img src={url} alt="Captured" />}
                       {/* <div className="relative z-1 upload-file border-solid border-x border-y h-3 w-3"></div> */}
                       {/* {image && <img src={image} alt="Captured" />}
                     {showVideo && !image && <video className="video" ref={videoRef} autoPlay></video>} */}
@@ -184,10 +194,18 @@ export default function PatientForm() {
                       <FormItem className="w-100 py-3 px-5 font-medium">
                         <FormLabel>Nombre</FormLabel>
                         <FormControl>
-                          <Input placeholder={"Ingresa el Nombre del paciente."} {...field} />
+                          <Input placeholder={"Ingresa el Nombre del paciente."} {...field}
+                            // onChange={(e) =>
+                            //   field.onChange(e.target.value.split(" "))}
+                            onChange={(e) => { // -> This is a workaround to split the name into an array. Doing an split for each change.
+                              const names = e.target.value.split(" ");
+                              field.onChange(names);
+                            }}
+                            value={field.value?.join(" ") ? field.value?.join(" ") : ""}
+                          />
                         </FormControl>
                         <FormDescription>
-
+                            Nombre y/o segundo nombre del paciente.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -204,7 +222,7 @@ export default function PatientForm() {
                           <Input placeholder={"Ingresa el Apellido del Paciente."} {...field} />
                         </FormControl>
                         <FormDescription>
-
+                          Apellidos del paciente.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -221,7 +239,7 @@ export default function PatientForm() {
                           <Input placeholder={"Ingresa el teléfono del Paciente."} {...field} />
                         </FormControl>
                         <FormDescription>
-
+                            Teléfono o celular del paciente.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -238,7 +256,7 @@ export default function PatientForm() {
                           <Input placeholder={"Ingresa el email del Paciente."} {...field} />
                         </FormControl>
                         <FormDescription>
-
+                          Email del paciente.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -266,7 +284,7 @@ export default function PatientForm() {
                           </SelectContent>
                         </Select>
                         <FormDescription>
-                          {/* You can manage identification types in your settings. */}
+                          Género del paciente.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -274,12 +292,12 @@ export default function PatientForm() {
                   />
 
                   {/* birthdate */}
-                  <FormField 
+                  <FormField
                     control={form.control}
                     name="birthDate"
                     render={({ field }) => (
                       <FormItem className="flex flex-col w-100 py-3 px-5 font-medium" >
-                        <FormLabel>Date of birth</FormLabel>
+                        <FormLabel>Fecha de nacimiento</FormLabel>
                         <Popover >
                           <PopoverTrigger asChild>
                             <FormControl >
@@ -300,10 +318,10 @@ export default function PatientForm() {
                             </FormControl>
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar  
+                            <Calendar
                               mode="single"
                               defaultMonth={new Date()}
-                              selected={field.value instanceof Date ? field.value : undefined} 
+                              selected={field.value instanceof Date ? field.value : undefined}
                               onSelect={field.onChange}
                               // onSelect={(date) => field.onChange(date as Matcher)}
                               disabled={(date: Date) =>
@@ -314,7 +332,7 @@ export default function PatientForm() {
                           </PopoverContent>
                         </Popover>
                         <FormDescription>
-                          Your date of birth is used to calculate your age.
+                          Fecha de nacimiento del paciente.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -332,7 +350,7 @@ export default function PatientForm() {
                           <Input placeholder={"Ingresa la dirección"} {...field} />
                         </FormControl>
                         <FormDescription>
-
+                          Dirección de residencia del paciente.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -349,7 +367,7 @@ export default function PatientForm() {
                           <Input placeholder={"Ingresa la ciudad"} {...field} />
                         </FormControl>
                         <FormDescription>
-
+                          Ciudad de residencia del paciente.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -366,7 +384,7 @@ export default function PatientForm() {
                           <Input placeholder={"Ingresa el departamento"} {...field} />
                         </FormControl>
                         <FormDescription>
-
+                          Departamento de residencia del paciente.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -397,6 +415,7 @@ export default function PatientForm() {
                           </SelectContent>
                         </Select>
                         <FormDescription>
+                          Estado civil del paciente.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -413,15 +432,16 @@ export default function PatientForm() {
                               // key={field.id}
                               control={form.control}
                               name={`contact.${index}.name.given`}
-                              defaultValue=""
                               render={({ field }): ReactElement => (
                                 <FormItem className="w-100 py-3 px-5 font-medium">
                                   <FormLabel>Nombre</FormLabel>
                                   <FormControl>
-                                    <Input placeholder={"Ingresa el Nombre del contacto."} {...field} />
+                                    <Input placeholder={"Ingresa el Nombre del contacto."} {...field} onChange={(e) =>
+                                      field.onChange(e.target.value.split(" "))
+                                    } />
                                   </FormControl>
                                   <FormDescription>
-
+                                    Nombre y/o segundo nombre del contacto.
                                   </FormDescription>
                                   <FormMessage />
                                 </FormItem>
@@ -440,7 +460,7 @@ export default function PatientForm() {
                                     <Input placeholder={"Ingresa el Apellido del contacto."} {...field} />
                                   </FormControl>
                                   <FormDescription>
-
+                                    Apellido del contacto.
                                   </FormDescription>
                                   <FormMessage />
                                 </FormItem>
@@ -459,7 +479,7 @@ export default function PatientForm() {
                                     <Input placeholder={"Ingresa el teléfono del contacto."} {...field} />
                                   </FormControl>
                                   <FormDescription>
-
+                                    Teléfono o celular del contacto.
                                   </FormDescription>
                                   <FormMessage />
                                 </FormItem>
@@ -478,7 +498,7 @@ export default function PatientForm() {
                                     <Input placeholder={"Ingresa el email del contacto."} {...field} />
                                   </FormControl>
                                   <FormDescription>
-
+                                    Email del contacto.
                                   </FormDescription>
                                   <FormMessage />
                                 </FormItem>
