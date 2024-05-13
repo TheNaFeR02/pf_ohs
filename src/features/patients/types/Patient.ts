@@ -1,122 +1,85 @@
+import addressTypeCodeDisplay from '@/features/questionnaire_creator/constants/addressTypeCodeDisplay';
+import addressUseCodeDisplay from '@/features/questionnaire_creator/constants/addressUseCodeDisplay';
+import administrativeGenderCodeDisplay from '@/features/questionnaire_creator/constants/administrativeGenderCodeDisplay';
+import linkTypeCodeDisplay from '@/features/questionnaire_creator/constants/linkTypeCodeDisplay';
+import nameUseCodeDisplay from '@/features/questionnaire_creator/constants/nameUseCodeDisplay';
+import { attachmentSchema } from '@/features/questionnaire_creator/types/Attachment';
+import { codeableConceptSchema } from '@/features/questionnaire_creator/types/CodeableConcept';
+import { contactPointSchema } from '@/features/questionnaire_creator/types/ContactPoint';
+import { domainResourceSchema } from '@/features/questionnaire_creator/types/DomainResource';
+import { identifierSchema } from '@/features/questionnaire_creator/types/Identifier';
+import { periodSchema } from '@/features/questionnaire_creator/types/Period';
+import { referenceSchema } from '@/features/questionnaire_creator/types/Reference';
+import { resourceSchema } from '@/features/questionnaire_creator/types/Resource';
+import { booleanSchema, dateSchema, dateTimeSchema, integerSchema, stringSchema } from '@/features/questionnaire_creator/types/dataTypes';
 import { z } from 'zod';
 
-// const PatientSchema = z.object({
-//     resourceType: z.string().optional(),
-//     identifier: z.array(IdentifierSchema).optional(),
-//     active: z.boolean().optional(),
-//     name: z.array(HumanNameSchema).optional(),
-//     telecom: z.array(ContactPointSchema).optional(),
-//     gender: z.enum(["male", "female", "other", "unknown"]).optional(),
-//     birthDate: z.string().regex(
-//         /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?/
-//       ).optional(), //<date>
-//     deceasedBoolean: z.boolean().optional(),
-//     deceasedDateTime: z.string().regex(
-//         /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?/)
-//         .optional(),// <dateTime>
-//     address: z.array(AddressSchema).optional(),
-//     maritalStatus: CodeableConceptSchema.optional(),
-//     multipleBirthBoolean: z.boolean().optional(),
-//     multipleBirthInteger: z.number().optional(),
-//     photo: z.array(AttachmentSchema).optional(),
-//     contact: z.array(ContactSchema).optional(),
-//     communication: z.array(z.object({
-//         language: CodeableConceptSchema,
-//         preferred: z.boolean().optional(),
-//     })).optional(),
-//     generalPractitioner: z.array(ReferenceSchema).optional(),
-//     managingOrganization: ReferenceSchema.optional(),
-//     link: z.array(LinkSchema).optional(),
-// });
 
-// Nota: Necesitarás definir los esquemas para Identifier, HumanName, ContactPoint, Address, CodeableConcept, Attachment, Contact, Communication, Reference y Link basándote en sus respectivas estructuras.
+const humanNameSchema = z.object({
+  use: z.enum(JSON.parse(JSON.stringify(nameUseCodeDisplay.map((nameUse) => nameUse.code)))).optional(),
+  text: stringSchema.optional(),
+  family: stringSchema.optional(),
+  given: z.array(stringSchema).optional(),
+  prefix: z.array(stringSchema).optional(),
+  suffix: z.array(stringSchema).optional(),
+  period: periodSchema.optional(),
+});
 
-const datePattern = /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?/
+const addressSchema = z.object({
+  use: z.enum(JSON.parse(JSON.stringify(addressUseCodeDisplay.map((addressUse) => addressUse.code)))).optional(),
+  type: z.enum(JSON.parse(JSON.stringify(addressTypeCodeDisplay.map((addressType) => addressType.code)))).optional(),
+  text: stringSchema.optional(),
+  line: z.array(stringSchema).optional(),
+  city: stringSchema.optional(),
+  district: stringSchema.optional(),
+  state: stringSchema.optional(),
+  postalCode: stringSchema.optional(),
+  country: stringSchema.optional(),
+  period: periodSchema.optional(),
+});
 
-export const patientSchema = z.object({
-  resourceType: z.string().optional(),
-  identifier: z.array(z.object({})).optional(),
-  active: z.boolean().optional(),
-  name: z.array(
-    z.object({ // This is the temporal object for pf purpose
-      family: z.string().optional(),
-      given: z.string().optional()
-    })
-      .or(z.object({})).optional() // This is simulating {HumanName} to pass all the Tests. Eventually change to the actual HumanChange schema.
-  ).optional(),
-  telecom: z.array(
-    z.object({ // This is the temporal object for pf purpose
-      system: z.string().optional(),
-      value: z.string().optional()
-    })
-      .or(z.object({})) // simulating {ContactPoint}
-      .optional()).optional(),
-  gender: z.enum(["male", "female", "other", "unknown"]).optional(),
-  // birthDate: z.string().regex(
-  //       /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?/
-  //   ).optional(),
-  birthDate: z.string().regex(
-    /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?/
-  ).optional().or(z.date({ required_error: "A date of birth is required." }).optional()).optional(), //<date>
-  // birthDate: z.date().refine((date)=>{date.toDateString().match(datePattern) === null, {message: "Invalid date format"}}).optional(),
-  // birthDate: z.date().refine(date => datePattern.test(date.toString()), { message: "Invalid date format" }).optional(),
-  deceasedBoolean: z.boolean().optional(),
-  deceasedDateTime: z.string().regex(
-    /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)))?)?)?/)
-    .optional(),// <dateTime>
-  address: z.array(
-    z.object({
-      text: z.string().optional(),
-      city: z.string().optional(),
-      district: z.string().optional(),
-      country: z.string().optional()
-    }).or(z.object({})).optional() // simulating {Address}
 
-  ).optional(),
+const basePatientSchema = z.object({
+  resourceType: z.literal("Patient").optional(),
+  identifier: z.array(identifierSchema).optional(),
+  active: booleanSchema.optional(),
+  name: z.array(humanNameSchema).optional(),
+  telecom: z.array(contactPointSchema).optional(),
+  gender: z.enum(JSON.parse(JSON.stringify(administrativeGenderCodeDisplay.map((administrativeGender) => administrativeGender.code)))).optional(),
+  birthDate: dateSchema.optional(), //<date>
+  deceasedBoolean: booleanSchema.optional(),
+  deceasedDateTime: dateTimeSchema.optional(),// <dateTime>
+  address: z.array(addressSchema).optional(),
   maritalStatus: z.object({
     text: z.string().optional(),
   }).optional(),
-  multipleBirthBoolean: z.boolean().optional(),
-  multipleBirthInteger: z.number().optional(),
-  photo: z.array(z.object({
-    data: z.string().optional(),
-    contentType: z.string().optional(),
-    url: z.string().optional()
-  })).optional(),
+  multipleBirthBoolean: booleanSchema.optional(),
+  multipleBirthInteger: integerSchema.optional(),
+  photo: z.array(attachmentSchema).optional(),
   contact: z.array(z.object({
-    relationship: z.array(z.object({})).optional(),
-    name: z.array(
-      z.object({ // This is the temporal object for pf purpose
-        family: z.string().optional(),
-        given: z.string().optional()
-      }))
-        .or(z.object({
-          family: z.string().optional(),
-          given: z.string().optional()
-        }).or(z.object({})).optional()).optional(), // This is simulating {HumanName} to pass all the Tests. Eventually change to the actual HumanChange schema.
-    telecom: z.array(
-      z.object({ // This is the temporal object for pf purpose
-        system: z.string().optional(),
-        value: z.string().optional()
-      }).optional())
-        .or(z.object({})) // simulating {ContactPoint}
-        .optional(),
-    address: z.array(
-      z.object({
-        text: z.string().optional(),
-        city: z.string().optional(),
-        district: z.string().optional(),
-        country: z.string().optional()
-      })).or(z.object({})).optional(), // simulating {Address}.optional(),
-    gender: z.enum(["male", "female", "other", "unknown"]).optional(),
-  })).optional(),
+    relationship: z.array(codeableConceptSchema).optional(),
+    name: humanNameSchema.optional(),
+    telecom: z.array(contactPointSchema).optional(),
+    address: addressSchema.optional(),
+    gender: z.enum(JSON.parse(JSON.stringify(administrativeGenderCodeDisplay.map((administrativeGender) => administrativeGender.code)))).optional(),
+    reference: referenceSchema.optional(),
+    period: periodSchema.optional(),
+  })).optional(), // This is simulating {HumanName} to pass all the Tests. Eventually change to the actual HumanChange schema.
   communication: z.array(z.object({
-    language: z.object({}).optional(),
-    preferred: z.boolean().optional(),
+    language: codeableConceptSchema,
+    preferred: booleanSchema.optional(),
   })).optional(),
-  generalPractitioner: z.array(z.object({})).optional(),
-  managingOrganization: z.object({}).optional(),
-  link: z.array(z.object({})).optional(),
+  generalPractitioner: z.array(referenceSchema).optional(),
+  managingOrganization: referenceSchema.optional(),
+  link: z.array(z.object({
+    other: referenceSchema,
+    type: z.enum(JSON.parse(JSON.stringify(linkTypeCodeDisplay.map((linkType) => linkType.code)))).optional(),
+  })).optional(),
 });
+
+export const patientSchema = resourceSchema
+  .omit({ resourceType: true })
+  .merge(domainResourceSchema.omit({ resourceType: true, resource: true }))
+  .merge(basePatientSchema);
 
 export type Patient = z.infer<typeof patientSchema>

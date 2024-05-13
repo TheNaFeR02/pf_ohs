@@ -19,6 +19,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { CameraIcon } from "@radix-ui/react-icons"
 import { TargetIcon } from "@radix-ui/react-icons"
 import Webcam from "react-webcam";
+import Image from "next/image";
 // import { Matcher } from "react-day-picker";
 
 const videoConstraints = {
@@ -124,6 +125,12 @@ export default function PatientForm() {
 
   }, [webcamRef]);
 
+
+  
+  // useEffect(() => {
+  //   setDate(new Date("1990-03-09"));
+  // }, [])
+
   return (
     <Form {...form} >
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -153,7 +160,7 @@ export default function PatientForm() {
                           videoConstraints={videoConstraints}
                         />
                       }
-                      {url && isCaptureEnable === false && <img src={url} alt="Captured" />}
+                      {url && isCaptureEnable === false && <Image src={url} alt="Captured" />}
                       {/* <div className="relative z-1 upload-file border-solid border-x border-y h-3 w-3"></div> */}
                       {/* {image && <img src={image} alt="Captured" />}
                     {showVideo && !image && <video className="video" ref={videoRef} autoPlay></video>} */}
@@ -267,16 +274,16 @@ export default function PatientForm() {
                   />
 
                   {/* birthdate */}
-                  <FormField
+                  <FormField 
                     control={form.control}
                     name="birthDate"
                     render={({ field }) => (
-                      <FormItem className="flex flex-col w-100 py-3 px-5 font-medium">
+                      <FormItem className="flex flex-col w-100 py-3 px-5 font-medium" >
                         <FormLabel>Date of birth</FormLabel>
                         <Popover >
                           <PopoverTrigger asChild>
                             <FormControl >
-                              <Button
+                              <Button suppressHydrationWarning // To supress warning about Date mismatch
                                 variant={"outline"}
                                 className={cn(
                                   "pl-3 text-left font-normal w-full", // w-full just to match the entire width.
@@ -293,9 +300,10 @@ export default function PatientForm() {
                             </FormControl>
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
+                            <Calendar  
                               mode="single"
-                              selected={field.value} // selected now expects a string as well(module augmentation), but this is only because z.date is required in the schema for the calendar to work, but at the same time FHIR is neccesary to validate using z.string.regex() 
+                              defaultMonth={new Date()}
+                              selected={field.value instanceof Date ? field.value : undefined} 
                               onSelect={field.onChange}
                               // onSelect={(date) => field.onChange(date as Matcher)}
                               disabled={(date: Date) =>

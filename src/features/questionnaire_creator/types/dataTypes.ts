@@ -15,8 +15,7 @@ const integerSchema = z.number().int();
 const stringSchema = z.string().max(1024 * 1024); // Maximum size of 1MB
 const decimalSchema = z.number();
 const uriSchema = z.string().regex(/\S*/);
-const urlSchema = z
-  .string().url()
+const urlSchema = z.string().regex(/\S*/); // NEED TO BE CHECKED, (https://hl7.org/fhir/datatypes.html#url)
 const canonicalSchema = z.string().regex(/\S*/);  //NEED TO BE CHECKED, (https://hl7.org/fhir/datatypes.html#canonical)
 const base64BinarySchema = z.string().regex(/(\s*([0-9a-zA-Z\+\=]){4}\s*)+/);
 const instantSchema = z.string().regex(instantRegex);
