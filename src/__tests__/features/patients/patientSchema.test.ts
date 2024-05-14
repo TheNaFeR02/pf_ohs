@@ -1,4 +1,4 @@
-import { patientSchema } from "@/features/patients/types/Patient"
+import { patientSchema } from "@/types/Patient"
 import GeneralPersonExample from "@/__testsData__/Patient/GeneralPersonExample.json"
 import Patient1ForLinking from "@/__testsData__/Patient/Patient1ForLinking.json"
 import Patient2ForLinking from "@/__testsData__/Patient/Patient2ForLinking.json"

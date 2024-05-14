@@ -1,10 +1,10 @@
 import { z } from "zod";
-import issueSeverityCodeDisplay from "@/features/questionnaire_creator/constants/issueSeverityCodeDisplay";
-import issueTypeCodeDisplay from "@/features/questionnaire_creator/constants/issueTypeCodeDisplay";
-import { codeableConceptSchema } from "@/features/questionnaire_creator/types/CodeableConcept";
-import { stringSchema } from "@/features/questionnaire_creator/types/dataTypes";
-import { domainResourceSchema } from "@/features/questionnaire_creator/types/DomainResource";
-import { resourceSchema } from "@/features/questionnaire_creator/types/Resource";
+import issueSeverityCodeDisplay from "@/constants/issueSeverityCodeDisplay";
+import issueTypeCodeDisplay from "@/constants/issueTypeCodeDisplay";
+import { codeableConceptSchema } from "@/types/CodeableConcept";
+import { stringSchema } from "@/types/dataTypes";
+import { domainResourceSchema } from "@/types/DomainResource";
+import { resourceSchema } from "@/types/Resource";
 
 export const baseOperationOutcomeSchema = z.object({
   resourceType: z.literal("OperationOutcome"),

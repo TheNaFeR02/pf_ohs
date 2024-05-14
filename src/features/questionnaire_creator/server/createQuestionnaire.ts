@@ -1,4 +1,4 @@
-import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
+import { Questionnaire } from "../../../types/Questionnaire";
 import { parseURL } from "@/utils/parseURL";
 
 export async function createQuestionnaire(questionnaire: Questionnaire) {

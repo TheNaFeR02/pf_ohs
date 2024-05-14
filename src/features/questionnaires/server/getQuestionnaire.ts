@@ -1,6 +1,6 @@
 import { parseURL } from "@/utils/parseURL";
-import { Questionnaire, questionnaireSchema } from "@/features/questionnaire_creator/types/Questionnaire"; 
-import { OperationOutcomeSchema } from "@/types/OperationOutcome";
+import { Questionnaire, questionnaireSchema } from "../../../types/Questionnaire"; 
+import { OperationOutcomeSchema } from "../../../types/OperationOutcome";
 import { FhirError } from "@/errors/FhirError";
 
 async function getQuestionnaire(id:string): Promise<Questionnaire> {

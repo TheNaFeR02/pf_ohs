@@ -1,5 +1,5 @@
-import { QuestionnaireResponseItem, QuestionnaireResponse } from "@/types/QuestionnaireResponse"
-import { Questionnaire, QuestionnaireItem } from "@/features/questionnaire_creator/types/Questionnaire"
+import { QuestionnaireResponseItem, QuestionnaireResponse } from "../../../types/QuestionnaireResponse"
+import { Questionnaire, QuestionnaireItem } from "../../../types/Questionnaire"
 
 
 export function generateDefaultQuestionnaireResponse(questionnaire: Questionnaire): QuestionnaireResponse {

@@ -1,4 +1,4 @@
-import { questionnaireResponseSchema } from "@/types/QuestionnaireResponse"
+import { questionnaireResponseSchema } from "../../types/QuestionnaireResponse"
 import QuestionnaireResponseData1 from "@/__testsData__/QuestionnaireResponse/QuestionnaireResponseData1.json"
 import QuestionnaireResponseData2 from "@/__testsData__/QuestionnaireResponse/QuestionnaireResponseData2.json"
 import QuestionnaireResponseData3 from "@/__testsData__/QuestionnaireResponse/QuestionnaireResponseData3.json"

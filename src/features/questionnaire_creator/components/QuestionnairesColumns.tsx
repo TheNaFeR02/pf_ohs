@@ -1,7 +1,7 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { BundleEntry } from "@/features/questionnaire_creator/types/Bundle";
-import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
+import { BundleEntry } from "../../../types/Bundle";
+import { Questionnaire } from "../../../types/Questionnaire";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";

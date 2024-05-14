@@ -1,17 +1,20 @@
-import QuestionnaireForm from "@/features/questionnaire_creator/components/QuestionnaireForm";
-import { FC, ReactElement } from "react"
+import { FhirError } from "@/errors/FhirError";
+import QuestionnaireResponseForm from "@/features/questionnaires/components/QuestionnaireResponseForm";
+import getQuestionnaire from "@/features/questionnaires/server/getQuestionnaire";
 
-
-const MedicalRecordPage: FC = (): ReactElement => {
-    // 
-    return(
-        // Create Tabs. + to Add new form for medical_record.
-        <div>
-            {/*  */}
-            
-            <QuestionnaireForm />
-        </div>
-    )
+export default async function MedicalRecordPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  try {
+    const questionnaire = await getQuestionnaire(params.id);
+    // Create Tabs. + to Add new form for medical_record.
+    return <QuestionnaireResponseForm questionnaire={questionnaire} />;
+  } catch (error) {
+    if (error instanceof FhirError) {
+      return <div>{error.errorSchema?.text?.div ?? ""}</div>;
+    }
+    return <div>Error fetching questionnaire.</div>;
+  }
 }
-
-export default MedicalRecordPage;

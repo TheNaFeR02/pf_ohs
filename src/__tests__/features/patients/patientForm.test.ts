@@ -1,5 +1,5 @@
-import { patientSchema } from "@/features/patients/types/Patient"
-import { base64BinarySchema } from "@/features/questionnaire_creator/types/dataTypes"
+import { patientSchema } from "@/types/Patient"
+import { base64BinarySchema } from "../../../types/dataTypes"
 
 
 test('patient form', () => {

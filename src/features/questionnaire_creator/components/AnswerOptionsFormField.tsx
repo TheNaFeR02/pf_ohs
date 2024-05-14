@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { FunctionComponent } from "react";
 import { Control } from "react-hook-form";
-import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
+import { Questionnaire } from "../../../types/Questionnaire";
 import {
   FormField,
   FormItem,

@@ -1,5 +1,5 @@
 import { parseURL } from "@/utils/parseURL";
-import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
+import { Questionnaire } from "../../../types/Questionnaire";
 
 interface updateQuestionnaireProps {
   id: string;

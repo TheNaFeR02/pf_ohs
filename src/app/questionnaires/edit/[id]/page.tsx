@@ -1,5 +1,5 @@
 import QuestionnaireForm from "@/features/questionnaire_creator/components/QuestionnaireForm";
-import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
+import { Questionnaire } from "../../../../types/Questionnaire";
 import getQuestionnaire from "@/features/questionnaire_creator/server/getQuestionnaire";
 
 export default async function QuestionnairesIdPage({

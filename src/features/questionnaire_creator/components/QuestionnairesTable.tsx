@@ -5,9 +5,9 @@ import QuestionnairesColumns from "@/features/questionnaire_creator/components/Q
 import {
   Bundle,
   BundleEntry,
-} from "@/features/questionnaire_creator/types/Bundle";
+} from "../../../types/Bundle";
 import QuestionnaireTableView from "@/features/questionnaire_creator/components/QuestionnairesTableView";
-import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
+import { Questionnaire } from "../../../types/Questionnaire";
 import {
   SortingState,
   ColumnFiltersState,

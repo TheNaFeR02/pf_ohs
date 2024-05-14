@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { attachmentSchema } from "@/features/questionnaire_creator/types/Attachment";
-import { codingSchema } from "@/features/questionnaire_creator/types/Coding";
-import { identifierSchema } from "@/features/questionnaire_creator/types/Identifier";
-import { quantitySchema } from "@/features/questionnaire_creator/types/Quantity";
-import { referenceSchema } from "@/features/questionnaire_creator/types/Reference";
+import { attachmentSchema } from "./Attachment";
+import { codingSchema } from "./Coding";
+import { identifierSchema } from "./Identifier";
+import { quantitySchema } from "./Quantity";
+import { referenceSchema } from "./Reference";
 import {
   booleanSchema,
   decimalSchema,
@@ -14,10 +14,10 @@ import {
   dateTimeSchema,
   timeSchema,
   canonicalSchema,
-} from "@/features/questionnaire_creator/types/dataTypes";
-import questionnaireAnswersStatusCodeDisplay from "@/features/questionnaire_creator/constants/questionnaireAnswersStatusCodeDisplay";
-import { domainResourceSchema } from "@/features/questionnaire_creator/types/DomainResource";
-import { resourceSchema } from "@/features/questionnaire_creator/types/Resource";
+} from "./dataTypes";
+import questionnaireAnswersStatusCodeDisplay from "@/constants/questionnaireAnswersStatusCodeDisplay";
+import { domainResourceSchema } from "./DomainResource";
+import { resourceSchema } from "./Resource";
 
 const baseQuestionnaireResponseItem = z.object({
   linkId: stringSchema,

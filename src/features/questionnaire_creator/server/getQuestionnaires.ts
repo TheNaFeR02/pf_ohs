@@ -2,8 +2,8 @@ import { parseURL } from "@/utils/parseURL";
 import {
   Bundle,
   bundleSchema,
-} from "@/features/questionnaire_creator/types/Bundle";
-import { OperationOutcomeSchema } from "@/types/OperationOutcome";
+} from "../../../types/Bundle";
+import { OperationOutcomeSchema } from "../../../types/OperationOutcome";
 import { FhirError } from "@/errors/FhirError";
 
 export async function getQuestionnaires(): Promise<Bundle> {

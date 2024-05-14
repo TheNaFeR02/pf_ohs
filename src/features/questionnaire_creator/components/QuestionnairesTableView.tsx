@@ -20,8 +20,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
-import { BundleEntry } from "@/features/questionnaire_creator/types/Bundle";
+import { Questionnaire } from "../../../types/Questionnaire";
+import { BundleEntry } from "../../../types/Bundle";
 
 interface QuestionnairesDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

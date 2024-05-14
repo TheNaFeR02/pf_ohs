@@ -3,7 +3,7 @@ import React, { FunctionComponent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Questionnaire } from "@/features/questionnaire_creator/types/Questionnaire";
+import { Questionnaire } from "../../../types/Questionnaire";
 import ItemsFormField from "@/features/questionnaire_creator/components/ItemsFormField";
 import {
   FormField,
@@ -39,8 +39,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import formatTextToUrl from "@/features/questionnaire_creator/utils/formatTextToUrl";
-import statusCodeDisplay from "@/features/questionnaire_creator/constants/statusCodeDisplay";
-import subjectTypesCodeDisplay from "@/features/questionnaire_creator/constants/subjectTypesCodeDisplay";
+import statusCodeDisplay from "@/constants/statusCodeDisplay";
+import subjectTypesCodeDisplay from "@/constants/subjectTypesCodeDisplay";
 import {
   Accordion,
   AccordionContent,

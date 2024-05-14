@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import {
   Questionnaire,
   questionnaireSchema,
-} from "@/features/questionnaire_creator/types/Questionnaire";
+} from "../../../types/Questionnaire";
 import QuestionnaireFormLayout from "@/features/questionnaire_creator/components/QuestionnaireFormLayout";
 import { createQuestionnaire } from "@/features/questionnaire_creator/server/createQuestionnaire";
 import { uptateQuestionnaire } from "@/features/questionnaire_creator/server/updateQuestionnaire";

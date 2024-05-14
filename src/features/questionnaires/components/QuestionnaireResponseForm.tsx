@@ -3,11 +3,11 @@ import React, { FC, ReactElement } from "react";
 import {
   QuestionnaireItem,
   Questionnaire,
-} from "@/features/questionnaire_creator/types/Questionnaire";
+} from "../../../types/Questionnaire";
 import {
   QuestionnaireResponse,
   questionnaireResponseSchema,
-} from "@/types/QuestionnaireResponse";
+} from "../../../types/QuestionnaireResponse";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generateDefaultQuestionnaireResponse } from "@/features/questionnaires/utils/generateDefaultQuestionnaireResponse";

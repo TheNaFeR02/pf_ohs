@@ -1,5 +1,5 @@
 // import { questionnaireSchema } from "@/types/Questionnaire"
-import { questionnaireSchema } from "@/features/questionnaire_creator/types/Questionnaire";
+import { questionnaireSchema } from "../../types/Questionnaire";
 import GeneralExample from "@/__testsData__/Questionnaire/GeneralExample.json";
 import LifelinesExample from "@/__testsData__/Questionnaire/LifelinesExample.json";
 import NeonateRecordExample from "@/__testsData__/Questionnaire/NeonateRecordExample.json";

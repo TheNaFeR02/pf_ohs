@@ -1,5 +1,5 @@
 import PatientForm from "@/features/patients/PatientForm";
-import nameUseCodeDisplay from "@/features/questionnaire_creator/constants/nameUseCodeDisplay";
+import nameUseCodeDisplay from "@/constants/nameUseCodeDisplay";
 
 
 export default function PatientCreatePage() {
