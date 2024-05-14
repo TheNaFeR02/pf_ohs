@@ -170,7 +170,7 @@ export default function PatientForm() {
                           videoConstraints={videoConstraints}
                         />
                       }
-                      {url && isCaptureEnable === false && <img src={url} alt="Captured" />}
+                      {url && isCaptureEnable === false && <Image src={url} alt="Captured" width={540} height={360} />}
                       {/* <div className="relative z-1 upload-file border-solid border-x border-y h-3 w-3"></div> */}
                       {/* {image && <img src={image} alt="Captured" />}
                     {showVideo && !image && <video className="video" ref={videoRef} autoPlay></video>} */}
