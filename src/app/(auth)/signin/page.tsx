@@ -49,7 +49,9 @@ export default function Signin() {
             <Button type="submit" className="w-full">
               Login
             </Button>
-            <Button variant="outline" className="w-full" onClick={() => signIn("google", { callbackUrl: "https://sturdy-barnacle-4r9v6rxjw9x2q969-3000.app.github.dev" })}>
+            <Button variant="outline" className="w-full"
+             onClick={() => signIn("google", { callbackUrl: "https://sturdy-barnacle-4r9v6rxjw9x2q969-3000.app.github.dev" })}
+             >
               Login with Google
             </Button>
           </div>

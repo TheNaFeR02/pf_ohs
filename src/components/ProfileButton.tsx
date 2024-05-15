@@ -8,26 +8,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { signOut } from "next-auth/react"
 // import { signOut } from 'next-auth/react'
 
 
 const ProfileButton = () => {
 
-  const handleLogout = async () => {
-    console.log("logged out")
-    // await fetch(parseURL("/api/auth/logout/"), {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    // }).then((response) => {
-    //   if (response.ok) {
-    //     router.push("/")
-    //   }
-    // }).catch((error) => {
-    //   console.log("Error while logging out!", error);
-    // });
-
-    // logOutProvider();
-  };
+  
 
   return (
     <DropdownMenu>
@@ -41,7 +28,7 @@ const ProfileButton = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+        <DropdownMenuItem className="cursor-pointer" onClick={()=>signOut()}>
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

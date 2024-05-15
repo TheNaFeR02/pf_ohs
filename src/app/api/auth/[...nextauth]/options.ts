@@ -19,20 +19,25 @@ export const options: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user, account }) {
-
+      console.log("jwt", account)
       if (account?.provider === "google" && account.id_token) {
         console.log("account", account)
-        const id_token = account.id_token;
+        token.access_token = account.access_token;
       }
 
       return token;
     },
 
+    async session({ session, token }) {
+      session.user.access_token = token.access_token;
+      return session;
+    },
+
     async redirect({ url, baseUrl }) {
       console.log("redirect", url, baseUrl)
-      
 
-      return '/something';
+
+      return baseUrl;
     }
   },
 
