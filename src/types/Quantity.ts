@@ -5,17 +5,11 @@ import {
   uriSchema,
   codeSchema,
 } from "./dataTypes";
-import quantityComparatorCodeDisplay from "@/constants/quantityComparatorCodeDisplay";
+import { quantityComparatorCode } from "@/constants/quantityComparatorCodeDisplay";
 
 export const quantitySchema = z.object({
   value: decimalSchema.optional(),
-  comparator: z
-    .enum(
-      JSON.parse(
-        JSON.stringify(quantityComparatorCodeDisplay.map((item) => item.code))
-      )
-    )
-    .optional(),
+  comparator: z.enum(quantityComparatorCode).optional(),
   unit: stringSchema.optional(),
   system: uriSchema.optional(),
   code: codeSchema.optional(),

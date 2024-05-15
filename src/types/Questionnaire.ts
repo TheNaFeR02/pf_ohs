@@ -21,11 +21,11 @@ import {
   timeSchema,
   markdownSchema,
 } from "@/types/dataTypes";
-import subjectTypesCodeDisplay from "@/constants/subjectTypesCodeDisplay";
-import statusCodeDisplay from "@/constants/statusCodeDisplay";
-import itemTypesCodeDisplay from "@/constants/itemTypesCodeDisplay";
-import questionnaireEnableOperatorCodeDisplay from "@/constants/questionnaireEnableOperatorCodeDisplay";
-import questionnaireEnableBehaviorCodeDisplay from "@/constants/questionnaireEnableBehaviorCodeDisplay";
+import { subjectTypesCode } from "@/constants/subjectTypesCodeDisplay";
+import { statusCode } from "@/constants/statusCodeDisplay";
+import { itemTypeCode } from "@/constants/itemTypeCodeDisplay";
+import { questionnaireEnableOperatorCode } from "@/constants/questionnaireEnableOperatorCodeDisplay";
+import { questionnaireEnableBehaviorCode } from "@/constants/questionnaireEnableBehaviorCodeDisplay";
 import { resourceSchema } from "@/types/Resource";
 import { domainResourceSchema } from "@/types/DomainResource";
 
@@ -35,24 +35,12 @@ const baseQuestionnaireItemSchema = z.object({
   code: z.array(codingSchema).optional(),
   prefix: stringSchema.optional(),
   text: stringSchema.optional(),
-  type: z.enum(
-    JSON.parse(
-      JSON.stringify(itemTypesCodeDisplay.map((itemType) => itemType.code))
-    )
-  ),
+  type: z.enum(itemTypeCode),
   enableWhen: z
     .array(
       z.object({
         question: stringSchema,
-        operator: z.enum(
-          JSON.parse(
-            JSON.stringify(
-              questionnaireEnableOperatorCodeDisplay.map(
-                (operator) => operator.code
-              )
-            )
-          )
-        ),
+        operator: z.enum(questionnaireEnableOperatorCode),
         answerBoolean: booleanSchema.optional(),
         answerDecimal: decimalSchema.optional(),
         answerInteger: integerSchema.optional(),
@@ -66,17 +54,7 @@ const baseQuestionnaireItemSchema = z.object({
       })
     )
     .optional(),
-  enableBehavior: z
-    .enum(
-      JSON.parse(
-        JSON.stringify(
-          questionnaireEnableBehaviorCodeDisplay.map(
-            (behavior) => behavior.code
-          )
-        )
-      )
-    )
-    .optional(),
+  enableBehavior: z.enum(questionnaireEnableBehaviorCode).optional(),
   required: booleanSchema.optional(),
   repeats: booleanSchema.optional(),
   readOnly: booleanSchema.optional(),
@@ -132,21 +110,9 @@ const baseQuestionnaireSchema = z.object({
   name: stringSchema.optional(),
   title: stringSchema.optional(),
   derivedFrom: z.array(canonicalSchema).optional(),
-  status: z.enum(
-    JSON.parse(JSON.stringify(statusCodeDisplay.map((status) => status.code)))
-  ),
+  status: z.enum(statusCode),
   experimental: booleanSchema.optional(),
-  subjectType: z
-    .array(
-      z.enum(
-        JSON.parse(
-          JSON.stringify(
-            subjectTypesCodeDisplay.map((subjectType) => subjectType.code)
-          )
-        )
-      )
-    )
-    .optional(),
+  subjectType: z.array(z.enum(subjectTypesCode)).optional(),
   date: dateTimeSchema.optional(),
   publisher: stringSchema.optional(),
   contact: z.array(contactDetailSchema).optional(),

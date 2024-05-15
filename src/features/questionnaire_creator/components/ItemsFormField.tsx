@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import itemTypesCodeDisplay from "@/constants/itemTypesCodeDisplay";
+import {itemTypeObj} from "@/constants/itemTypeCodeDisplay";
 import {
   Accordion,
   AccordionContent,
@@ -139,7 +139,7 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {itemTypesCodeDisplay.map((item) => (
+                {itemTypeObj.map((item) => (
                   <SelectItem key={item.code} value={item.code}>
                     {item.display}
                   </SelectItem>

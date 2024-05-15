@@ -1,6 +1,6 @@
 import { z } from "zod";
-import issueSeverityCodeDisplay from "@/constants/issueSeverityCodeDisplay";
-import issueTypeCodeDisplay from "@/constants/issueTypeCodeDisplay";
+import { issueSeverityCode } from "@/constants/issueSeverityCodeDisplay";
+import { issueTypeCode } from "@/constants/issueTypeCodeDisplay";
 import { codeableConceptSchema } from "@/types/CodeableConcept";
 import { stringSchema } from "@/types/dataTypes";
 import { domainResourceSchema } from "@/types/DomainResource";
@@ -10,16 +10,8 @@ export const baseOperationOutcomeSchema = z.object({
   resourceType: z.literal("OperationOutcome"),
   issue: z.array(
     z.object({
-      severity: z.enum(
-        JSON.parse(
-          JSON.stringify(issueSeverityCodeDisplay.map((item) => item.code))
-        )
-      ),
-      code: z.enum(
-        JSON.parse(
-          JSON.stringify(issueTypeCodeDisplay.map((item) => item.code))
-        )
-      ),
+      severity: z.enum(issueSeverityCode),
+      code: z.enum(issueTypeCode),
       details: codeableConceptSchema.optional(),
       diagnostics: stringSchema.optional(),
       location: z.array(stringSchema).optional(),

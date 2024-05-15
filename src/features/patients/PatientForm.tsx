@@ -34,7 +34,16 @@ import { CameraIcon } from "@radix-ui/react-icons";
 import { TargetIcon } from "@radix-ui/react-icons";
 import Webcam from "react-webcam";
 import Image from "next/image";
-// import { Matcher } from "react-day-picker";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+import { administrativeGenderObj } from "@/constants/administrativeGenderCodeDisplay";
+import { maritalStatusObj } from "@/constants/maritalStatusCodeDisplay";
+
 
 const videoConstraints = {
   width: 720,
@@ -72,7 +81,7 @@ export default function PatientForm() {
           country: "Colombia",
         },
       ],
-      maritalStatus: { text: "soltero" },
+      maritalStatus: "M",
       photo: [
         {
           data: defaultPhoto,
@@ -110,12 +119,10 @@ export default function PatientForm() {
     },
   });
 
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control: form.control,
-      name: "contact",
-    }
-  );
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "contact",
+  });
 
   function onSubmit(values: Patient) {
     // We extract the base64 image from the url. Basically we are eliminating the header -> 'data:image/jpeg;base64,/9j/4AAQSk...'
@@ -302,9 +309,13 @@ export default function PatientForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value={"male"}>Hombre</SelectItem>
-                            <SelectItem value={"female"}>Mujer</SelectItem>
-                            <SelectItem value={"other"}>Otro</SelectItem>
+                            {administrativeGenderObj.map(
+                              ({ code, display }) => (
+                                <SelectItem key={code} value={code}>
+                                  {display}
+                                </SelectItem>
+                              )
+                            )}
                           </SelectContent>
                         </Select>
                         <FormDescription>Género del paciente.</FormDescription>
@@ -366,7 +377,6 @@ export default function PatientForm() {
                       </FormItem>
                     )}
                   />
-                  {/* ... */}
 
                   <FormField
                     control={form.control}
@@ -424,13 +434,12 @@ export default function PatientForm() {
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
-                    name={"maritalStatus.text"}
+                    name={"maritalStatus"}
                     render={({ field }): ReactElement => (
                       <FormItem className="w-100 py-3 px-5 font-medium">
-                        <FormLabel>Estado Civil</FormLabel>
+                        <FormLabel>Estado civil</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
@@ -438,28 +447,21 @@ export default function PatientForm() {
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue
-                                placeholder={"Selecciona el género."}
+                                placeholder={"Selecciona el estado civil."}
                               />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value={"soltero"}>Soltero/a</SelectItem>
-                            <SelectItem value={"casado"}>Casado/a</SelectItem>
-                            <SelectItem value={"union_libre"}>
-                              Unión Libre
-                            </SelectItem>
-                            <SelectItem value={"separado"}>
-                              Separado/a
-                            </SelectItem>
-                            <SelectItem value={"divorciado"}>
-                              Divorciado/a
-                            </SelectItem>
-                            <SelectItem value={"viudo"}>Viudo/a</SelectItem>
+                            {maritalStatusObj.map(
+                              ({ code, display }) => (
+                                <SelectItem key={code} value={code}>
+                                  {display}
+                                </SelectItem>
+                              )
+                            )}
                           </SelectContent>
                         </Select>
-                        <FormDescription>
-                          Estado civil del paciente.
-                        </FormDescription>
+                        <FormDescription>Estado civil del paciente.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

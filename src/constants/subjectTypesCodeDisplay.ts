@@ -1,9 +1,23 @@
 import subjectTypes from "@/data/subjectTypes.json";
 import Concept from "../types/Concept";
 
-const subjectTypesCodeDisplay: Concept[] = subjectTypes.concept.map((item) => ({
-  display: item.display,
-  code: item.code,
-}));
+// Process subjectTypes and create the necessary arrays in a single loop
+const subjectTypesObj: Concept[] = [];
+const subjectTypesCode: [string, ...string[]] = [""];
+const subjectTypesDisplay: [string, ...string[]] = [""];
+const subjectTypesDefinition: [string, ...string[]] = [""];
 
-export default subjectTypesCodeDisplay;
+subjectTypes.concept.forEach((item) => {
+  subjectTypesObj.push(item);
+  subjectTypesCode.push(item.code);
+  subjectTypesDisplay.push(item.display);
+  subjectTypesDefinition.push(item.definition);
+});
+
+// Remove the initial empty string
+subjectTypesCode.shift();
+subjectTypesDisplay.shift();
+subjectTypesDefinition.shift();
+
+// Export all the processed data
+export { subjectTypesObj, subjectTypesCode, subjectTypesDisplay, subjectTypesDefinition };

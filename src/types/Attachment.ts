@@ -7,17 +7,12 @@ import {
   stringSchema,
   dateTimeSchema,
 } from "@/types/dataTypes";
-import languagesCodeDisplay from "@/constants/languagesCodeDisplay";
+import { languagesCode } from "@/constants/languagesCodeDisplay";
+
 
 export const attachmentSchema = z.object({
   contentType: codeSchema.optional(),
-  language: z
-    .enum(
-      JSON.parse(
-        JSON.stringify(languagesCodeDisplay.map((language) => language.code))
-      )
-    )
-    .optional(),
+  language: z.enum(languagesCode).optional(),
   data: base64BinarySchema.optional(),
   url: urlSchema.optional(),
   size: unsignedIntSchema.optional(),

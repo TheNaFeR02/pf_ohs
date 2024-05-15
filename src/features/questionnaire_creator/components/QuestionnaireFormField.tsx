@@ -39,8 +39,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import formatTextToUrl from "@/features/questionnaire_creator/utils/formatTextToUrl";
-import statusCodeDisplay from "@/constants/statusCodeDisplay";
-import subjectTypesCodeDisplay from "@/constants/subjectTypesCodeDisplay";
+import { statusObj } from "@/constants/statusCodeDisplay";
+import { subjectTypesObj } from "@/constants/subjectTypesCodeDisplay";
 import {
   Accordion,
   AccordionContent,
@@ -115,7 +115,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {statusCodeDisplay.map((item) => (
+                {statusObj.map((item) => (
                   <SelectItem key={item.code} value={item.code}>
                     {item.display}
                   </SelectItem>
@@ -145,7 +145,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
                     )}
                   >
                     {field.value
-                      ? subjectTypesCodeDisplay.find(
+                      ? subjectTypesObj.find(
                           (subjectType) =>
                             Array.isArray(field.value) &&
                             field.value.includes(subjectType.code)
@@ -160,7 +160,7 @@ const QuestionnaireFormField: FunctionComponent = () => {
                   <CommandInput placeholder="Search Subject type..." />
                   <CommandEmpty>No Subject type found.</CommandEmpty>
                   <CommandGroup>
-                    {subjectTypesCodeDisplay.map((subjectType) => (
+                    {subjectTypesObj.map((subjectType) => (
                       <CommandList key={subjectType.code}>
                         <CommandItem
                           value={subjectType.display}
@@ -172,9 +172,8 @@ const QuestionnaireFormField: FunctionComponent = () => {
                           <CheckIcon
                             className={cn(
                               "mr-2 h-4 w-4",
-                              Array.isArray(field.value)
-                                ? field.value.includes(subjectType.code)
-                                : subjectType.code === field.value
+                              Array.isArray(field.value) &&
+                                field.value.includes(subjectType.code)
                                 ? "opacity-100"
                                 : "opacity-0"
                             )}

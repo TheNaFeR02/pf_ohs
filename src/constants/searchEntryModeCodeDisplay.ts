@@ -1,11 +1,23 @@
 import searchEntryMode from "@/data/searchEntryMode.json";
 import Concept from "../types/Concept";
 
-const searchEntryModeCodeDisplay: Concept[] = searchEntryMode.concept.map(
-  (item) => ({
-    display: item.display,
-    code: item.code,
-  })
-);
+// Process searchEntryMode and create the necessary arrays in a single loop
+const searchEntryModeObj: Concept[] = [];
+const searchEntryModeCode: [string, ...string[]] = [""];
+const searchEntryModeDisplay: [string, ...string[]] = [""];
+const searchEntryModeDefinition: [string, ...string[]] = [""];
 
-export default searchEntryModeCodeDisplay;
+searchEntryMode.concept.forEach((item) => {
+  searchEntryModeObj.push(item);
+  searchEntryModeCode.push(item.code);
+  searchEntryModeDisplay.push(item.display);
+  searchEntryModeDefinition.push(item.definition);
+});
+
+// Remove the initial empty string
+searchEntryModeCode.shift();
+searchEntryModeDisplay.shift();
+searchEntryModeDefinition.shift();
+
+// Export all the processed data
+export { searchEntryModeObj, searchEntryModeCode, searchEntryModeDisplay, searchEntryModeDefinition };

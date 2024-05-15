@@ -15,7 +15,7 @@ import {
   timeSchema,
   canonicalSchema,
 } from "./dataTypes";
-import questionnaireAnswersStatusCodeDisplay from "@/constants/questionnaireAnswersStatusCodeDisplay";
+import { questionnaireAnswersStatusCode } from "@/constants/questionnaireAnswersStatusCodeDisplay";
 import { domainResourceSchema } from "./DomainResource";
 import { resourceSchema } from "./Resource";
 
@@ -62,13 +62,7 @@ export const baseQuestionnaireResponseSchema = z.object({
   basedOn: z.array(referenceSchema).optional(), // Reference to the CarePlan or ServiceRequest
   partOf: z.array(referenceSchema).optional(), // Reference to the Observation or Procedure
   questionnaire: canonicalSchema.optional(), // Canonical to the Questionnaire
-  status: z.enum(
-    JSON.parse(
-      JSON.stringify(
-        questionnaireAnswersStatusCodeDisplay.map((item) => item.code)
-      )
-    )
-  ),
+  status: z.enum(questionnaireAnswersStatusCode),
   subject: referenceSchema.optional(), // Reference to any
   authored: dateTimeSchema.optional(),
   author: referenceSchema.optional(), // Reference to Device|Practitioner|PractitionerRole|Patient|RelatedPerson|Organization

@@ -1,9 +1,22 @@
 import addressType from "@/data/addressType.json";
 import Concept from "../types/Concept";
 
-const addressTypeCodeDisplay: Concept[] = addressType.concept.map((item) => ({
-  display: item.display,
-  code: item.code,
-}));
+// Process addressType and create the necessary arrays in a single loop
+const addressTypeObj: Concept[] = [];
+const addressTypeCode: [string, ...string[]] = [""];
+const addressTypeDisplay: [string, ...string[]] = [""];
+const addressTypeDefinition: [string, ...string[]] = [""];
 
-export default addressTypeCodeDisplay;
+addressType.concept.forEach((item) => {
+  addressTypeObj.push(item);
+  addressTypeCode.push(item.code);
+  addressTypeDisplay.push(item.display);
+  addressTypeDefinition.push(item.definition);
+});
+
+// Remove the initial empty string
+addressTypeCode.shift();
+addressTypeDisplay.shift();
+addressTypeDefinition.shift();
+
+export { addressTypeObj, addressTypeCode, addressTypeDisplay, addressTypeDefinition };

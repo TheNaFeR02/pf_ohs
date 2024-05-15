@@ -1,30 +1,35 @@
-
-
 import nameUse from "@/data/nameUse.json";
 import Concept from "../types/Concept";
 
-function concatAllTypes(concepts: typeof nameUse.concept) {
-  let concatenatedTypes: Concept[] = [];
+// Process nameUse and create the necessary arrays in a single loop
+const nameUseObj: Concept[] = [];
+const nameUseCode: [string, ...string[]] = [""];
+const nameUseDisplay: [string, ...string[]] = [""];
+const nameUseDefinition: [string, ...string[]] = [""];
 
-  // Iterate over each concept
-  concepts.forEach((concept) => {
-    concatenatedTypes.push({
-      code: concept.code,
-      display: concept.display,
+// The structure of nameUse is different from the previous examples
+// The concept array is nested inside the concept array
+
+nameUse.concept.forEach((item) => {
+  if (item.concept) {
+    item.concept.forEach((concept) => {
+      nameUseObj.push(concept);
+      nameUseCode.push(concept.code);
+      nameUseDisplay.push(concept.display);
+      nameUseDefinition.push(concept.definition);
     });
-    // If the current concept has child concepts, recursively call the function to concatenate their codes
-    if (concept.concept) {
-      concatenatedTypes = concatenatedTypes.concat(
-        concatAllTypes(concept.concept)
-      );
-    }
-  });
-  return concatenatedTypes;
-}
+  } else {
+    nameUseObj.push(item);
+    nameUseCode.push(item.code);
+    nameUseDisplay.push(item.display);
+    nameUseDefinition.push(item.definition);
+  }
+});
 
-const nameUseCodeDisplay = concatAllTypes(nameUse.concept).map((item) => ({
-  code: item.code,
-  display: item.display,
-}));
+// Remove the initial empty string
+nameUseCode.shift();
+nameUseDisplay.shift();
+nameUseDefinition.shift();
 
-export default nameUseCodeDisplay;
+// Export all the processed data
+export { nameUseObj, nameUseCode, nameUseDisplay, nameUseDefinition };

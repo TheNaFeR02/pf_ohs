@@ -9,9 +9,9 @@ import {
   unsignedIntSchema,
   uriSchema,
 } from "@/types/dataTypes";
-import searchEntryModeCodeDisplay from "@/constants/searchEntryModeCodeDisplay";
-import httpVerbCodeDisplay from "@/constants/httpVerbCodeDisplay";
-import bundleTypeCodeDisplay from "@/constants/bundleTypeCodeDisplay";
+import { searchEntryModeCode } from "@/constants/searchEntryModeCodeDisplay";
+import { httpVerbCode } from "@/constants/httpVerbCodeDisplay";
+import { bundleTypeCode } from "@/constants/bundleTypeCodeDisplay";
 
 const bundleLinkSchema = z.object({
   relation: stringSchema, // R!
@@ -20,27 +20,13 @@ const bundleLinkSchema = z.object({
 type BundleLink = z.infer<typeof bundleLinkSchema>;
 
 const bundleSearchSchema = z.object({
-  mode: z
-    .enum(
-      JSON.parse(
-        JSON.stringify(
-          searchEntryModeCodeDisplay.map(
-            (searchEntryMode) => searchEntryMode.code
-          )
-        )
-      )
-    )
-    .optional(),
+  mode: z.enum(searchEntryModeCode).optional(),
   score: decimalSchema.min(0).max(1).optional(),
 });
 type BundleSearch = z.infer<typeof bundleSearchSchema>;
 
 const bundleRequestSchema = z.object({
-  method: z.enum(
-    JSON.parse(
-      JSON.stringify(httpVerbCodeDisplay.map((httpVerb) => httpVerb.code))
-    )
-  ), // R!  GET | HEAD | POST | PUT | DELETE | PATCH
+  method: z.enum(httpVerbCode), // R!  GET | POST | PUT | DELETE
   url: uriSchema, // R!  URL for the resource
   ifNoneMatch: stringSchema.optional(),
   ifModifiedSince: instantSchema.optional(),
@@ -83,11 +69,7 @@ export const bundleEntrySchema = <T>(resourceSchema: z.ZodType<T>) =>
 export const bundleSchema = z.object({
   resourceType: z.literal("Bundle"),
   identifier: z.array(identifierSchema).optional(),
-  type: z.enum(
-    JSON.parse(
-      JSON.stringify(bundleTypeCodeDisplay.map((bundleType) => bundleType.code))
-    )
-  ), // R!  document | message | transaction ...
+  type: z.enum(bundleTypeCode), // R!  document | message | transaction | transaction-response | batch | batch-response | history | searchset | collection
   timestamp: instantSchema.optional(),
   total: unsignedIntSchema.optional(),
   link: z.array(bundleLinkSchema).optional(),

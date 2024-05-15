@@ -6,16 +6,10 @@ import {
   uriSchema,
   stringSchema,
 } from "./dataTypes";
-import identifierUseCodeDisplay from "@/constants/identifierUseCodeDisplay";
+import {identifierUseCode} from "@/constants/identifierUseCodeDisplay";
 
 export const identifierSchema = z.object({
-  use: z
-    .enum(
-      JSON.parse(
-        JSON.stringify(identifierUseCodeDisplay.map((item) => item.code))
-      )
-    )
-    .optional(),
+  use: z.enum(identifierUseCode).optional(),
   type: codeableConceptSchema.optional(),
   system: uriSchema.optional(),
   value: stringSchema.optional(),
