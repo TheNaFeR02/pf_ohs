@@ -34,13 +34,6 @@ import { CameraIcon } from "@radix-ui/react-icons";
 import { TargetIcon } from "@radix-ui/react-icons";
 import Webcam from "react-webcam";
 import Image from "next/image";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
 import { administrativeGenderObj } from "@/constants/administrativeGenderCodeDisplay";
 import { maritalStatusObj } from "@/constants/maritalStatusCodeDisplay";
 
