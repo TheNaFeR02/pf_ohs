@@ -58,7 +58,7 @@ const basePatientSchema = z.object({
   deceasedBoolean: booleanSchema.optional(),
   deceasedDateTime: dateTimeSchema.optional(), // <dateTime>
   address: z.array(addressSchema).optional(),
-  maritalStatus: z.enum(maritalStatusCode).optional(),
+  maritalStatus: codeableConceptSchema.optional(),
   multipleBirthBoolean: booleanSchema.optional(),
   multipleBirthInteger: integerSchema.optional(),
   photo: z.array(attachmentSchema).optional(),
