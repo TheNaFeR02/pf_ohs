@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
 import { getPatients } from "@/features/patients/server/getPatients";
-import PatientsColumns from "@/features/patients/PatientsColumns";
+import PatientsColumns from "@/features/patients/components/PatientsColumns";
 import { Bundle, BundleEntry } from "@/types/Bundle";
-import PatientsTableView from "@/features/patients/PatientsTableView";
+import PatientsTableView from "@/features/patients/components/PatientsTableView";
 import { Patient } from "@/types/Patient";
 import {
   SortingState,

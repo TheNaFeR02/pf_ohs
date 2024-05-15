@@ -1,4 +1,4 @@
-import PatientsTable from "@/features/patients/PatientsTable";
+import PatientsTable from "@/features/patients/components/PatientsTable";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
