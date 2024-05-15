@@ -25,7 +25,7 @@ test('QuestionnaireResponse Test -> Real-world NSW My Personal Health Record exa
 
 test('QuestionnaireResponse Test -> Glasgow Coma Score example answers', () => {
     const result = questionnaireResponseSchema.safeParse(QuestionnaireResponseData4)
-    console.error(result.error)
+
     expect(result.success).toBe(true)
 })
 
