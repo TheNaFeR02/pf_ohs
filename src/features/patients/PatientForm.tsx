@@ -37,7 +37,6 @@ import Image from "next/image";
 import { administrativeGenderObj } from "@/constants/administrativeGenderCodeDisplay";
 import { maritalStatusObj } from "@/constants/maritalStatusCodeDisplay";
 
-
 const videoConstraints = {
   width: 720,
   height: 720,
@@ -74,7 +73,9 @@ export default function PatientForm() {
           country: "Colombia",
         },
       ],
-      maritalStatus: "M",
+      // maritalStatus: {
+      //   text: "Soltero",
+      // },
       photo: [
         {
           data: defaultPhoto,
@@ -131,6 +132,7 @@ export default function PatientForm() {
       photo: [{ data: base64Image || defaultPhoto }],
     };
     console.log(finalValues);
+    console.log(JSON.stringify(finalValues));
   }
 
   // camera: https://dev.to/sababg/react-webcam-typescript-gh2
@@ -429,35 +431,47 @@ export default function PatientForm() {
                   />
                   <FormField
                     control={form.control}
-                    name={"maritalStatus"}
-                    render={({ field }): ReactElement => (
-                      <FormItem className="w-100 py-3 px-5 font-medium">
-                        <FormLabel>Estado civil</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue
-                                placeholder={"Selecciona el estado civil."}
-                              />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {maritalStatusObj.map(
-                              ({ code, display }) => (
+                    name="maritalStatus"
+                    render={({ field }): ReactElement => {
+                      const handleValueChange = (e: string) => {
+                        const selectedMaritalStatus = maritalStatusObj.find(
+                          (item) => item.code === e
+                        );
+                        field.onChange({
+                          coding: [
+                            {
+                              code: e,
+                              display: selectedMaritalStatus?.display,
+                            },
+                          ],
+                          text: selectedMaritalStatus?.display,
+                        });
+                      };
+
+                      return (
+                        <FormItem className="w-100 py-3 px-5 font-medium">
+                          <FormLabel>Estado civil</FormLabel>
+                          <Select onValueChange={handleValueChange}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Selecciona el estado civil" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {maritalStatusObj.map(({ code, display }) => (
                                 <SelectItem key={code} value={code}>
                                   {display}
                                 </SelectItem>
-                              )
-                            )}
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>Estado civil del paciente.</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            Estado civil del paciente.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
                   />
 
                   <fieldset className="border border-solid border-opacity-60 rounded-lg p-3 mb-5 w-full col-span-full">
