@@ -11,8 +11,8 @@ import { FormOrganizationupdate } from '@/features/companies/update_companies/co
 import router from 'next/router';
 import Link from 'next/link'
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/router';
 import { Delete } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 
 export default function DemoPage() {
@@ -20,7 +20,9 @@ export default function DemoPage() {
     const [loading, setLoading] = useState(true);
     const queryClient = useQueryClient();
     const { toast } = useToast();
+    const router = useRouter();
 
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -51,6 +53,7 @@ export default function DemoPage() {
         try {
             await deleteMutation.mutateAsync(organization.id || '');
             setData(prevData => prevData.filter(item => item.id !== organization.id));
+            toast({ description: 'Organization deleted successfully' , variant: 'default' })
         } catch (error) {
             console.error('Error deleting organization:', error);
         }
@@ -58,7 +61,7 @@ export default function DemoPage() {
     }, []);
     const onEdit = useCallback((organization: Organization) => {
         // Assuming FormOrganizationupdate is a component that takes props
-
+        router.push(`/companies/update/${organization.id}`);
     }, []);
     const column = useMemo(() => columns({ onEdit, onDelete }), [onEdit, onDelete]);
     

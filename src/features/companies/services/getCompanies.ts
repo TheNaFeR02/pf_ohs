@@ -3,11 +3,13 @@ import { Organization, OrganizationSchema} from "@/features/companies/types/orga
 import { jsonverify } from "@/features/companies/types/jsonverify";
 
 export async function getOrganization(): Promise<Organization[]> {
+  console.log("Fetching Organization details...");
   try {
     const res = await fetch(parseURL("/Organization"), {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        
       }
     });
 

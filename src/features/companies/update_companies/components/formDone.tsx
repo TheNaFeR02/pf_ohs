@@ -32,13 +32,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { createOrganization } from "@/features/companies/services/createCompanies";
 import { getOrganizationById } from "@/features/companies/services/getCompany";
 import { updateOrganization } from "@/features/companies/services/updateCompanies";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+
 
 export function FormOrganizationupdate({ id }: { id: string }) {
-  
   const router = useRouter();
-  const { idorg } = router.query;
-  console.log(idorg);
   const form = useForm<z.infer<typeof OrganizationSchema>>({
     resolver: zodResolver(OrganizationSchema),
     defaultValues: {
@@ -62,12 +60,12 @@ export function FormOrganizationupdate({ id }: { id: string }) {
                         use: "",
                         text: "",
                         family: "",
-                        given: [],
-                        prefix: [],
+                        given: [""],
+                        prefix: [""],
                     },
                     address: {
                         use: "",
-                        line: [],
+                        line: [""],
                         city: "",
                         postalCode: "",
                         country: "",
@@ -76,7 +74,7 @@ export function FormOrganizationupdate({ id }: { id: string }) {
             ],
         },
 })
-
+try {
 useEffect(() => {
   const fetchData = async () => {
     try {
@@ -89,12 +87,15 @@ useEffect(() => {
 
   fetchData();
 }, [form]);
-
+} catch (error) {
+  console.error("Error fetching organization data:", error);
+}
 
 
 function onSubmit(values: Organization) {
-  console.log("values", values);
   updateOrganization(id, values);
+  router.back();
+
 }
 
     const { control } = form;
@@ -134,11 +135,14 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                       name={`identifier.${index}.use`}
                       render={({ field }) => (
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl className="w-50 mr-5">
+                          <FormItem className="w-50 mr-5">
+                          <FormControl >
                             <SelectTrigger>
                               <SelectValue placeholder="Seleccionar Sistema" />
                             </SelectTrigger>
                           </FormControl>
+                          <FormMessage/>
+                        </FormItem>
                           <SelectContent>
                             <SelectItem value="usual">Habitual</SelectItem>
                             <SelectItem value="official">Oficial</SelectItem>
@@ -147,24 +151,32 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                             <SelectItem value="old">Viejo</SelectItem>
                           </SelectContent>
                         </Select>
+                        
                       )}
                     /> 
+
                     <FormField
                       control={form.control}
                       name={`identifier.${index}.system`}
                       render={({ field }) => (
+                        <FormItem className="w-full ml-5">
                         <FormControl>
                           <Input placeholder="Sistema Ej(https://www.rues.org.co)" type="text" {...field} className="ml-5 mr-5"/>
                         </FormControl>
+                        <FormMessage/>
+                        </FormItem>
                       )}
                     />
                     <FormField
                       control={form.control}
                       name={`identifier.${index}.value`}
                       render={({ field }) => (
+                        <FormItem className="w-full ml-10">
                         <FormControl>
                           <Input placeholder="NIT" type="text" {...field}/>
                         </FormControl>
+                        <FormMessage/>
+                        </FormItem>
                       )}
                     />
                                 {index > 0 && (
@@ -175,7 +187,7 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
               ))}
                 <Button
                   type="button"
-                  onClick={() => appendIdentifier({})}
+                  onClick={() => appendIdentifier({system: "", value: "", use: ""})}
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-4 rounded mt-2"
                 >
                   Añadir Contacto
@@ -199,9 +211,12 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                   control={form.control}
                   name={`name`}
                   render={({ field }) => (
+                    <FormItem>
                       <FormControl>
                         <Input placeholder="Nombre organización" type="text" {...field} className="my-2"/>
                       </FormControl>
+                      <FormMessage/>
+                      </FormItem>
                   )}
               />
               <div className="flex flex-row my-5">
@@ -250,11 +265,14 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                                 name={`contact.${index}.telecom.0.system`}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl className="w-50 mr-5">
+                                          <FormItem className="w-50 mr-5">
+                                            <FormControl >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Seleccionar Sistema" />
                                             </SelectTrigger>
                                             </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
                                             <SelectContent>
                                             <SelectItem value="phone">Teléfono</SelectItem>
                                             <SelectItem value="fax">Fax</SelectItem>
@@ -271,9 +289,12 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                                     control={form.control}
                                     name={`contact.${index}.telecom.0.value`}
                                     render={({ field }) => (
+                                      <FormItem className="w-full">
                                         <FormControl>
                                             <Input placeholder="Numero" type="text" {...field}/>
                                         </FormControl>
+                                        <FormMessage/>
+                                        </FormItem>
                                     )}
                                 />
                                 <FormField
@@ -281,11 +302,14 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                                     name={`contact.${index}.telecom.0.use`}
                                     render={({ field }) => (
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl className="w-50 ml-5">
+                                          <FormItem className="w-50 ml-5">
+                                            <FormControl >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Seleccionar Uso" />
                                             </SelectTrigger>
                                             </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
                                             <SelectContent>
                                             <SelectItem value="home">Casa</SelectItem>
                                             <SelectItem value="work">Trabajo</SelectItem>
@@ -422,7 +446,29 @@ const { fields: identifierFields, append: appendIdentifier, remove: removeIdenti
                             )}
                         </div>
                     ))}
-                    <Button type="button" onClick={() => contactAppend({telecom: [{}]})} className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-4 rounded mt-2">Añadir Contacto</Button>
+                    <Button type="button" onClick={() => contactAppend([
+                {
+                    telecom: [{
+                        system: "",
+                        value: "",
+                        use: "",
+                    }],
+                    name: {
+                        use: "",
+                        text: "",
+                        family: "",
+                        given: [""],
+                        prefix: [""],
+                    },
+                    address: {
+                        use: "",
+                        line: [""],
+                        city: "",
+                        postalCode: "",
+                        country: "",
+                    },
+                },
+            ])} className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-4 rounded mt-2">Añadir Contacto</Button>
                 </CardContent>
             </Card>
             </div>

@@ -3,7 +3,6 @@ import { parseURL } from "@/utils/parseURL";
 
 
 export async function createOrganization(organization: Organization){
-    console.log("parsed url:", parseURL('/Organization'));
     try {
         const res = await fetch(parseURL('/Organization'), {
           method: 'POST',
@@ -12,7 +11,7 @@ export async function createOrganization(organization: Organization){
           },
           body: JSON.stringify(organization)
         })
-    
+        
         const data = await res.json()
     
         console.log(data)

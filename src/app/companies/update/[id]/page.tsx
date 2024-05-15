@@ -5,13 +5,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useRouter } from "next/router";
 
 
-const Page = () => {
-    const router = useRouter();
-    const { id } = router.query;
+const Page = ({ params }: { params: { id: string } }) => {
     return (
         <div>
-                
-                <FormOrganizationupdate id={"5"}/>
+            <FormOrganizationupdate id={params.id}/>
         </div>
     );
 };
