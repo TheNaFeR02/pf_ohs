@@ -1,4 +1,3 @@
-"use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { BundleEntry } from "../../../types/Bundle";
 import { Questionnaire } from "../../../types/Questionnaire";
@@ -87,7 +86,17 @@ const QuestionnairesColumns = (
   {
     accessorKey: "resource.title",
     id: "Title",
-    header: "Title",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Title
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "resource.status",
@@ -96,7 +105,7 @@ const QuestionnairesColumns = (
     cell: ({ row }) => {
       return (
         <Badge variant="outline">
-          {row.original.resource?.status.toUpperCase()}
+          {row.original.resource?.status}
         </Badge>
       );
     },

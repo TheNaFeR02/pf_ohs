@@ -61,12 +61,7 @@ function QuestionnairesTable() {
       rowSelection,
     },
   });
-  return (
-    <div>
-      {data?.total && <p>Total: {data.total}</p>}
-      <QuestionnairesTableView columns={columns} table={table} />
-    </div>
-  );
+  return <QuestionnairesTableView columns={columns} table={table} />;
 }
 
 export default QuestionnairesTable;
