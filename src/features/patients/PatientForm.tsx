@@ -36,6 +36,7 @@ import Webcam from "react-webcam";
 import Image from "next/image";
 import { administrativeGenderObj } from "@/constants/administrativeGenderCodeDisplay";
 import { maritalStatusObj } from "@/constants/maritalStatusCodeDisplay";
+import { createPatient } from "@/features/patients/server/createPatient";
 
 const videoConstraints = {
   width: 720,
@@ -73,9 +74,6 @@ export default function PatientForm() {
           country: "Colombia",
         },
       ],
-      // maritalStatus: {
-      //   text: "Soltero",
-      // },
       photo: [
         {
           data: defaultPhoto,
@@ -132,7 +130,7 @@ export default function PatientForm() {
       photo: [{ data: base64Image || defaultPhoto }],
     };
     console.log(finalValues);
-    console.log(JSON.stringify(finalValues));
+    createPatient(finalValues);
   }
 
   // camera: https://dev.to/sababg/react-webcam-typescript-gh2

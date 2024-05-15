@@ -9,8 +9,8 @@ export default function HomePage() {
         <Link className="p-4 bg-gray-100 rounded-md" href="/questionnaires">
           Questionnaires
         </Link>
-        <Link className="p-4 bg-gray-100 rounded-md" href="/patient/create">
-          Patients Create
+        <Link className="p-4 bg-gray-100 rounded-md" href="/patient/">
+          Patients
         </Link>
         <Link className="p-4 bg-gray-100 rounded-md" href="/medical_record">
           Medical Record

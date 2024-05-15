@@ -1,9 +1,8 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { BundleEntry } from "../../../types/Bundle";
-import { Questionnaire } from "../../../types/Questionnaire";
+import { BundleEntry } from "@/types/Bundle";
+import { Patient } from "@/types/Patient";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,17 +25,17 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { deleteQuestionnaire } from "@/features/questionnaire_creator/server/deleteQuestionnaire";
+import { deletePatient } from "@/features/patients/server/deletePatient";
 import { useToast } from "@/components/ui/use-toast";
 
-interface QuestionnairesColumnsProps {
-  data: BundleEntry<Questionnaire>[];
-  setData: (data: BundleEntry<Questionnaire>[]) => void;
+interface PatientsColumnsProps {
+  data: BundleEntry<Patient>[];
+  setData: (data: BundleEntry<Patient>[]) => void;
 }
 
-const QuestionnairesColumns = (
-  props: QuestionnairesColumnsProps
-): ColumnDef<BundleEntry<Questionnaire>>[] => [
+const PatientsColumns = (
+  props: PatientsColumnsProps
+): ColumnDef<BundleEntry<Patient>>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -77,7 +76,7 @@ const QuestionnairesColumns = (
       return (
         <Link
           className="text-blue-600 hover:underline"
-          href={`/questionnaires/${row.original.resource?.id}`}
+          href={`/patient/${row.original.resource?.id}`}
         >
           {row.original.resource?.id}
         </Link>
@@ -85,29 +84,19 @@ const QuestionnairesColumns = (
     },
   },
   {
-    accessorKey: "resource.title",
-    id: "Title",
-    header: "Title",
+    accessorKey: "resource.name.0.given.0",
+    id: "Name",
+    header: "Name",
   },
   {
-    accessorKey: "resource.status",
-    header: "Status",
-    id: "Status",
-    cell: ({ row }) => {
-      return (
-        <Badge variant="outline">
-          {row.original.resource?.status.toUpperCase()}
-        </Badge>
-      );
-    },
+    accessorKey: "resource.name.0.family",
+    header: "Last name",
+    id: "Last name",
   },
   {
-    accessorKey: "resource.subjectType",
-    id: "Subject Type",
-    header: "Subject Type",
-    cell: ({ row }) => {
-      return row.original.resource?.subjectType ?? "No Subject type";
-    },
+    accessorKey: "resource.telecom.0.value",
+    id: "Phone",
+    header: "Phone",
   },
   {
     accessorKey: "resource.meta.versionId",
@@ -115,20 +104,17 @@ const QuestionnairesColumns = (
     id: "Version",
   },
   {
-    accessorKey: "resource.date",
-    header: "Creation Date",
-    id: "Creation Date",
-    cell: ({ row }) => {
-      return new Date(row.original.resource?.date ?? "").toLocaleDateString();
-    },
+    accessorKey: "resource.gender",
+    header: "Gender",
+    id: "Gender",
   },
   {
-    accessorKey: "resource.meta.lastUpdated",
-    header: "Last Updated",
-    id: "Last Updated",
+    accessorKey: "resource.birthDate",
+    header: "Birth Date",
+    id: "Birth Date",
     cell: ({ row }) => {
       return new Date(
-        row.original.resource?.meta?.lastUpdated ?? ""
+        row.original.resource?.birthDate ?? ""
       ).toLocaleDateString();
     },
   },
@@ -146,11 +132,11 @@ const QuestionnairesColumns = (
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <Link href={`/questionnaires/edit/${row.original.resource?.id}`}>
+            <Link href={`/patient/edit/${row.original.resource?.id}`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <Link href={`/questionnaires/${row.original.resource?.id}`}>
+            <Link href={`/patient/${row.original.resource?.id}`}>
               <DropdownMenuItem>See preview</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
@@ -166,12 +152,12 @@ const QuestionnairesColumns = (
   },
 ];
 
-export default QuestionnairesColumns;
+export default PatientsColumns;
 
 interface deleteAlertProps {
   id: string;
-  data: BundleEntry<Questionnaire>[];
-  setData: (data: BundleEntry<Questionnaire>[]) => void;
+  data: BundleEntry<Patient>[];
+  setData: (data: BundleEntry<Patient>[]) => void;
 }
 
 function DeleteAlertDialog({ id, data, setData }: deleteAlertProps) {
@@ -198,12 +184,12 @@ function DeleteAlertDialog({ id, data, setData }: deleteAlertProps) {
             onClick={() => {
               try {
                 toast({
-                  title: `Questionnaire ${id} deleted`,
-                  description: "The questionnaire has been deleted",
+                  title: `Patienet ${id} deleted`,
+                  description: "The patient has been deleted",
                   variant: "destructive",
                 });
                 setData(data.filter((entry) => entry.resource?.id !== id));
-                deleteQuestionnaire(id);
+                deletePatient(id);
               } catch (error) {
                 console.error(error);
               }

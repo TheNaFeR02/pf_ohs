@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
-import { getQuestionnaires } from "@/features/questionnaire_creator/server/getQuestionnaires";
-import QuestionnairesColumns from "@/features/questionnaire_creator/components/QuestionnairesColumns";
-import { Bundle, BundleEntry } from "../../../types/Bundle";
-import QuestionnairesTableView from "@/features/questionnaire_creator/components/QuestionnairesTableView";
-import { Questionnaire } from "../../../types/Questionnaire";
+import { getPatients } from "@/features/patients/server/getPatients";
+import PatientsColumns from "@/features/patients/PatientsColumns";
+import { Bundle, BundleEntry } from "@/types/Bundle";
+import PatientsTableView from "@/features/patients/PatientsTableView";
+import { Patient } from "@/types/Patient";
 import {
   SortingState,
   ColumnFiltersState,
@@ -16,23 +16,23 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 
-function QuestionnairesTable() {
+function PatientsTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [data, setData] = useState<Bundle>();
-  const [entryData, setEntryData] = useState<BundleEntry<Questionnaire>[]>([]);
+  const [entryData, setEntryData] = useState<BundleEntry<Patient>[]>([]);
 
   const columns = useMemo(
-    () => QuestionnairesColumns({ data: entryData, setData: setEntryData }),
+    () => PatientsColumns({ data: entryData, setData: setEntryData }),
     [entryData]
   );
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getQuestionnaires();
+        const res = await getPatients();
         setData(res);
         setEntryData(res.entry || []);
       } catch (error) {
@@ -64,9 +64,9 @@ function QuestionnairesTable() {
   return (
     <div>
       {data?.total && <p>Total: {data.total}</p>}
-      <QuestionnairesTableView columns={columns} table={table} />
+      <PatientsTableView columns={columns} table={table} />
     </div>
   );
 }
 
-export default QuestionnairesTable;
+export default PatientsTable;
