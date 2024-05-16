@@ -1,25 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { items } from "@/constants/linkItems";
 
-const items = [
-  {
-    title: "Questionnaires",
-    href: "/questionnaires",
-  },
-  {
-    title: "Patients",
-    href: "/patient",
-  },
-  {
-    title: "Medical Records",
-    href: "/medical_record",
-  },
-  {
-    title: "Organizations",
-    href: "/organizations",
-  },
-];
 
 export default function HomePage() {
   return (
@@ -31,7 +14,7 @@ export default function HomePage() {
             <Button
             className="w-full h-56"
             size="lg"
-            >{item.title}</Button>
+            >{item.name}</Button>
           </Link>
         ))}
       </div>

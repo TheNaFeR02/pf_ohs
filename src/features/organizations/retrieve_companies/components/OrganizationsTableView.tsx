@@ -80,7 +80,7 @@ function OrganizationTableView<TData, TValue>({
           <Search className="h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search in questionnaires..."
+            placeholder="Search in organizations..."
             className="w-full rounded-lg bg-background md:w-[200px] lg:w-[336px]"
             onChange={(e) => table.setGlobalFilter(e.target.value)}
           />

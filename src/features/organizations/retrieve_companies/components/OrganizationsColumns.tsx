@@ -164,6 +164,7 @@ const OrganizationsColumns = (
   },
 ];
 export default OrganizationsColumns;
+
 interface deleteAlertProps {
   id: string;
   data: BundleEntry<Organization>[];

@@ -22,13 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet";
 import * as React from "react";
-
-const items = [
-  { name: "Patients", icon: Users, href: "/patients" },
-  { name: "Products", icon: LucideFileHeart, href: "/questionnaires" },
-  { name: "Customers", icon: Users2, href: "/customers" },
-  { name: "Companies", icon: LineChart, href: "/organiaztions" },
-];
+import { items } from "@/constants/linkItems";
 
 export default function Sidebar() {
   const pathname = usePathname();

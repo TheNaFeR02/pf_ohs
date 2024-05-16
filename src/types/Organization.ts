@@ -19,16 +19,16 @@ export const baseOrganizationSchema = z.object({
   telecom: z.array(contactPointSchema).optional(),
   address: z.array(addressSchema).optional(),
   partOf: referenceSchema.optional(), // Reference to another organization
-  contact: z.array(
-    z
-      .object({
+  contact: z
+    .array(
+      z.object({
         purpose: codeableConceptSchema.optional(),
         name: humanNameSchema.optional(),
         telecom: z.array(contactPointSchema).optional(),
         address: addressSchema.optional(),
       })
-      .optional()
-  ),
+    )
+    .optional(),
   endpoint: z.array(referenceSchema).optional(), // Reference to endpoint
 });
 

@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { getOrganization } from "@/features/organizations/server/getOrganization";
 import {
   Form,
   FormControl,
@@ -178,7 +177,7 @@ export function FormOrganization() {
                               onClick={() => removeIdentifier(index)}
                               className="ml-2 my-1 mx-2 bg-red-500 text-white rounded hover:bg-red-700"
                             >
-                              Eliminar Contacto
+                              Eliminar Identificador
                             </Button>
                           )}
                         </div>
@@ -191,7 +190,7 @@ export function FormOrganization() {
                       }
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-4 rounded mt-2"
                     >
-                      Añadir Contacto
+                      Añadir Identificador
                     </Button>
                   </CardContent>
                 </Card>
