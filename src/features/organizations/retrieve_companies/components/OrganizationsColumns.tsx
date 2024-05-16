@@ -1,41 +1,44 @@
+"use client";
+import { Organization } from "@/types/Organization";
 import { ColumnDef } from "@tanstack/react-table";
 import { BundleEntry } from "@/types/Bundle";
-import { Questionnaire } from "@/types/Questionnaire";
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  AlertDialogHeader,
+  AlertDialogFooter,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/components/ui/use-toast";
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { deleteQuestionnaire } from "@/features/questionnaire_creator/server/deleteQuestionnaire";
-import { useToast } from "@/components/ui/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { deleteOrganization } from "@/features/organizations/server/deleteOrganization";
 
-interface QuestionnairesColumnsProps {
-  data: BundleEntry<Questionnaire>[];
-  setData: (data: BundleEntry<Questionnaire>[]) => void;
+interface OrganizationColumnsProps {
+  data: BundleEntry<Organization>[];
+  setData: (data: BundleEntry<Organization>[]) => void;
 }
 
-const QuestionnairesColumns = (
-  props: QuestionnairesColumnsProps
-): ColumnDef<BundleEntry<Questionnaire>>[] => [
+const OrganizationsColumns = (
+  props: OrganizationColumnsProps
+): ColumnDef<BundleEntry<Organization>>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -76,7 +79,7 @@ const QuestionnairesColumns = (
       return (
         <Link
           className="text-blue-600 hover:underline"
-          href={`/questionnaires/${row.original.resource?.id}`}
+          href={`/organizations/${row.original.resource?.id}`}
         >
           {row.original.resource?.id}
         </Link>
@@ -84,8 +87,8 @@ const QuestionnairesColumns = (
     },
   },
   {
-    accessorKey: "resource.title",
-    id: "Title",
+    accessorKey: "resource.name",
+    id: "Name",
     header: ({ column }) => {
       return (
         <Button
@@ -99,37 +102,23 @@ const QuestionnairesColumns = (
     },
   },
   {
-    accessorKey: "resource.status",
+    accessorKey: "resource.active",
     header: "Status",
-    id: "Status",
+    id: "Active",
     cell: ({ row }) => {
       return (
-        <Badge variant="outline">
-          {row.original.resource?.status}
+        <Badge
+          variant={row.original.resource?.active ? "default" : "secondary"}
+        >
+          {row.original.resource?.active ? "Active" : "Inactive"}
         </Badge>
       );
-    },
-  },
-  {
-    accessorKey: "resource.subjectType",
-    id: "Subject Type",
-    header: "Subject Type",
-    cell: ({ row }) => {
-      return row.original.resource?.subjectType ?? "No Subject type";
     },
   },
   {
     accessorKey: "resource.meta.versionId",
     header: "Version",
     id: "Version",
-  },
-  {
-    accessorKey: "resource.date",
-    header: "Creation Date",
-    id: "Creation Date",
-    cell: ({ row }) => {
-      return new Date(row.original.resource?.date ?? "").toLocaleDateString();
-    },
   },
   {
     accessorKey: "resource.meta.lastUpdated",
@@ -155,11 +144,11 @@ const QuestionnairesColumns = (
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <Link href={`/questionnaires/edit/${row.original.resource?.id}`}>
+            <Link href={`/organizations/edit/${row.original.resource?.id}`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <Link href={`/questionnaires/${row.original.resource?.id}`}>
+            <Link href={`/organizatios/${row.original.resource?.id}`}>
               <DropdownMenuItem>See preview</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
@@ -174,13 +163,11 @@ const QuestionnairesColumns = (
     },
   },
 ];
-
-export default QuestionnairesColumns;
-
+export default OrganizationsColumns;
 interface deleteAlertProps {
   id: string;
-  data: BundleEntry<Questionnaire>[];
-  setData: (data: BundleEntry<Questionnaire>[]) => void;
+  data: BundleEntry<Organization>[];
+  setData: (data: BundleEntry<Organization>[]) => void;
 }
 
 function DeleteAlertDialog({ id, data, setData }: deleteAlertProps) {
@@ -212,7 +199,7 @@ function DeleteAlertDialog({ id, data, setData }: deleteAlertProps) {
                   variant: "destructive",
                 });
                 setData(data.filter((entry) => entry.resource?.id !== id));
-                deleteQuestionnaire(id);
+                deleteOrganization(id);
               } catch (error) {
                 console.error(error);
               }

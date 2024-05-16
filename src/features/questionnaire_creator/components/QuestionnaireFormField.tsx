@@ -3,7 +3,7 @@ import React, { FunctionComponent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Questionnaire } from "../../../types/Questionnaire";
+import { Questionnaire } from "@/types/Questionnaire";
 import ItemsFormField from "@/features/questionnaire_creator/components/ItemsFormField";
 import {
   FormField,
@@ -13,15 +13,12 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/ui/form";
-import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, StarIcon } from "@radix-ui/react-icons";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { format } from "date-fns";
 import { CaretSortIcon, CheckIcon, TrashIcon } from "@radix-ui/react-icons";
 import {
   Command,

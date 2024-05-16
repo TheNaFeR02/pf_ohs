@@ -15,7 +15,10 @@ export default function HomePage() {
         <Link className="p-4 bg-gray-100 rounded-md" href="/medical_record">
           Medical Record
         </Link>
-        </div>
+        <Link className="p-4 bg-gray-100 rounded-md" href="/organizations">
+          Companies
+        </Link>
+      </div>
     </div>
   );
 }

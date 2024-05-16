@@ -27,7 +27,7 @@ const items = [
   { name: "Patients", icon: Users, href: "/patients" },
   { name: "Products", icon: LucideFileHeart, href: "/questionnaires" },
   { name: "Customers", icon: Users2, href: "/customers" },
-  { name: "Analytics", icon: LineChart, href: "/analytics" },
+  { name: "Companies", icon: LineChart, href: "/organiaztions" },
 ];
 
 export default function Sidebar() {

@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
-import { getQuestionnaires } from "@/features/questionnaire_creator/server/getQuestionnaires";
-import QuestionnairesColumns from "@/features/questionnaire_creator/components/QuestionnairesColumns";
+import { getOrganizations } from "@/features/organizations/server/getOrganizations";
+import OrganizationsColumns from "@/features/organizations/retrieve_companies/components/OrganizationsColumns";
 import { Bundle, BundleEntry } from "@/types/Bundle";
-import QuestionnairesTableView from "@/features/questionnaire_creator/components/QuestionnairesTableView";
-import { Questionnaire } from "@/types/Questionnaire";
+import OrganizationsTableView from "@/features/organizations/retrieve_companies/components/OrganizationsTableView";
+import { Organization } from "@/types/Organization";
 import {
   SortingState,
   ColumnFiltersState,
@@ -16,23 +16,24 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 
-function QuestionnairesTable() {
+
+function OrganizationsTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [data, setData] = useState<Bundle>();
-  const [entryData, setEntryData] = useState<BundleEntry<Questionnaire>[]>([]);
+  const [entryData, setEntryData] = useState<BundleEntry<Organization>[]>([]);
 
   const columns = useMemo(
-    () => QuestionnairesColumns({ data: entryData, setData: setEntryData }),
+    () => OrganizationsColumns({ data: entryData, setData: setEntryData }),
     [entryData]
   );
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getQuestionnaires();
+        const res = await getOrganizations();
         setData(res);
         setEntryData(res.entry || []);
       } catch (error) {
@@ -61,7 +62,8 @@ function QuestionnairesTable() {
       rowSelection,
     },
   });
-  return <QuestionnairesTableView columns={columns} table={table} />;
+  return <OrganizationsTableView columns={columns} table={table} />;
 }
 
-export default QuestionnairesTable;
+export default OrganizationsTable;
+

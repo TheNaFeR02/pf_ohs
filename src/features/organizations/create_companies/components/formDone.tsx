@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { getOrganization } from "@/features/companies/services/getCompanies";
+import { getOrganization } from "@/features/organizations/server/getOrganization";
 import {
   Form,
   FormControl,
@@ -26,10 +26,7 @@ import {
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Organization,
-  OrganizationSchema,
-} from "@/features/companies/types/organization";
+import { Organization, organizationSchema } from "@/types/Organization";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -38,15 +35,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createOrganization } from "@/features/companies/services/createCompanies";
-import { getOrganizationById } from "@/features/companies/services/getCompany";
-import { updateOrganization } from "@/features/companies/services/updateCompanies";
+import { createOrganization } from "@/features/organizations/server/createOrganization";
 import { useRouter } from "next/navigation";
 
-export function FormOrganizationupdate({ id }: { id: string }) {
+export function FormOrganization() {
   const router = useRouter();
-  const form = useForm<z.infer<typeof OrganizationSchema>>({
-    resolver: zodResolver(OrganizationSchema),
+  const form = useForm<z.infer<typeof organizationSchema>>({
+    resolver: zodResolver(organizationSchema),
     defaultValues: {
       resourceType: "Organization",
       identifier: [
@@ -59,52 +54,12 @@ export function FormOrganizationupdate({ id }: { id: string }) {
       active: false,
       name: "",
       alias: ["", "", ""],
-      contact: [
-        {
-          telecom: [
-            {
-              system: "",
-              value: "",
-              use: "",
-            },
-          ],
-          name: {
-            use: "",
-            text: "",
-            family: "",
-            given: [""],
-            prefix: [""],
-          },
-          address: {
-            use: "",
-            line: [""],
-            city: "",
-            postalCode: "",
-            country: "",
-          },
-        },
-      ],
     },
   });
-  try {
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const data = await getOrganizationById(id);
-          form.reset(data);
-        } catch (error) {
-          console.error("Error fetching organization data:", error);
-        }
-      };
 
-      fetchData();
-    }, [form, id]);
-  } catch (error) {
-    console.error("Error fetching organization data:", error);
-  }
-
-  function onSubmit(values: Organization) {
-    updateOrganization(id, values);
+  async function onSubmit(values: Organization) {
+    console.log(values);
+    await createOrganization(values);
     router.back();
   }
 
@@ -133,7 +88,7 @@ export function FormOrganizationupdate({ id }: { id: string }) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <Card className="m-5">
           <CardHeader>
-            <CardTitle>Actualizar compañia</CardTitle>
+            <CardTitle>Crear compañia</CardTitle>
             <CardDescription>
               Ingrese la información de la compañia
             </CardDescription>
@@ -184,18 +139,17 @@ export function FormOrganizationupdate({ id }: { id: string }) {
                               </Select>
                             )}
                           />
-
                           <FormField
                             control={form.control}
                             name={`identifier.${index}.system`}
                             render={({ field }) => (
-                              <FormItem className="w-full ml-5">
+                              <FormItem className="w-full mr-5">
                                 <FormControl>
                                   <Input
                                     placeholder="Sistema Ej(https://www.rues.org.co)"
                                     type="text"
                                     {...field}
-                                    className="ml-5 mr-5"
+                                    className="ml-5 mr-5 w-full"
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -206,7 +160,7 @@ export function FormOrganizationupdate({ id }: { id: string }) {
                             control={form.control}
                             name={`identifier.${index}.value`}
                             render={({ field }) => (
-                              <FormItem className="w-full ml-10">
+                              <FormItem className="w-full ml-5">
                                 <FormControl>
                                   <Input
                                     placeholder="NIT"
@@ -634,7 +588,7 @@ export function FormOrganizationupdate({ id }: { id: string }) {
               type="submit"
               className="bg-green-500 hover:bg-green-700 mb-10"
             >
-              Actualizar
+              Crear
             </Button>
           </div>
         </Card>
@@ -643,4 +597,4 @@ export function FormOrganizationupdate({ id }: { id: string }) {
   );
 }
 
-export default FormOrganizationupdate;
+export default FormOrganization;

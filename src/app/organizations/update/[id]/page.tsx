@@ -1,5 +1,5 @@
 "use client";
-import FormOrganizationupdate from "@/features/companies/update_companies/components/formDone";
+import FormOrganizationupdate from "@/features/organizations/update_companies/components/formDone";
 import React from "react";
 
 
