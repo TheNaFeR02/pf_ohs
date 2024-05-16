@@ -75,7 +75,6 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
   };
 
   const removeItem = (index: number) => {
-    console.log("index", index);
     itemRemove(index);
   };
 

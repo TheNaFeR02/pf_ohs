@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Questionnaire } from "../../../types/Questionnaire";
-import { BundleEntry } from "../../../types/Bundle";
+import { Questionnaire } from "@/types/Questionnaire";
+import { BundleEntry } from "@/types/Bundle";
 import {
   Card,
   CardContent,
@@ -28,9 +28,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ListFilter, PlusCircle, File } from "lucide-react";
+import { ListFilter, PlusCircle, File, Search } from "lucide-react";
 import { statusObj } from "@/constants/statusCodeDisplay";
-import { useState } from "react";
+import Link from "next/link";
 
 interface QuestionnairesDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -65,6 +65,15 @@ function QuestionnaireTableView<TData, TValue>({
             </TabsTrigger>
           ))}
         </TabsList>
+        <div className="flex items-center gap-2 ml-auto ">
+          <Search className="h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search in questionnaires..."
+            className="w-full rounded-lg bg-background md:w-[200px] lg:w-[336px]"
+            onChange={(e) => table.setGlobalFilter(e.target.value)}
+          />
+        </div>
         <div className="ml-auto flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -106,12 +115,14 @@ function QuestionnaireTableView<TData, TValue>({
               Export
             </span>
           </Button>
-          <Button size="sm" className="h-8 gap-1">
-            <PlusCircle className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Add Product
-            </span>
-          </Button>
+          <Link href="/questionnaires/create">
+            <Button size="sm" className="h-8 gap-1">
+              <PlusCircle className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Add Questionnaire
+              </span>
+            </Button>
+          </Link>
         </div>
       </div>
       <TabsContent
