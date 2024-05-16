@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>
@@ -21,6 +22,9 @@ const DataTableRowActions = <TData,>({row,onEdit,onDelete}:DataTableRowActionsPr
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <Link href={`/companies/update/${row.original}`}>
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+              </Link>
               <DropdownMenuItem onClick={()=> onEdit(row.original) }>Actualizar</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={()=> onDelete(row.original)} >Eliminar</DropdownMenuItem>
