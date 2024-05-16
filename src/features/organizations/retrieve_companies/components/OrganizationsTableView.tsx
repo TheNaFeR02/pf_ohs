@@ -143,7 +143,7 @@ function OrganizationTableView<TData, TValue>({
           <CardHeader>
             <CardTitle>Organizations</CardTitle>
             <CardDescription>
-              Manage your questionnaires and view their details.
+              Manage your organizations and view their details.
             </CardDescription>
           </CardHeader>
           <CardContent>
