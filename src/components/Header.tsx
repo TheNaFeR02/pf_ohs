@@ -1,78 +1,71 @@
-import Link from 'next/link'
-import Container from './ui/container'
-import { Button } from '@/components/ui/button'
-import { Moon, ShoppingCart, Sun } from 'lucide-react'
-import ProfileButton from './ProfileButton'
-import ModeToggle from './ModeToggle'
-
-const Header = () => {
-    return (
-        <header className="sm:flex sm:justify-between py-3 px-4 border-b">
-            <Container>
-                <div className="relative px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between w-full">
-                    <div className="flex items-center">
-                        <Link href="/" className="ml-4 lg:ml-0">
-                            <h1 className="text-xl font-bold">
-                                GUARDIANS
-                            </h1>
-                        </Link>
-                    </div>
-                    <nav className="mx-6 flex items-center space-x-4 lg:space-x-6 hidden md:block ">
-                        <Button asChild variant="ghost">
-                            <Link
-                                href={'/heroes'}
-                                // key={key}
-                                className="text-sm font-medium transition-colors"
-                            >
-                                Heroes
-                            </Link>
-                        </Button>
-                        <Button asChild variant="ghost">
-                            <Link
-                                href={'/villains'}
-                                // key={key}
-                                className="text-sm font-medium transition-colors"
-                            >
-                                Villains
-                            </Link>
-                        </Button>
-                        <Button asChild variant="ghost">
-                            <Link
-                                href={'/scheduler'}
-                                // key={key}
-                                className="text-sm font-medium transition-colors"
-                            >
-                                Scheduler
-                            </Link>
-                        </Button>
-                        <Button asChild variant="ghost">
-                            <Link
-                                href={'/sponsors'}
-                                // key={key}
-                                className="text-sm font-medium transition-colors"
-                            >
-                                Sponsors
-                            </Link>
-                        </Button>
-                        <Button asChild variant="ghost">
-                            <Link
-                                href={'/fights'}
-                                // key={key}
-                                className="text-sm font-medium transition-colors"
-                            >
-                                Fights
-                            </Link>
-                        </Button>
-                    </nav>
-                    <div className="flex items-center gap-4">
-                        <ModeToggle />
-                        <ProfileButton />
-                    </div>
-
-                </div>
-            </Container>
-        </header>
-    )
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Home,
+  LineChart,
+  Moon,
+  Package,
+  Package2,
+  PanelLeft,
+  Search,
+  ShoppingCart,
+  Sun,
+  Users2,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Suspense } from "react";
+import DinamicBreadcrumb from "@/components/Breadcrumbs";
+import Image from "next/image";
+export default function Header() {
+  return (
+    <>
+      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+        <Suspense fallback={null}>
+          <DinamicBreadcrumb />
+        </Suspense>
+        <div className="relative ml-auto flex-1 md:grow-0">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search..."
+            className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+          />
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="overflow-hidden rounded-full"
+            >
+              <Image
+                // get the image from internet free source
+                src="https://randomuser.me/api/portraits/lego/3.jpg"
+                width={36}
+                height={36}
+                alt="Avatar"
+                className="overflow-hidden rounded-full"
+              />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem>Support</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Logout</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </header>
+    </>
+  );
 }
-
-export default Header

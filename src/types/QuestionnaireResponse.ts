@@ -1,67 +1,78 @@
 import { z } from "zod";
+import { attachmentSchema } from "./Attachment";
+import { codingSchema } from "./Coding";
+import { identifierSchema } from "./Identifier";
+import { quantitySchema } from "./Quantity";
+import { referenceSchema } from "./Reference";
+import {
+  booleanSchema,
+  decimalSchema,
+  integerSchema,
+  stringSchema,
+  uriSchema,
+  dateSchema,
+  dateTimeSchema,
+  timeSchema,
+  canonicalSchema,
+} from "./dataTypes";
+import { questionnaireAnswersStatusCode } from "@/constants/questionnaireAnswersStatusCodeDisplay";
+import { domainResourceSchema } from "./DomainResource";
+import { resourceSchema } from "./Resource";
 
-const baseItem = z.object({
-  linkId: z.string(),
-  text: z.string().optional(),
+const baseQuestionnaireResponseItem = z.object({
+  linkId: stringSchema,
+  definition: uriSchema.optional(),
+  text: stringSchema.optional(),
 });
 
-export type Item = z.infer<typeof baseItem> & {
-  item?: Item[];
-  answer?: z.infer<typeof answerSchema>[];
+export type QuestionnaireResponseItem = z.infer<
+  typeof baseQuestionnaireResponseItem
+> & {
+  item?: QuestionnaireResponseItem[];
+  answer?: z.infer<typeof questionnaireResponseItemAnswerSchema>[];
 };
 
-const itemSchema: z.ZodType<Item> = baseItem.extend({
-  item: z.lazy(() => itemSchema.array()).optional(),
-  answer: z.lazy(() => answerSchema.array()).optional(),
+const questionnaireResponseItemSchema: z.ZodType<QuestionnaireResponseItem> =
+  baseQuestionnaireResponseItem.extend({
+    item: z.lazy(() => questionnaireResponseItemSchema.array()).optional(),
+    answer: z
+      .lazy(() => questionnaireResponseItemAnswerSchema.array())
+      .optional(),
+  });
+
+const questionnaireResponseItemAnswerSchema = z.object({
+  valueBoolean: booleanSchema.optional(),
+  valueDecimal: decimalSchema.optional(),
+  valueInteger: integerSchema.optional(),
+  valueDate: dateSchema.optional(),
+  valueDateTime: dateTimeSchema.optional(),
+  valueTime: timeSchema.optional(),
+  valueString: stringSchema.optional(),
+  valueUri: uriSchema.optional(),
+  valueAttachment: attachmentSchema.optional(),
+  valueCoding: codingSchema.optional(),
+  valueQuantity: quantitySchema.optional(),
+  valueReference: referenceSchema.optional(),
+  item: questionnaireResponseItemSchema.array().optional(),
 });
 
-const answerSchema = z.object({
-  valueBoolean: z.boolean().optional(),
-  valueDecimal: z.number().optional(),
-  valueInteger: z.number().int().optional(),
-  // valueDate: z.string().date().optional(),
-  // valueDateTime: z.string().dateTime().optional(),
-  // valueTime: z.string().optional(),
-  valueString: z.string().optional(),
-  // valueUri: z.string().url().optional(),
-  // valueAttachment: z.object({
-  // Define the schema for Attachment if needed
-  // }).optional(),
-  valueCoding: z
-    .object({
-      code: z.string().optional(),
-      display: z.string().optional(),
-    })
-    .optional(),
-  // valueQuantity: z.object({
-  //   // Define the schema for Quantity if needed
-  // }).optional(),
-  // valueReference: z.object({
-  //   // Define the schema for Reference if needed
-  // }).optional(),
-  item: itemSchema.array().optional(),
+export const baseQuestionnaireResponseSchema = z.object({
+  resourceType: z.literal("QuestionnaireResponse"),
+  identifier: identifierSchema.optional(),
+  basedOn: z.array(referenceSchema).optional(), // Reference to the CarePlan or ServiceRequest
+  partOf: z.array(referenceSchema).optional(), // Reference to the Observation or Procedure
+  questionnaire: canonicalSchema.optional(), // Canonical to the Questionnaire
+  status: z.enum(questionnaireAnswersStatusCode),
+  subject: referenceSchema.optional(), // Reference to any
+  authored: dateTimeSchema.optional(),
+  author: referenceSchema.optional(), // Reference to Device|Practitioner|PractitionerRole|Patient|RelatedPerson|Organization
+  source: referenceSchema.optional(), // Reference to Patient|Practitioner|PractitionerRole|RelatedPerson
+  item: questionnaireResponseItemSchema.array().optional(),
 });
 
-export const questionnaireResponseSchema = z.object({
-  resourceType: z.string().optional(),
-  questionnaire: z.string().optional(),
-  authored: z.string().optional(),
-  author: z.object({
-    reference: z.string().optional(),
-    type: z.string().optional(),
-  }).optional(),
-  status: z
-    .string()
-    .refine((status) =>
-      [
-        "in-progress",
-        "completed",
-        "amended",
-        "entered-in-error",
-        "stopped",
-      ].includes(status)
-    ).optional(),
-  item: itemSchema.array().optional(),
-});
+export const questionnaireResponseSchema = resourceSchema
+  .omit({ resourceType: true })
+  .merge(domainResourceSchema.omit({ resourceType: true, resource: true }))
+  .merge(baseQuestionnaireResponseSchema);
 
 export type QuestionnaireResponse = z.infer<typeof questionnaireResponseSchema>;

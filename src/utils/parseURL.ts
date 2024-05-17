@@ -6,6 +6,7 @@ export function parseURL(url: string): string {
     if (url.match(regex)) {
         return url;
     }
+
     var mainURL = process.env.NEXT_PUBLIC_API_ENDPOINT;
     if (mainURL === undefined) return "";
     if (mainURL.charAt(mainURL.length - 1) !== "/") mainURL += "/"

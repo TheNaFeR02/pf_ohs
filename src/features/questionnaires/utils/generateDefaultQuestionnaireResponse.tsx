@@ -1,5 +1,5 @@
-import { Item as QuestionnaireResponseItem, QuestionnaireResponse } from "@/types/QuestionnaireResponse"
-import { Questionnaire, Item as QuestionnaireItem } from "@/types/Questionnaire"
+import { QuestionnaireResponseItem, QuestionnaireResponse } from "../../../types/QuestionnaireResponse"
+import { Questionnaire, QuestionnaireItem } from "../../../types/Questionnaire"
 
 
 export function generateDefaultQuestionnaireResponse(questionnaire: Questionnaire): QuestionnaireResponse {

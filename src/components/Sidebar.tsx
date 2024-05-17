@@ -1,137 +1,112 @@
-import Link from "next/link"
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
+import {
+  Package2,
+  Home,
+  ShoppingCart,
+  Package,
+  Users2,
+  LineChart,
+  Settings,
+  PanelLeft,
+  LucideFileHeart,
+  Users,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet";
+import * as React from "react";
+import { items } from "@/constants/linkItems";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+export default function Sidebar() {
+  const pathname = usePathname();
 
-export default function SidebarDemo() {
-    return (
-        <div className="flex">
-            <div className="flex flex-col h-full p-3 bg-white shadow w-60">
-                <div className="space-y-3">
-                    <div className="flex items-center">
-                        <h2 className="text-xl font-bold">Dashboard</h2>
-                    </div>
-                    <div className="flex-1">
-                        <ul className="pt-2 pb-4 space-y-1 text-sm">
-                            <li className="rounded-sm">
-                                <Link
-                                    href="/"
-                                    className="flex items-center p-2 space-x-3 rounded-md"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                                        />
-                                    </svg>
-                                    <span>Home</span>
-                                </Link>
-                            </li>
-                            <li className="rounded-sm">
-                                <Link
-                                    href="/server"
-                                    className="flex items-center p-2 space-x-3 rounded-md"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                                        />
-                                    </svg>
-                                    <span>Server</span>
-                                </Link>
-                            </li>
-                            <li className="rounded-sm">
-                                <Link
-                                    href="/client"
-                                    className="flex items-center p-2 space-x-3 rounded-md"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                                        />
-                                    </svg>
-                                    <span>Client</span>
-                                </Link>
-                            </li>
-                            <li className="rounded-sm">
-                                <Link
-                                    href="setting"
-                                    className="flex items-center p-2 space-x-3 rounded-md"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                                        />
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                        />
-                                    </svg>
-                                    <span>Settings</span>
-                                </Link>
-                            </li>
-                            <li className="rounded-sm">
-                                <Link
-                                    href="logout"
-                                    className="flex items-center p-2 space-x-3 rounded-md"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-6 h-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                                        />
-                                    </svg>
-                                    <span>Logout</span>
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    )
+  return (
+    <TooltipProvider>
+      <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button size="icon" variant="outline">
+              <PanelLeft className="h-5 w-5" />
+              <span className="sr-only">Toggle Menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="sm:max-w-xs">
+            <nav className="grid gap-6 text-lg font-medium">
+              <Link
+                href="/"
+                className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
+              >
+                <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
+                <span className="sr-only">Acme Inc</span>
+              </Link>
+              {items.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`flex items-center gap-4 px-2.5 ${
+                    pathname.startsWith(item.href)
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <item.icon className="h-5 w-5" />
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+          </SheetContent>
+        </Sheet>
+        <Link
+          href="/"
+          className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 ${
+            pathname === "/"
+              ? "text-foreground"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Home className="h-5 w-5" />
+          <span className="sr-only">Acme Inc</span>
+        </Link>
+        {items.map((item) => (
+          <Tooltip key={item.name}>
+            <TooltipTrigger asChild>
+              <Link
+                href={item.href}
+                className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 ${
+                  pathname.startsWith(item.href)
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <item.icon className="h-5 w-5" />
+                <span className="sr-only">{item.name}</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right">{item.name}</TooltipContent>
+          </Tooltip>
+        ))}
+      </nav>
+      <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              href="/settings"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+            >
+              <Settings className="h-5 w-5" />
+              <span className="sr-only">Settings</span>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="right">Settings</TooltipContent>
+        </Tooltip>
+      </nav>
+    </TooltipProvider>
+  );
 }
