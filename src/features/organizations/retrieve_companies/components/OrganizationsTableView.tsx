@@ -33,14 +33,14 @@ import Link from "next/link";
 import Concept from "@/types/Concept";
 
 const booleanObj: Concept[] = [
-  {
-    code: "true",
-    display: "Active",
-  },
-  {
-    code: "false",
-    display: "Inactive",
-  },
+  // {
+  //   code: "true",
+  //   display: "Active",
+  // },
+  // {
+  //   code: "false",
+  //   display: "Inactive",
+  // },
 ];
 
 interface OrganizationsDataTableProps<TData, TValue> {
@@ -54,7 +54,10 @@ function OrganizationTableView<TData, TValue>({
   return (
     <Tabs
       defaultValue="all"
-      value={(table.getColumn("Active")?.getFilterValue() as string) ?? "all"}
+      value={
+        (table.getColumn("Active".toString())?.getFilterValue() as string) ??
+        "all"
+      }
     >
       <div className="flex items-center">
         <TabsList>
@@ -69,7 +72,9 @@ function OrganizationTableView<TData, TValue>({
               key={status.code}
               value={status.code}
               onClick={() =>
-                table.getColumn("Active")?.setFilterValue(status.code)
+                table
+                  .getColumn("Active")
+                  ?.setFilterValue(status.code == "true" ? true : false)
               }
             >
               {status.display}

@@ -61,12 +61,7 @@ function PatientsTable() {
       rowSelection,
     },
   });
-  return (
-    <div>
-      {data?.total && <p>Total: {data.total}</p>}
-      <PatientsTableView columns={columns} table={table} />
-    </div>
-  );
+  return <PatientsTableView columns={columns} table={table} />;
 }
 
 export default PatientsTable;
