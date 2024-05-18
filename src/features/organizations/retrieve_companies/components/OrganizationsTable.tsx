@@ -2,31 +2,30 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { getOrganizations } from "@/features/organizations/server/getOrganizations";
 import OrganizationsColumns from "@/features/organizations/retrieve_companies/components/OrganizationsColumns";
-import { Bundle, BundleEntry } from "@/types/Bundle";
-import OrganizationsTableView from "@/features/organizations/retrieve_companies/components/OrganizationsTableView";
+import { BundleEntry } from "@/types/Bundle";
 import { Organization } from "@/types/Organization";
-import {
-  SortingState,
-  ColumnFiltersState,
-  VisibilityState,
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-} from "@tanstack/react-table";
-
+import { DataTable } from "@/components/DataTable/DataTable";
 
 function OrganizationsTable() {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<Bundle>();
   const [entryData, setEntryData] = useState<BundleEntry<Organization>[]>([]);
 
+  const tableHeader = {
+    title: "Organizations",
+    description: "Manage your organizations and view their details.",
+  };
+
+  const addButton = {
+    href: "/organizations/create",
+    label: "Create Organization",
+  };
+
   const columns = useMemo(
-    () => OrganizationsColumns({ data: entryData, setData: setEntryData }),
+    () =>
+      OrganizationsColumns({
+        data: entryData,
+        setData: setEntryData,
+        tableTitle: tableHeader.title,
+      }),
     [entryData]
   );
 
@@ -34,36 +33,22 @@ function OrganizationsTable() {
     const fetchData = async () => {
       try {
         const res = await getOrganizations();
-        setData(res);
         setEntryData(res.entry || []);
       } catch (error) {
-        console.error("Error fetching questionnaires:", error);
+        console.error("Error fetching organizations:", error);
       }
     };
     fetchData();
   }, []);
 
-  const table = useReactTable({
-    data: entryData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-  return <OrganizationsTableView columns={columns} table={table} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={entryData}
+      tableHeader={tableHeader}
+      addButton={addButton}
+    />
+  );
 }
 
 export default OrganizationsTable;
-
