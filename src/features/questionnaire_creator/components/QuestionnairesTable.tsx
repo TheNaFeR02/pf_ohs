@@ -2,30 +2,42 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { getQuestionnaires } from "@/features/questionnaire_creator/server/getQuestionnaires";
 import QuestionnairesColumns from "@/features/questionnaire_creator/components/QuestionnairesColumns";
-import { Bundle, BundleEntry } from "@/types/Bundle";
-import QuestionnairesTableView from "@/features/questionnaire_creator/components/QuestionnairesTableView";
+import { BundleEntry } from "@/types/Bundle";
 import { Questionnaire } from "@/types/Questionnaire";
-import {
-  SortingState,
-  ColumnFiltersState,
-  VisibilityState,
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-} from "@tanstack/react-table";
+import { DataTable } from "@/components/DataTable/DataTable";
+import Concept from "@/types/Concept";
+import { statusObj } from "@/constants/statusCodeDisplay";
 
 function QuestionnairesTable() {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<Bundle>();
   const [entryData, setEntryData] = useState<BundleEntry<Questionnaire>[]>([]);
 
+  const tableHeader = {
+    title: "Questionnaires",
+    description: "Manage your questionnaires and view their details.",
+  };
+
+  const addButton = {
+    href: "/questionnaires/create",
+    label: "Create Questionnaire",
+  };
+
+  const filters: {
+    columnId: string;
+    options: Concept[];
+  }[] = [
+    {
+      columnId: "status",
+      options: statusObj,
+    },
+  ];
+
   const columns = useMemo(
-    () => QuestionnairesColumns({ data: entryData, setData: setEntryData }),
+    () =>
+      QuestionnairesColumns({
+        data: entryData,
+        setData: setEntryData,
+        tableTitle: tableHeader.title,
+      }),
     [entryData]
   );
 
@@ -33,7 +45,6 @@ function QuestionnairesTable() {
     const fetchData = async () => {
       try {
         const res = await getQuestionnaires();
-        setData(res);
         setEntryData(res.entry || []);
       } catch (error) {
         console.error("Error fetching questionnaires:", error);
@@ -42,26 +53,15 @@ function QuestionnairesTable() {
     fetchData();
   }, []);
 
-  const table = useReactTable({
-    data: entryData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-  return <QuestionnairesTableView columns={columns} table={table} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={entryData}
+      tableHeader={tableHeader}
+      addButton={addButton}
+      filters={filters}
+    />
+  );
 }
 
 export default QuestionnairesTable;
