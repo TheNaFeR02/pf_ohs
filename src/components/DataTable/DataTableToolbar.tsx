@@ -13,7 +13,7 @@ type Filter = {
 };
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  filters: Filter[];
+  filters?: Filter[];
   addButton: {
     href: string;
     label: string;

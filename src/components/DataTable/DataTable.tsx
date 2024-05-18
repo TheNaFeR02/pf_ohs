@@ -48,7 +48,7 @@ interface DataTableProps<TData, TValue> {
     href: string;
     label: string;
   };
-  filters: {
+  filters?: {
     columnId: string;
     options: Concept[];
   }[];

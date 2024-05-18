@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import RowDeleteAlertDialog from "@/components/DataTable/RowDeleteAlertDialog";
 import { Checkbox } from "@/components/ui/checkbox";
+import { deleteQuestionnaire } from "@/features/questionnaire_creator/server/deleteQuestionnaire";
 
 interface QuestionnairesColumnsProps {
   data: BundleEntry<Questionnaire>[];
@@ -91,7 +92,7 @@ const QuestionnairesColumns = (
     id: "status",
     header: "Status",
     filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
+      return value.includes(row.getValue(id));
     },
   },
   {
@@ -148,7 +149,7 @@ const QuestionnairesColumns = (
               data={props.data}
               setData={props.setData}
               tableTitle={props.tableTitle}
-              
+              deleteFunction={deleteQuestionnaire}
             />
           </DropdownMenuContent>
         </DropdownMenu>
@@ -158,4 +159,3 @@ const QuestionnairesColumns = (
 ];
 
 export default QuestionnairesColumns;
-

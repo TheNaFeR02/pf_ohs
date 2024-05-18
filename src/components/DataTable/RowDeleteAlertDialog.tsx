@@ -1,6 +1,4 @@
 import { deleteQuestionnaire } from "@/features/questionnaire_creator/server/deleteQuestionnaire";
-import { BundleEntry } from "@/types/Bundle";
-import { Questionnaire } from "@/types/Questionnaire";
 import { Button } from "../ui/button";
 import {
   AlertDialog,
@@ -14,15 +12,23 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { useToast } from "../ui/use-toast";
+import { BundleEntry } from "@/types/Bundle";
 
-interface rowDeleteAlertProps {
+interface RowDeleteAlertProps<TData> {
   id: string;
-  data: BundleEntry<Questionnaire>[];
-  setData: (data: BundleEntry<Questionnaire>[]) => void;
+  data: BundleEntry<any>[];
+  setData: (data: BundleEntry<any>[]) => void;
   tableTitle: string;
+  deleteFunction: (id: string) => Promise<void>;
 }
 
-function RowDeleteAlertDialog({ id, data, setData, tableTitle }: rowDeleteAlertProps) {
+function RowDeleteAlertDialog<TData>({
+  id,
+  data,
+  setData,
+  tableTitle,
+  deleteFunction,
+}: RowDeleteAlertProps<TData>) {
   const { toast } = useToast();
 
   return (
@@ -42,21 +48,21 @@ function RowDeleteAlertDialog({ id, data, setData, tableTitle }: rowDeleteAlertP
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={() => {
-              try {
-                toast({
-                  title: `${tableTitle} ${id} deleted`,
-                  description: `The ${tableTitle.toLocaleLowerCase()} has been deleted`,
-                  variant: "destructive",
-                });
-                setData(data.filter((entry) => entry.resource?.id !== id));
-                deleteQuestionnaire(id);
-              } catch (error) {
-                console.error(error);
-              }
+        <AlertDialogAction
+            onClick={async () => {
+                try {
+                    toast({
+                        title: `${tableTitle} ${id} deleted`,
+                        description: `The ${tableTitle.toLocaleLowerCase()} has been deleted`,
+                        variant: "destructive",
+                    });
+                    setData(data.filter((entry) => entry.resource.id !== id));
+                    await deleteFunction(id);
+                } catch (error) {
+                    console.error(error);
+                }
             }}
-          >
+        >
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -13,24 +13,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { deletePatient } from "@/features/patients/server/deletePatient";
-import { useToast } from "@/components/ui/use-toast";
+import RowDeleteAlertDialog from "@/components/DataTable/RowDeleteAlertDialog";
 
 interface PatientsColumnsProps {
   data: BundleEntry<Patient>[];
   setData: (data: BundleEntry<Patient>[]) => void;
+  tableTitle: string;
 }
 
 const PatientsColumns = (
@@ -140,10 +130,12 @@ const PatientsColumns = (
               <DropdownMenuItem>See preview</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <DeleteAlertDialog
+            <RowDeleteAlertDialog
               id={row.original.resource?.id ?? ""}
               data={props.data}
               setData={props.setData}
+              tableTitle={props.tableTitle}
+              deleteFunction={deletePatient}
             />
           </DropdownMenuContent>
         </DropdownMenu>
@@ -153,52 +145,3 @@ const PatientsColumns = (
 ];
 
 export default PatientsColumns;
-
-interface deleteAlertProps {
-  id: string;
-  data: BundleEntry<Patient>[];
-  setData: (data: BundleEntry<Patient>[]) => void;
-}
-
-function DeleteAlertDialog({ id, data, setData }: deleteAlertProps) {
-  const { toast } = useToast();
-
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="w-full">
-          Delete
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={() => {
-              try {
-                toast({
-                  title: `Patienet ${id} deleted`,
-                  description: "The patient has been deleted",
-                  variant: "destructive",
-                });
-                setData(data.filter((entry) => entry.resource?.id !== id));
-                deletePatient(id);
-              } catch (error) {
-                console.error(error);
-              }
-            }}
-          >
-            Delete
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-}

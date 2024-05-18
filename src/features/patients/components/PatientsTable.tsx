@@ -2,30 +2,30 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { getPatients } from "@/features/patients/server/getPatients";
 import PatientsColumns from "@/features/patients/components/PatientsColumns";
-import { Bundle, BundleEntry } from "@/types/Bundle";
-import PatientsTableView from "@/features/patients/components/PatientsTableView";
+import { BundleEntry } from "@/types/Bundle";
 import { Patient } from "@/types/Patient";
-import {
-  SortingState,
-  ColumnFiltersState,
-  VisibilityState,
-  useReactTable,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-} from "@tanstack/react-table";
+import { DataTable } from "@/components/DataTable/DataTable";
 
 function PatientsTable() {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
-  const [data, setData] = useState<Bundle>();
   const [entryData, setEntryData] = useState<BundleEntry<Patient>[]>([]);
 
+  const tableHeader = {
+    title: "Patients",
+    description: "Manage your patients and view their details.",
+  };
+
+  const addButton = {
+    href: "/patients/create",
+    label: "Create Patient",
+  };
+
   const columns = useMemo(
-    () => PatientsColumns({ data: entryData, setData: setEntryData }),
+    () =>
+      PatientsColumns({
+        data: entryData,
+        setData: setEntryData,
+        tableTitle: tableHeader.title,
+      }),
     [entryData]
   );
 
@@ -33,35 +33,22 @@ function PatientsTable() {
     const fetchData = async () => {
       try {
         const res = await getPatients();
-        setData(res);
         setEntryData(res.entry || []);
       } catch (error) {
-        console.error("Error fetching questionnaires:", error);
+        console.error("Error fetching patients:", error);
       }
     };
     fetchData();
   }, []);
 
-  const table = useReactTable({
-    data: entryData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-  return <PatientsTableView columns={columns} table={table} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={entryData}
+      tableHeader={tableHeader}
+      addButton={addButton}
+    />
+  );
 }
 
 export default PatientsTable;
