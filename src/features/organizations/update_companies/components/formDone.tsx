@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { getOrganizations } from "@/features/organizations/server/getOrganizations";
 import {
   Form,
   FormControl,
@@ -35,10 +34,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createOrganization } from "@/features/organizations/server/createOrganization";
-import { getOrganization } from "@/features/organizations/server/getOrganization";
-import { updateOrganization } from "@/features/organizations/server/updateOrganization";
 import { useRouter } from "next/navigation";
+import { getResource } from "@/server/getResource";
+import { updateResource } from "@/server/updateResource";
 
 export function FormOrganizationupdate({ id }: { id: string }) {
   const router = useRouter();
@@ -87,8 +85,13 @@ export function FormOrganizationupdate({ id }: { id: string }) {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const data = await getOrganization(id);
-          form.reset(data);
+          const data = await getResource({
+            id: id,
+            schema: organizationSchema,
+          });
+          if (data !== null) {
+            form.reset(data);
+          }
         } catch (error) {
           console.error("Error fetching organization data:", error);
         }
@@ -101,7 +104,7 @@ export function FormOrganizationupdate({ id }: { id: string }) {
   }
 
   function onSubmit(values: Organization) {
-    updateOrganization(id, values);
+    updateResource({ id: id, data: values, schema: organizationSchema });
     router.back();
   }
 

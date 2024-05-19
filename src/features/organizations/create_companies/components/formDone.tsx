@@ -34,8 +34,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createOrganization } from "@/features/organizations/server/createOrganization";
 import { useRouter } from "next/navigation";
+import { createResource } from "@/server/createResource";
 
 export function FormOrganization() {
   const router = useRouter();
@@ -58,7 +58,7 @@ export function FormOrganization() {
 
   async function onSubmit(values: Organization) {
     console.log(values);
-    await createOrganization(values);
+    await createResource({ data: values, schema: organizationSchema });
     router.back();
   }
 

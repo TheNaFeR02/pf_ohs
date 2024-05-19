@@ -15,8 +15,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { deleteOrganization } from "@/features/organizations/server/deleteOrganization";
 import RowDeleteAlertDialog from "@/components/DataTable/RowDeleteAlertDialog";
+import { deleteResource } from "@/server/deleteResource";
 
 interface OrganizationColumnsProps {
   data: BundleEntry<Organization>[];
@@ -142,10 +142,11 @@ const OrganizationsColumns = (
             <DropdownMenuSeparator />
             <RowDeleteAlertDialog
               id={row.original.resource?.id ?? ""}
+              resourceType="Organization"
               data={props.data}
               setData={props.setData}
               tableTitle={props.tableTitle}
-              deleteFunction={deleteOrganization}
+              deleteFunction={deleteResource}
             />
           </DropdownMenuContent>
         </DropdownMenu>

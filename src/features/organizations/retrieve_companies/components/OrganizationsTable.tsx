@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
-import { getOrganizations } from "@/features/organizations/server/getOrganizations";
+import { getResourceBundle } from "@/server/getResourceBundle";
 import OrganizationsColumns from "@/features/organizations/retrieve_companies/components/OrganizationsColumns";
 import { BundleEntry } from "@/types/Bundle";
 import { Organization } from "@/types/Organization";
@@ -32,7 +32,7 @@ function OrganizationsTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getOrganizations();
+        const res = await getResourceBundle({ resourceType: "Organization" });
         setEntryData(res.entry || []);
       } catch (error) {
         console.error("Error fetching organizations:", error);
