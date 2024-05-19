@@ -17,12 +17,16 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { createResource } from "@/server/createResource";
+import { useRouter } from "next/navigation";
+
 interface QuestionnaireFormProps {
   data?: Questionnaire;
   id?: string;
 }
 
 const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
+  const router = useRouter();
+
   const form = useForm<Questionnaire>({
     resolver: zodResolver(questionnaireSchema),
     defaultValues: data
@@ -45,8 +49,12 @@ const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
             schema: questionnaireSchema,
           });
         } else {
-          await createResource({data:questionnaire, schema:questionnaireSchema});
+          await createResource({
+            data: questionnaire,
+            schema: questionnaireSchema,
+          });
         }
+        router.push("/questionnaires");
       })();
     } catch (error) {
       console.error("Error submitting form:", error);

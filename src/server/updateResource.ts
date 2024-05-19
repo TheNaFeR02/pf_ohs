@@ -1,3 +1,4 @@
+import { toast } from "@/components/ui/use-toast";
 import { Resource } from "@/types/Resource";
 import { parseURL } from "@/utils/parseURL";
 import { ZodSchema } from "zod";
@@ -13,17 +14,15 @@ export async function updateResource<T extends Resource>({
   data,
   schema,
 }: updateResourceProps<T>) {
-//   console.log("Updating resource:", data);
 
   // Validar datos con Zod
   const validationResult = schema.safeParse(data);
   if (!validationResult.success) {
     console.error("Validation error:", validationResult.error.errors);
-    return;
+    throw new Error("Validation error");
   }
 
   try {
-    console.log(parseURL(`/${data.resourceType}/${id}`));
     const res = await fetch(parseURL(`/${data.resourceType}/${id}`), {
       method: "PUT",
       headers: {
@@ -34,8 +33,23 @@ export async function updateResource<T extends Resource>({
 
     const response = await res.json();
 
-    // console.log("Response:", response);
+    if (!res.ok) {
+      throw new Error(response);
+    }
+
+    toast({
+      title: `${data.resourceType} updated`,
+      description: `The ${data.resourceType?.toLowerCase()} has been updated`,
+      variant: "default",
+    });
+
   } catch (error) {
     console.error(error);
+    toast({
+      title: `${data.resourceType} not updated`,
+      description: `Failed to update ${data.resourceType?.toLowerCase()}`,
+      variant: "destructive",
+    });
+    throw new Error("Fetch error");
   }
 }

@@ -1,3 +1,5 @@
+import RejectionToast from "@/components/RejectionToast";
+import { toast } from "@/components/ui/use-toast";
 import { Resource } from "@/types/Resource";
 import { parseURL } from "@/utils/parseURL";
 import { ZodSchema } from "zod";
@@ -11,13 +13,12 @@ export async function createResource<T extends Resource>({
   data,
   schema,
 }: createResourceProps<T>) {
-//   console.log("Creating resource:", data);
 
   // Validar datos con Zod
   const validationResult = schema.safeParse(data);
   if (!validationResult.success) {
     console.error("Validation error:", validationResult.error.errors);
-    return;
+    throw new Error("Validation error");
   }
 
   try {
@@ -31,8 +32,23 @@ export async function createResource<T extends Resource>({
 
     const response = await res.json();
 
-    // console.log("Response:", response);
+    if (!res.ok) {
+      throw new Error(response);
+    }
+
+    toast({
+      title: `${data.resourceType} created`,
+      description: `The ${data.resourceType?.toLowerCase()} has been created`,
+      variant: "default",
+    });
+
   } catch (error) {
     console.error(error);
+    toast({
+      title: `Ups! ${data.resourceType} not created`,
+      description: `Failed to create ${data.resourceType?.toLowerCase()}`,
+      variant: "destructive",
+    });
+    throw new Error("Fetch error");
   }
 }

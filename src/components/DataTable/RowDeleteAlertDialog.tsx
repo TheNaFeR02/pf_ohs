@@ -10,7 +10,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { useToast } from "../ui/use-toast";
 import { BundleEntry } from "@/types/Bundle";
 
 interface RowDeleteAlertProps {
@@ -19,7 +18,7 @@ interface RowDeleteAlertProps {
   data: BundleEntry<any>[];
   setData: (data: BundleEntry<any>[]) => void;
   tableTitle: string;
-  deleteFunction: (props: { resourceType: string, id: string }) => Promise<any>;
+  deleteFunction: (props: { resourceType: string; id: string }) => Promise<any>;
 }
 
 function RowDeleteAlertDialog({
@@ -30,8 +29,6 @@ function RowDeleteAlertDialog({
   tableTitle,
   deleteFunction,
 }: RowDeleteAlertProps) {
-  const { toast } = useToast();
-
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -54,18 +51,8 @@ function RowDeleteAlertDialog({
               try {
                 await deleteFunction({ resourceType, id });
                 setData(data.filter((entry) => entry.resource.id !== id));
-                toast({
-                  title: `${tableTitle} ${id} deleted`,
-                  description: `The ${tableTitle.toLowerCase()} has been deleted`,
-                  variant: "destructive",
-                });
               } catch (error) {
                 console.error(error);
-                toast({
-                  title: "Error",
-                  description: `Failed to delete ${tableTitle.toLowerCase()} ${id}`,
-                  variant: "destructive",
-                });
               }
             }}
           >
