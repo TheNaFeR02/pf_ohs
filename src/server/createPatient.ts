@@ -1,4 +1,4 @@
-import { FakePatient } from "@/app/example/types/fakePatient";
+import { FakePatient } from "@/app/(general)/example/types/fakePatient";
 import { parseURL } from "@/utils/parseURL";
 
 
