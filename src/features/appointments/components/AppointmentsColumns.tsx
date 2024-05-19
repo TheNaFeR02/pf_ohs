@@ -14,8 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import RowDeleteAlertDialog from "@/components/DataTable/RowDeleteAlertDialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { deleteAppointment } from "@/features/appointments/server/deleteAppointment";
-
+import { deleteResource } from "@/server/deleteResource";
 interface AppointmentsColumnsProps {
   data: BundleEntry<Appointment>[];
   setData: (data: BundleEntry<Appointment>[]) => void;
@@ -191,10 +190,11 @@ const AppointmentsColumns = (
             <DropdownMenuSeparator />
             <RowDeleteAlertDialog
               id={row.original.resource?.id ?? ""}
+              resourceType="Appointment"
               data={props.data}
               setData={props.setData}
               tableTitle={props.tableTitle}
-              deleteFunction={deleteAppointment}
+              deleteFunction={deleteResource}
             />
           </DropdownMenuContent>
         </DropdownMenu>

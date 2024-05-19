@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Appointment, appointmentSchema } from "@/types/Appointment";
-import { createAppointment } from "@/features/appointments/server/createAppointment";
-import { uptateAppointment } from "@/features/appointments/server/updateAppointment";
 import {
   Card,
   CardHeader,
@@ -17,6 +15,8 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { createResource } from "@/server/createResource";
+import { updateResource } from "@/server/updateResource";
 interface AppointmentFormProps {
   data?: Appointment;
   id?: string;
@@ -88,9 +88,9 @@ const AppointmentForm = ({ data, id }: AppointmentFormProps) => {
     try {
       await form.handleSubmit(async (data) => {
         if (data && id) {
-          await uptateAppointment({ id: id, data: appointment });
+          await updateResource({ id: id, data: appointment, schema: appointmentSchema });
         } else {
-          await createAppointment(appointment);
+          await createResource({data: appointment, schema: appointmentSchema});
         }
       })();
     } catch (error) {

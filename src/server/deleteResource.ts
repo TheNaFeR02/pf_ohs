@@ -2,10 +2,6 @@ import { operationOutcomeSchema } from "@/types/OperationOutcome";
 import { parseURL } from "@/utils/parseURL";
 import { z } from "zod";
 
-// interface deleteResourceProps {
-//   resourceType: string;
-//   id: string;
-// }
 
 export async function deleteResource({
   resourceType,
