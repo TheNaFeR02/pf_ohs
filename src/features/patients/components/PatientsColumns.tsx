@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
-import { deletePatient } from "@/features/patients/server/deletePatient";
+import { deleteResource } from "@/server/deleteResource";
 import RowDeleteAlertDialog from "@/components/DataTable/RowDeleteAlertDialog";
 
 interface PatientsColumnsProps {
@@ -132,10 +132,11 @@ const PatientsColumns = (
             <DropdownMenuSeparator />
             <RowDeleteAlertDialog
               id={row.original.resource?.id ?? ""}
+              resourceType="Patient"
               data={props.data}
               setData={props.setData}
               tableTitle={props.tableTitle}
-              deleteFunction={deletePatient}
+              deleteFunction={deleteResource}
             />
           </DropdownMenuContent>
         </DropdownMenu>

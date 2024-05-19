@@ -2,7 +2,7 @@ import { Resource } from "@/types/Resource";
 import { parseURL } from "@/utils/parseURL";
 import { ZodSchema } from "zod";
 
-interface createResourceProps<T extends Resource> {
+export interface createResourceProps<T extends Resource> {
   data: T;
   schema: ZodSchema<T>;
 }

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
-import { getPatients } from "@/features/patients/server/getPatients";
+import { getResourceBundle } from "@/server/getResourceBundle";
 import PatientsColumns from "@/features/patients/components/PatientsColumns";
 import { BundleEntry } from "@/types/Bundle";
 import { Patient } from "@/types/Patient";
@@ -32,7 +32,7 @@ function PatientsTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getPatients();
+        const res = await getResourceBundle({ resourceType: "Patient" });
         setEntryData(res.entry || []);
       } catch (error) {
         console.error("Error fetching patients:", error);
