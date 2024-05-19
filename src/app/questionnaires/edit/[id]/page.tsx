@@ -1,6 +1,6 @@
 import QuestionnaireForm from "@/features/questionnaire_creator/components/QuestionnaireForm";
-import { Questionnaire } from "../../../../types/Questionnaire";
-import getQuestionnaire from "@/features/questionnaire_creator/server/getQuestionnaire";
+import { questionnaireSchema } from "@/types/Questionnaire";
+import { getResource } from "@/server/getResource";
 
 export default async function QuestionnairesIdPage({
   params,
@@ -8,7 +8,14 @@ export default async function QuestionnairesIdPage({
   params: { id: string };
 }) {
   try {
-    const questionnaire = await getQuestionnaire(params.id);
+    const questionnaire = await getResource({
+      id: params.id,
+      resourceType: "Questionnaire",
+      schema: questionnaireSchema,
+    });
+    if (!questionnaire) {
+      return <div>Questionnaire not found.</div>;
+    }
 
     return <QuestionnaireForm data={questionnaire} id={params.id} />;
   } catch (error) {

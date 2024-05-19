@@ -36,7 +36,7 @@ import Webcam from "react-webcam";
 import Image from "next/image";
 import { administrativeGenderObj } from "@/constants/administrativeGenderCodeDisplay";
 import { maritalStatusObj } from "@/constants/maritalStatusCodeDisplay";
-import { createPatient } from "@/features/patients/server/createPatient";
+import { createResource, createResourceProps } from "@/server/createResource";
 
 const videoConstraints = {
   width: 720,
@@ -130,7 +130,10 @@ export default function PatientForm() {
       photo: [{ data: base64Image || defaultPhoto }],
     };
     console.log(finalValues);
-    createPatient(finalValues);
+    createResource({
+      data: finalValues,
+      schema: patientSchema,
+    } as createResourceProps<Patient>); // Add type assertion to fix the type error
   }
 
   // camera: https://dev.to/sababg/react-webcam-typescript-gh2

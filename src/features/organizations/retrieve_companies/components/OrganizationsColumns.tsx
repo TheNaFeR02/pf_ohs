@@ -6,20 +6,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import {
-  AlertDialogHeader,
-  AlertDialogFooter,
-} from "@/components/ui/alert-dialog";
-import { useToast } from "@/components/ui/use-toast";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -29,11 +15,13 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { deleteOrganization } from "@/features/organizations/server/deleteOrganization";
+import RowDeleteAlertDialog from "@/components/DataTable/RowDeleteAlertDialog";
+import { deleteResource } from "@/server/deleteResource";
 
 interface OrganizationColumnsProps {
   data: BundleEntry<Organization>[];
   setData: (data: BundleEntry<Organization>[]) => void;
+  tableTitle: string;
 }
 
 const OrganizationsColumns = (
@@ -152,10 +140,13 @@ const OrganizationsColumns = (
               <DropdownMenuItem>See preview</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <DeleteAlertDialog
+            <RowDeleteAlertDialog
               id={row.original.resource?.id ?? ""}
+              resourceType="Organization"
               data={props.data}
               setData={props.setData}
+              tableTitle={props.tableTitle}
+              deleteFunction={deleteResource}
             />
           </DropdownMenuContent>
         </DropdownMenu>
@@ -164,52 +155,3 @@ const OrganizationsColumns = (
   },
 ];
 export default OrganizationsColumns;
-
-interface deleteAlertProps {
-  id: string;
-  data: BundleEntry<Organization>[];
-  setData: (data: BundleEntry<Organization>[]) => void;
-}
-
-function DeleteAlertDialog({ id, data, setData }: deleteAlertProps) {
-  const { toast } = useToast();
-
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="w-full">
-          Delete
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={() => {
-              try {
-                toast({
-                  title: `Questionnaire ${id} deleted`,
-                  description: "The questionnaire has been deleted",
-                  variant: "destructive",
-                });
-                setData(data.filter((entry) => entry.resource?.id !== id));
-                deleteOrganization(id);
-              } catch (error) {
-                console.error(error);
-              }
-            }}
-          >
-            Delete
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-}
