@@ -1,30 +1,28 @@
-
-import { options } from '@/app/api/auth/[...nextauth]/options';
-import { getServerSession } from 'next-auth/next'
-import { redirect } from 'next/navigation'
-
+import { options } from "@/app/api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
 
 async function getGooglePatient(access_token: string) {
+  console.log("google access token:", access_token);
 
-  console.log("google access token:", access_token)
-
-  const res = await fetch('https://healthcare.googleapis.com/v1/projects/pf-ohs/locations/northamerica-northeast1/datasets/pf-ohs-test/fhirStores/pf-ohs-datastore/fhir/Patient/4e9adcae-4277-42c4-8fe7-85ec5c1d4734/\$everything', {
-    method: 'GET',
-    headers: {
-      // 'Content-Type': 'application/json-patch+json',
-      'Authorization': `Bearer ${access_token}`
+  const res = await fetch(
+    "https://healthcare.googleapis.com/v1/projects/pf-ohs/locations/northamerica-northeast1/datasets/pf-ohs-test/fhirStores/pf-ohs-datastore/fhir/Patient/49f8cc87-33da-4733-8e1d-a7f2b2b0b9b3",
+    {
+      method: "GET",
+      headers: {
+        // 'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${access_token}`,
+      },
     }
-  })
+  );
 
-  console.log("google patient response:", res)
-  return await res.json()
-
+  console.log("google patient response:", res);
+  return await res.json();
 }
 
 async function createGooglePatient(access_token: string) {
-  console.log(access_token)
-  const body = 
-    `
+  console.log(access_token);
+  const body = `
     {
   "resourceType": "Patient",
   "active": true,
@@ -95,60 +93,55 @@ async function createGooglePatient(access_token: string) {
     }
   ]
 }
-    `
-  
-
-  
-// console.log(body)
-
-  const cloudRegion = 'northamerica-northeast1';
-  const projectId = 'pf-ohs';
-  const datasetId = 'pf-ohs-test';
-  const fhirStoreId = 'pf-ohs-datastore';
-  const resourceType = 'Patient';
-  const res = await fetch(`https://healthcare.googleapis.com/v1/projects/${projectId}/locations/${cloudRegion}/datasets/${datasetId}/fhirStores/${fhirStoreId}/fhir/Patient`, {
-    method: 'POST',
-    headers: {
-      // 'Content-Type': 'application/json-patch+json',
-      'Authorization': `Bearer ${access_token}`,
-      'Content-Type': 'application/fhir+json;charset=utf-8'
-    },
-    body: body
-  })
-
-  const result = await res.json()
-
-  if (result.issue) {
-  result.issue.forEach((issue: any, index: number) => {
-    console.log(`Issue #${index + 1}:`);
-    console.log(`Code: ${issue.code}`);
-    console.log(`Details: ${JSON.stringify(issue.details, null, 2)}`);
-    console.log(`Diagnostics: ${issue.diagnostics}`);
-    console.log(`Severity: ${issue.severity}`);
-    if (issue.expression) {
-      console.log(`Expression: ${JSON.stringify(issue.expression, null, 2)}`);
+    `;
+  const cloudRegion = "northamerica-northeast1";
+  const projectId = "pf-ohs";
+  const datasetId = "pf-ohs-test";
+  const fhirStoreId = "pf-ohs-datastore";
+  const resourceType = "Patient";
+  const res = await fetch(
+    `https://healthcare.googleapis.com/v1/projects/${projectId}/locations/${cloudRegion}/datasets/${datasetId}/fhirStores/${fhirStoreId}/fhir/Patient`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/fhir+json;charset=utf-8",
+      },
+      body: body,
     }
-    console.log('\n');
-  });
-}
-}
+  );
 
+  const result = await res.json();
+  console.log(result);
+  if (result.issue) {
+    result.issue.forEach((issue: any, index: number) => {
+      console.log(`Issue #${index + 1}:`);
+      console.log(`Code: ${issue.code}`);
+      console.log(`Details: ${JSON.stringify(issue.details, null, 2)}`);
+      console.log(`Diagnostics: ${issue.diagnostics}`);
+      console.log(`Severity: ${issue.severity}`);
+      if (issue.expression) {
+        console.log(`Expression: ${JSON.stringify(issue.expression, null, 2)}`);
+      }
+      console.log("\n");
+    });
+  }
+}
 
 export default async function GoogleFHIRPatientPage() {
-  const session = await getServerSession(options)
+  const session = await getServerSession(options);
 
   if (!session) {
-    redirect('/api/auth/signin?callbackUrl=/server')
+    redirect("/api/auth/signin?callbackUrl=/server");
   }
 
-  // const patient = await getGooglePatient(session.user.access_token);
+  const patient = await getGooglePatient(session.user.access_token);
   // const patient = await createGooglePatient(session.user.access_token)
-  
 
   return (
     <div>
       <h1>Google FHIR Patient Page</h1>
-      {/* <pre>{JSON.stringify(patient, null, 2)}</pre> */}
+      <pre>{JSON.stringify(patient, null, 2)}</pre>
     </div>
   );
 }
