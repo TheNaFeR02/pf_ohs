@@ -38,7 +38,7 @@ function AppointmentsTable() {
         setData: setEntryData,
         tableTitle: tableHeader.title,
       }),
-    [entryData]
+    [entryData, tableHeader.title]
   );
 
   useEffect(() => {

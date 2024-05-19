@@ -26,7 +26,7 @@ function OrganizationsTable() {
         setData: setEntryData,
         tableTitle: tableHeader.title,
       }),
-    [entryData]
+    [entryData, tableHeader.title]
   );
 
   useEffect(() => {

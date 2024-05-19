@@ -11,19 +11,13 @@ export default async function QuestionnairesIdPage({
   try {
     const questionnaire = await getResource({
       id: params.id,
+      resourceType: "Questionnaire",
       schema: questionnaireSchema,
     });
-
-    if (questionnaire === null) {
+    if (!questionnaire) {
       return <div>Questionnaire not found.</div>;
     }
-
-    return (
-      <>
-        {/* ...Building form */}
-        <QuestionnaireResponseForm questionnaire={questionnaire} />
-      </>
-    );
+    return <QuestionnaireResponseForm questionnaire={questionnaire} />;
   } catch (error) {
     if (error instanceof FhirError) {
       // show here Fhir Error

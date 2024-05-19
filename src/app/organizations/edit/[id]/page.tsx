@@ -9,6 +9,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <FormOrganizationupdate id={params.id}/>
         </div>
     );
+    
 };
 
 export default Page

@@ -23,6 +23,7 @@ export async function updateResource<T extends Resource>({
   }
 
   try {
+    console.log(parseURL(`/${data.resourceType}/${id}`));
     const res = await fetch(parseURL(`/${data.resourceType}/${id}`), {
       method: "PUT",
       headers: {

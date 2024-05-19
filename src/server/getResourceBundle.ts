@@ -15,6 +15,7 @@ export async function getResourceBundle({
       method: "GET",
     });
     const data: Bundle = await res.json();
+    console.log(data);
     const bundle = bundleSchema.safeParse(data);
     if (bundle.success) {
       return data;

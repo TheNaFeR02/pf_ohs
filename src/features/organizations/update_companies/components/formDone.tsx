@@ -87,6 +87,7 @@ export function FormOrganizationupdate({ id }: { id: string }) {
         try {
           const data = await getResource({
             id: id,
+            resourceType: "Organization",
             schema: organizationSchema,
           });
           if (data !== null) {
