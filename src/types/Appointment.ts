@@ -10,24 +10,16 @@ import {
   unsignedIntSchema,
 } from "@/types/dataTypes";
 import { periodSchema } from "@/types/Period";
+import { appointmentStatusCode } from "@/constants/appointmentStatusCodeDisplay";
+import { participantRequiredCode } from "@/constants/participantRequiredCodeDislay";
+import { participantStatusCode } from "@/constants/participantStatusCodeDisplay";
+import { domainResourceSchema } from "./DomainResource";
+import { resourceSchema } from "./Resource";
 
-export const Appointment = z.object({
+export const baseAppointmentSchema = z.object({
   resourceType: z.literal("Appointment"),
   identifier: z.array(identifierSchema).optional(),
-  status: z
-    .enum([
-      "proposed",
-      "pending",
-      "booked",
-      "arrived",
-      "fulfilled",
-      "cancelled",
-      "noshow",
-      "entered-in-error",
-      "checked-in",
-      "waitlist",
-    ])
-    .optional(),
+  status: z.enum(appointmentStatusCode),
   cancelationReason: codeableConceptSchema.optional(),
   serviceCategory: z.array(codeableConceptSchema).optional(),
   serviceType: z.array(codeableConceptSchema).optional(),
@@ -50,13 +42,17 @@ export const Appointment = z.object({
     z.object({
       type: z.array(codeableConceptSchema),
       actor: referenceSchema.optional(),
-      required: z.enum(["required", "optional", "information-only"]).optional(),
-      status: z.enum(["accepted", "declined", "tentative", "needs-action"]),
-      period: z.object({
-        start: instantSchema.optional(),
-        end: instantSchema.optional(),
-      }),
+      required: z.enum(participantRequiredCode).optional(),
+      status: z.enum(participantStatusCode),
+      period: periodSchema.optional(),
     })
-  ),
-  requestedPeriod: periodSchema.optional(),
+  ).min(1),
+  requestedPeriod: z.array(periodSchema).optional(),
 });
+
+export const appointmentSchema = resourceSchema
+  .omit({ resourceType: true })
+  .merge(domainResourceSchema.omit({ resourceType: true, resource: true }))
+  .merge(baseAppointmentSchema);
+
+export type Appointment = z.infer<typeof appointmentSchema>;
