@@ -19,4 +19,9 @@ addressTypeCode.shift();
 addressTypeDisplay.shift();
 addressTypeDefinition.shift();
 
-export { addressTypeObj, addressTypeCode, addressTypeDisplay, addressTypeDefinition };
+export {
+  addressTypeObj,
+  addressTypeCode,
+  addressTypeDisplay,
+  addressTypeDefinition,
+};

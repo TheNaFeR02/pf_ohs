@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Questionnaire, questionnaireSchema } from "@/types/Questionnaire";
-import { createQuestionnaire } from "@/features/questionnaire_creator/server/createQuestionnaire";
-import { uptateQuestionnaire } from "@/features/questionnaire_creator/server/updateQuestionnaire";
+import { updateResource } from "@/server/updateResource";
 import {
   Card,
   CardHeader,
@@ -17,6 +16,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { createResource } from "@/server/createResource";
 interface QuestionnaireFormProps {
   data?: Questionnaire;
   id?: string;
@@ -39,9 +39,13 @@ const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
     try {
       await form.handleSubmit(async (data) => {
         if (data && id) {
-          await uptateQuestionnaire({ id: id, data: questionnaire });
+          await updateResource({
+            id: id,
+            data: questionnaire,
+            schema: questionnaireSchema,
+          });
         } else {
-          await createQuestionnaire(questionnaire);
+          await createResource({data:questionnaire, schema:questionnaireSchema});
         }
       })();
     } catch (error) {
