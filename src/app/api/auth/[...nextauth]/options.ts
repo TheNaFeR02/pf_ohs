@@ -11,7 +11,8 @@ export const options: NextAuthOptions = {
         params: {
           prompt: "consent",
           access_type: "offline",
-          response_type: "code"
+          response_type: "code",
+          scope: "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/cloud-healthcare",
         }
       }
     }),
@@ -21,7 +22,7 @@ export const options: NextAuthOptions = {
     async jwt({ token, user, account }) {
       console.log("jwt", account)
       if (account?.provider === "google" && account.id_token) {
-        console.log("account", account)
+        // console.log("account", account)
         token.access_token = account.access_token;
       }
 
