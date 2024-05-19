@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import RowDeleteAlertDialog from "@/components/DataTable/RowDeleteAlertDialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { deleteQuestionnaire } from "@/features/questionnaire_creator/server/deleteQuestionnaire";
+import { deleteResource } from "@/server/deleteResource";
 
 interface QuestionnairesColumnsProps {
   data: BundleEntry<Questionnaire>[];
@@ -146,10 +146,11 @@ const QuestionnairesColumns = (
             <DropdownMenuSeparator />
             <RowDeleteAlertDialog
               id={row.original.resource?.id ?? ""}
+              resourceType={"Questionnaire"}
               data={props.data}
               setData={props.setData}
               tableTitle={props.tableTitle}
-              deleteFunction={deleteQuestionnaire}
+              deleteFunction={deleteResource}
             />
           </DropdownMenuContent>
         </DropdownMenu>

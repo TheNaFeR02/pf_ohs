@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
-import { getQuestionnaires } from "@/features/questionnaire_creator/server/getQuestionnaires";
 import QuestionnairesColumns from "@/features/questionnaire_creator/components/QuestionnairesColumns";
 import { BundleEntry } from "@/types/Bundle";
 import { Questionnaire } from "@/types/Questionnaire";
 import { DataTable } from "@/components/DataTable/DataTable";
 import Concept from "@/types/Concept";
 import { statusObj } from "@/constants/statusCodeDisplay";
+import { getResourceBundle } from "@/server/getResourceBundle";
 
 function QuestionnairesTable() {
   const [entryData, setEntryData] = useState<BundleEntry<Questionnaire>[]>([]);
@@ -44,7 +44,7 @@ function QuestionnairesTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getQuestionnaires();
+        const res = await getResourceBundle({ resourceType: "Questionnaire" });
         setEntryData(res.entry || []);
       } catch (error) {
         console.error("Error fetching questionnaires:", error);

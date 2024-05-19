@@ -1,4 +1,3 @@
-import { deleteQuestionnaire } from "@/features/questionnaire_creator/server/deleteQuestionnaire";
 import { Button } from "../ui/button";
 import {
   AlertDialog,
@@ -14,21 +13,23 @@ import {
 import { useToast } from "../ui/use-toast";
 import { BundleEntry } from "@/types/Bundle";
 
-interface RowDeleteAlertProps<TData> {
+interface RowDeleteAlertProps {
   id: string;
+  resourceType: string;
   data: BundleEntry<any>[];
   setData: (data: BundleEntry<any>[]) => void;
   tableTitle: string;
-  deleteFunction: (id: string) => Promise<void>;
+  deleteFunction: (props: { resourceType: string, id: string }) => Promise<any>;
 }
 
-function RowDeleteAlertDialog<TData>({
+function RowDeleteAlertDialog({
   id,
+  resourceType,
   data,
   setData,
   tableTitle,
   deleteFunction,
-}: RowDeleteAlertProps<TData>) {
+}: RowDeleteAlertProps) {
   const { toast } = useToast();
 
   return (
@@ -48,21 +49,26 @@ function RowDeleteAlertDialog<TData>({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction
+          <AlertDialogAction
             onClick={async () => {
-                try {
-                    toast({
-                        title: `${tableTitle} ${id} deleted`,
-                        description: `The ${tableTitle.toLocaleLowerCase()} has been deleted`,
-                        variant: "destructive",
-                    });
-                    setData(data.filter((entry) => entry.resource.id !== id));
-                    await deleteFunction(id);
-                } catch (error) {
-                    console.error(error);
-                }
+              try {
+                await deleteFunction({ resourceType, id });
+                setData(data.filter((entry) => entry.resource.id !== id));
+                toast({
+                  title: `${tableTitle} ${id} deleted`,
+                  description: `The ${tableTitle.toLowerCase()} has been deleted`,
+                  variant: "destructive",
+                });
+              } catch (error) {
+                console.error(error);
+                toast({
+                  title: "Error",
+                  description: `Failed to delete ${tableTitle.toLowerCase()} ${id}`,
+                  variant: "destructive",
+                });
+              }
             }}
-        >
+          >
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>
