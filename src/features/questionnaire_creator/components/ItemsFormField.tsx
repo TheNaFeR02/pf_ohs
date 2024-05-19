@@ -7,7 +7,7 @@ import {
   useFieldArray,
   UseFormSetValue,
 } from "react-hook-form";
-import { Questionnaire } from "../../../types/Questionnaire";
+import { Questionnaire } from "@/types/Questionnaire";
 import AnswerOptionsFormField from "@/features/questionnaire_creator/components/AnswerOptionsFormField";
 import {
   FormField,
@@ -75,7 +75,6 @@ const ItemsFormField: FunctionComponent<ItemsFormFieldProps> = ({
   };
 
   const removeItem = (index: number) => {
-    console.log("index", index);
     itemRemove(index);
   };
 

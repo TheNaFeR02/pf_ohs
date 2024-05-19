@@ -20,9 +20,9 @@ export const baseOperationOutcomeSchema = z.object({
   ),
 });
 
-export const OperationOutcomeSchema = resourceSchema
+export const operationOutcomeSchema = resourceSchema
   .omit({ resourceType: true })
   .merge(domainResourceSchema.omit({ resourceType: true, resource: true }))
   .merge(baseOperationOutcomeSchema);
 
-export type OperationOutcome = z.infer<typeof OperationOutcomeSchema>;
+export type OperationOutcome = z.infer<typeof operationOutcomeSchema>;

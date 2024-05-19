@@ -5,20 +5,24 @@ import QuestionnaireFormField from "@/features/questionnaire_creator/components/
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Questionnaire, questionnaireSchema } from "@/types/Questionnaire";
+import { updateResource } from "@/server/updateResource";
 import {
-  Questionnaire,
-  questionnaireSchema,
-} from "../../../types/Questionnaire";
-import QuestionnaireFormLayout from "@/features/questionnaire_creator/components/QuestionnaireFormLayout";
-import { createQuestionnaire } from "@/features/questionnaire_creator/server/createQuestionnaire";
-import { uptateQuestionnaire } from "@/features/questionnaire_creator/server/updateQuestionnaire";
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import Link from "next/link";
+import { createResource } from "@/server/createResource";
 interface QuestionnaireFormProps {
   data?: Questionnaire;
   id?: string;
 }
 
 const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
-
   const form = useForm<Questionnaire>({
     resolver: zodResolver(questionnaireSchema),
     defaultValues: data
@@ -34,14 +38,14 @@ const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
   async function onSubmit(questionnaire: Questionnaire) {
     try {
       await form.handleSubmit(async (data) => {
-        data
-          ? console.log("Updating questionnaire", id)
-          : console.log("Creating questionnaire");
-        console.log(JSON.stringify(questionnaire));
         if (data && id) {
-          await uptateQuestionnaire({ id: id, data: questionnaire });
+          await updateResource({
+            id: id,
+            data: questionnaire,
+            schema: questionnaireSchema,
+          });
         } else {
-          await createQuestionnaire(questionnaire);
+          await createResource({data:questionnaire, schema:questionnaireSchema});
         }
       })();
     } catch (error) {
@@ -52,23 +56,25 @@ const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="space-y-4">
-          <QuestionnaireFormLayout>
-            <div className="w-full">
-              <QuestionnaireFormField />
-            </div>
-          </QuestionnaireFormLayout>
-          <div className="flex justify-end">
+        <Card>
+          <CardHeader>
+            <CardTitle>Create questionnaire</CardTitle>
+            <CardDescription>
+              Use the form below to create a new questionnaire
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <QuestionnaireFormField />
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <Link href="/questionnaires">
+              <Button variant="outline" type="button">
+                Cancel
+              </Button>
+            </Link>
             <Button type="submit">Submit</Button>
-          </div>
-          {form.formState.errors && (
-            <div>
-              {Object.keys(form.formState.errors).map((fieldName: string, index) => (
-                <p key={index}>{fieldName}</p>
-              ))}
-            </div>
-          )}
-        </div>
+          </CardFooter>
+        </Card>
       </form>
     </Form>
   );

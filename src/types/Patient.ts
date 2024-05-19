@@ -19,30 +19,8 @@ import {
   stringSchema,
 } from "./dataTypes";
 import { z } from "zod";
-import { maritalStatusCode } from "@/constants/maritalStatusCodeDisplay";
-
-const humanNameSchema = z.object({
-  use: z.enum(nameUseCode).optional(),
-  text: stringSchema.optional(),
-  family: stringSchema.optional(),
-  given: z.array(stringSchema).optional(),
-  prefix: z.array(stringSchema).optional(),
-  suffix: z.array(stringSchema).optional(),
-  period: periodSchema.optional(),
-});
-
-const addressSchema = z.object({
-  use: z.enum(addressUseCode).optional(),
-  type: z.enum(addressTypeCode).optional(),
-  text: stringSchema.optional(),
-  line: z.array(stringSchema).optional(),
-  city: stringSchema.optional(),
-  district: stringSchema.optional(),
-  state: stringSchema.optional(),
-  postalCode: stringSchema.optional(),
-  country: stringSchema.optional(),
-  period: periodSchema.optional(),
-});
+import { humanNameSchema } from "@/types/HumanName";
+import { addressSchema } from "@/types/Address";
 
 const basePatientSchema = z.object({
   resourceType: z.literal("Patient").optional(),

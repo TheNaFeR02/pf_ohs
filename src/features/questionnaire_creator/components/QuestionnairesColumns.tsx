@@ -1,9 +1,7 @@
-"use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { BundleEntry } from "../../../types/Bundle";
-import { Questionnaire } from "../../../types/Questionnaire";
+import { BundleEntry } from "@/types/Bundle";
+import { Questionnaire } from "@/types/Questionnaire";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,24 +12,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import RowDeleteAlertDialog from "@/components/DataTable/RowDeleteAlertDialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { deleteQuestionnaire } from "@/features/questionnaire_creator/server/deleteQuestionnaire";
-import { useToast } from "@/components/ui/use-toast";
+import { deleteResource } from "@/server/deleteResource";
 
 interface QuestionnairesColumnsProps {
   data: BundleEntry<Questionnaire>[];
   setData: (data: BundleEntry<Questionnaire>[]) => void;
+  tableTitle: string;
 }
 
 const QuestionnairesColumns = (
@@ -87,27 +75,30 @@ const QuestionnairesColumns = (
   {
     accessorKey: "resource.title",
     id: "Title",
-    header: "Title",
-  },
-  {
-    accessorKey: "resource.status",
-    header: "Status",
-    id: "Status",
-    cell: ({ row }) => {
+    header: ({ column }) => {
       return (
-        <Badge variant="outline">
-          {row.original.resource?.status.toUpperCase()}
-        </Badge>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Title
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
       );
     },
   },
   {
-    accessorKey: "resource.subjectType",
-    id: "Subject Type",
-    header: "Subject Type",
-    cell: ({ row }) => {
-      return row.original.resource?.subjectType ?? "No Subject type";
+    accessorKey: "resource.status",
+    id: "status",
+    header: "Status",
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
+  },
+  {
+    accessorKey: "resource.subjectType",
+    id: "resource.subjectType",
+    header: "subjectType",
   },
   {
     accessorKey: "resource.meta.versionId",
@@ -149,15 +140,17 @@ const QuestionnairesColumns = (
             <Link href={`/questionnaires/edit/${row.original.resource?.id}`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
-            <DropdownMenuSeparator />
             <Link href={`/questionnaires/${row.original.resource?.id}`}>
               <DropdownMenuItem>See preview</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <DeleteAlertDialog
+            <RowDeleteAlertDialog
               id={row.original.resource?.id ?? ""}
+              resourceType={"Questionnaire"}
               data={props.data}
               setData={props.setData}
+              tableTitle={props.tableTitle}
+              deleteFunction={deleteResource}
             />
           </DropdownMenuContent>
         </DropdownMenu>
@@ -167,53 +160,3 @@ const QuestionnairesColumns = (
 ];
 
 export default QuestionnairesColumns;
-
-interface deleteAlertProps {
-  id: string;
-  data: BundleEntry<Questionnaire>[];
-  setData: (data: BundleEntry<Questionnaire>[]) => void;
-}
-
-function DeleteAlertDialog({ id, data, setData }: deleteAlertProps) {
-  const { toast } = useToast();
-
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="w-full">
-          Delete
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={() => {
-              try {
-                toast({
-                  title: `Questionnaire ${id} deleted`,
-                  description: "The questionnaire has been deleted",
-                  variant: "destructive",
-                });
-                deleteQuestionnaire(id ?? "");
-                const dataCopy = [...data];
-                setData(dataCopy);
-              } catch (error) {
-                console.error(error);
-              }
-            }}
-          >
-            Delete
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-}
