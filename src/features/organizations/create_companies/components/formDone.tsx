@@ -85,7 +85,7 @@ export function FormOrganization() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <Card className="m-5">
+        <Card>
           <CardHeader>
             <CardTitle>Crear compañia</CardTitle>
             <CardDescription>
