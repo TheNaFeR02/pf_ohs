@@ -5,6 +5,7 @@ import PatientsColumns from "@/features/patients/components/PatientsColumns";
 import { BundleEntry } from "@/types/Bundle";
 import { Patient } from "@/types/Patient";
 import { DataTable } from "@/components/DataTable/DataTable";
+import exportDataToCsv from "@/utils/exportDataToCsv";
 
 function PatientsTable() {
   const [entryData, setEntryData] = useState<BundleEntry<Patient>[]>([]);

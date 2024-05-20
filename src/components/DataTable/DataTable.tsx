@@ -36,6 +36,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import exportDataToCsv from "@/utils/exportDataToCsv";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -69,6 +70,10 @@ export function DataTable<TData, TValue>({
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
+  const handleExportData = () => {
+    exportDataToCsv({ data: data, resourceType: tableHeader.title});
+  };
+
   const table = useReactTable({
     data,
     columns,
@@ -93,7 +98,12 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} filters={filters} addButton={addButton} />
+      <DataTableToolbar
+        table={table}
+        filters={filters}
+        addButton={addButton}
+        handleExportData={handleExportData}
+      />
       <Card className="rounded-md border">
         <CardHeader>
           <CardTitle>{tableHeader.title}</CardTitle>
