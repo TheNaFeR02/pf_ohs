@@ -41,7 +41,7 @@ const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
 
   async function onSubmit(questionnaire: Questionnaire) {
     try {
-      await form.handleSubmit(async (data) => {
+      // await form.handleSubmit(async (data) => {
         if (data && id) {
           await updateResource({
             id: id,
@@ -55,7 +55,7 @@ const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
           });
         }
         router.push("/questionnaires");
-      })();
+      // })();
     } catch (error) {
       console.error("Error submitting form:", error);
     }
