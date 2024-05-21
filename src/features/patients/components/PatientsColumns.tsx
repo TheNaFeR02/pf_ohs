@@ -66,7 +66,7 @@ const PatientsColumns = (
       return (
         <Link
           className="text-blue-600 hover:underline"
-          href={`/patient/${row.original.resource?.id}`}
+          href={`/patients/get/${row.original.resource?.id}`}
         >
           {row.original.resource?.id}
         </Link>
@@ -122,11 +122,11 @@ const PatientsColumns = (
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <Link href={`/patient/edit/${row.original.resource?.id}`}>
+            <Link href={`/patients/edit/${row.original.resource?.id}`}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <Link href={`/patient/${row.original.resource?.id}`}>
+            <Link href={`/patients/get/${row.original.resource?.id}`}>
               <DropdownMenuItem>See preview</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
