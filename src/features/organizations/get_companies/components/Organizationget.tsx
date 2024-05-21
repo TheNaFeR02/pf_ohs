@@ -44,7 +44,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useEffect, useMemo, useState } from "react"
-import { getpatientsbyorg } from "../../server/getpatientsbyorg"
+import { getpatientsbyorg } from "../../../../server/getpatientsbyorg"
 import { Patient } from "@/types/Patient"
 import { useRouter } from "next/navigation";
 import { getResource } from "@/server/getResource";
