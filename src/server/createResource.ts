@@ -7,13 +7,14 @@ import { ZodSchema } from "zod";
 export interface createResourceProps<T extends Resource> {
   data: T;
   schema: ZodSchema<T>;
+  access_token: string | undefined;
 }
 
 export async function createResource<T extends Resource>({
   data,
   schema,
+  access_token,
 }: createResourceProps<T>) {
-
   // Validar datos con Zod
   const validationResult = schema.safeParse(data);
   if (!validationResult.success) {
@@ -25,12 +26,15 @@ export async function createResource<T extends Resource>({
     const res = await fetch(parseURL(`${data.resourceType}`), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/fhir+json;charset=utf-8",
+        Authorization: `Bearer ${access_token}`,
       },
       body: JSON.stringify(data),
     });
 
     const response = await res.json();
+
+    console.log(response);
 
     if (!res.ok) {
       throw new Error(response);
@@ -41,7 +45,6 @@ export async function createResource<T extends Resource>({
       description: `The ${data.resourceType?.toLowerCase()} has been created`,
       variant: "default",
     });
-
   } catch (error) {
     console.error(error);
     toast({

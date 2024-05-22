@@ -11,6 +11,8 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { BundleEntry } from "@/types/Bundle";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 interface RowDeleteAlertProps {
   id: string;
@@ -18,7 +20,11 @@ interface RowDeleteAlertProps {
   data: BundleEntry<any>[];
   setData: (data: BundleEntry<any>[]) => void;
   tableTitle: string;
-  deleteFunction: (props: { resourceType: string; id: string }) => Promise<any>;
+  deleteFunction: (props: {
+    resourceType: string;
+    id: string;
+    access_token: string | undefined;
+  }) => Promise<any>;
 }
 
 function RowDeleteAlertDialog({
@@ -29,6 +35,14 @@ function RowDeleteAlertDialog({
   tableTitle,
   deleteFunction,
 }: RowDeleteAlertProps) {
+
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/api/auth/signin?callbackUrl=/client");
+    },
+  });
+  
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -49,7 +63,7 @@ function RowDeleteAlertDialog({
           <AlertDialogAction
             onClick={async () => {
               try {
-                await deleteFunction({ resourceType, id });
+                await deleteFunction({ resourceType, id , access_token: session?.user?.access_token });
                 setData(data.filter((entry) => entry.resource.id !== id));
               } catch (error) {
                 console.error(error);

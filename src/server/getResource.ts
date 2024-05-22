@@ -5,12 +5,14 @@ interface getResourceProps<T extends Resource> {
   id: string;
   resourceType: string;
   schema: ZodSchema<T>;
+  access_token: string | undefined;
 }
 
 export async function getResource<T extends Resource>({
   id,
   resourceType,
   schema,
+  access_token,
 }: getResourceProps<T>): Promise<T | null> {
   console.log("Fetching resource with ID:", id);
 
@@ -18,6 +20,9 @@ export async function getResource<T extends Resource>({
     console.log(parseURL(`/${resourceType}/${id}`));
     const res = await fetch(parseURL(`/${resourceType}/${id}`), {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
     });
 
     if (!res.ok) {
@@ -25,6 +30,8 @@ export async function getResource<T extends Resource>({
     }
 
     const data = await res.json();
+
+    console
 
     // Validar datos con Zod
     const validationResult = schema.safeParse(data);

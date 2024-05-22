@@ -43,10 +43,11 @@ import Image from "next/image";
 import { administrativeGenderObj } from "@/constants/administrativeGenderCodeDisplay";
 import { maritalStatusObj } from "@/constants/maritalStatusCodeDisplay";
 import { createResource, createResourceProps } from "@/server/createResource";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { getResourceBundle } from "@/server/getResourceBundle";
 import { Bundle, BundleEntry } from "@/types/Bundle";
 import { Organization } from "@/types/Organization";
+import { useSession } from "next-auth/react";
 
 const videoConstraints = {
   width: 720,
@@ -55,6 +56,13 @@ const videoConstraints = {
 };
 
 export default function PatientForm() {
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/api/auth/signin?callbackUrl=/client");
+    },
+  });
+
   const [entryData, setEntryData] = useState<BundleEntry<Organization>[]>([]);
   const { control, setValue } = useFormContext<Patient>();
 
@@ -79,14 +87,17 @@ export default function PatientForm() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getResourceBundle({ resourceType: "Organization" });
+        const res = await getResourceBundle({
+          resourceType: "Organization",
+          access_token: session?.user?.access_token,
+        });
         setEntryData(res.entry || []);
       } catch (error) {
         console.error("Error fetching organizations:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [session?.user?.access_token]);
 
   return (
     <div className="space-y-4">
@@ -472,7 +483,7 @@ export default function PatientForm() {
                     Add Contact
                   </Button>
                   <Button
-                    variant='destructive'
+                    variant="destructive"
                     type="button"
                     onClick={() => remove(index)}
                   >

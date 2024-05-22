@@ -7,15 +7,18 @@ import { z } from "zod";
 export async function deleteResource({
   resourceType,
   id,
+  access_token,
 }: {
   resourceType: string;
   id: string;
+  access_token: string | undefined;
 }): Promise<z.infer<typeof operationOutcomeSchema> | null> {
   try {
     const res = await fetch(parseURL(`/${resourceType}/${id}`), {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/fhir+json;charset=utf-8",
+        Authorization: `Bearer ${access_token}`,
       },
     });
 

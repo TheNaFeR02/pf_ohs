@@ -135,6 +135,10 @@ export default async function GoogleFHIRPatientPage() {
     redirect("/api/auth/signin?callbackUrl=/server");
   }
 
+  if (!session.user?.access_token) {
+    return <div>Missing access token</div>;
+  }
+  
   const patient = await getGooglePatient(session.user.access_token);
   // const patient = await createGooglePatient(session.user.access_token)
 

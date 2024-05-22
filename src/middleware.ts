@@ -11,6 +11,12 @@ export default withAuth(
         // Store current request url in a custom header, which you can read later
 
 
+        if(request.nextauth.token?.role === "patient" && !request.nextUrl.pathname.endsWith("patients")){
+            return NextResponse.rewrite(
+                        new URL("/error", request.url)
+            )
+        }
+
         // if (request.nextUrl.pathname.startsWith("/")
         //     && !request.nextauth.token?.accessAPIToken) {
         //     return NextResponse.rewrite(

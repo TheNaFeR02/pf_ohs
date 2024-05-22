@@ -34,22 +34,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { createResource } from "@/server/createResource";
+import { useSession } from "next-auth/react";
 
 export function FormOrganization() {
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/api/auth/signin?callbackUrl=/client");
+    },
+  });
+
   const router = useRouter();
   const form = useForm<z.infer<typeof organizationSchema>>({
     resolver: zodResolver(organizationSchema),
     defaultValues: {
       resourceType: "Organization",
-      identifier: [
-        {
-          use: "",
-          system: "",
-          value: "",
-        },
-      ],
+
       active: false,
       name: "",
       alias: ["", "", ""],
@@ -58,7 +60,11 @@ export function FormOrganization() {
 
   async function onSubmit(values: Organization) {
     console.log(values);
-    await createResource({ data: values, schema: organizationSchema });
+    await createResource({
+      data: values,
+      schema: organizationSchema,
+      access_token: session?.user?.access_token,
+    });
     router.back();
   }
 

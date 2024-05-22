@@ -17,12 +17,21 @@ import {
 import Link from "next/link";
 import { createResource } from "@/server/createResource";
 import { updateResource } from "@/server/updateResource";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 interface AppointmentFormProps {
   data?: Appointment;
   id?: string;
 }
 
 const AppointmentForm = ({ data, id }: AppointmentFormProps) => {
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/api/auth/signin?callbackUrl=/client");
+    },
+  });
+
   const form = useForm<Appointment>({
     resolver: zodResolver(appointmentSchema),
     defaultValues: data
@@ -88,9 +97,18 @@ const AppointmentForm = ({ data, id }: AppointmentFormProps) => {
     try {
       await form.handleSubmit(async (data) => {
         if (data && id) {
-          await updateResource({ id: id, data: appointment, schema: appointmentSchema });
+          await updateResource({
+            id: id,
+            data: appointment,
+            schema: appointmentSchema,
+            access_token: session?.user?.access_token,
+          });
         } else {
-          await createResource({data: appointment, schema: appointmentSchema});
+          await createResource({
+            data: appointment,
+            schema: appointmentSchema,
+            access_token: session?.user?.access_token,
+          });
         }
       })();
     } catch (error) {

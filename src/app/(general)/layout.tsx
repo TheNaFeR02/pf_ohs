@@ -1,3 +1,4 @@
+"use client"
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
@@ -5,13 +6,14 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Ocuppational Health & Safety",
-  description: "Ocuppational Health & Safety web application",
-};
+// export const metadata: Metadata = {
+//   title: "Ocuppational Health & Safety",
+//   description: "Ocuppational Health & Safety web application",
+// };
 
 export default function RootLayout({
   children,
@@ -21,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <SessionProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -40,6 +43,7 @@ export default function RootLayout({
           </div>
           <Toaster />
         </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

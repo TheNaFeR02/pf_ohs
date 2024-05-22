@@ -7,12 +7,14 @@ interface updateResourceProps<T> {
   id: string;
   data: T;
   schema: ZodSchema<T>; // Agregamos el esquema Zod como propiedad
+  access_token: string | undefined;
 }
 
 export async function updateResource<T extends Resource>({
   id,
   data,
   schema,
+  access_token,
 }: updateResourceProps<T>) {
 
   // Validar datos con Zod
@@ -26,7 +28,8 @@ export async function updateResource<T extends Resource>({
     const res = await fetch(parseURL(`/${data.resourceType}/${id}`), {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/fhir+json;charset=utf-8",
+        Authorization: `Bearer ${access_token}`,
       },
       body: JSON.stringify(data),
     });
