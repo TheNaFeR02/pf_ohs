@@ -11,7 +11,7 @@ import { resourceSchema } from "./Resource";
 
 export const baseOrganizationSchema = z.object({
   resourceType: z.literal("Organization"),
-  identifier: z.array(identifierSchema),
+  identifier: z.array(identifierSchema).optional(),
   active: booleanSchema.optional(),
   type: z.array(codeableConceptSchema).optional(),
   name: stringSchema.optional(),
