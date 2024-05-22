@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 import {
   Activity,
   ArrowUpRight,
@@ -9,22 +9,18 @@ import {
   Package2,
   Search,
   Users,
-} from "lucide-react"
+} from "lucide-react";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,9 +28,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Table,
   TableBody,
@@ -42,11 +38,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useEffect, useMemo, useState } from "react"
-import { getpatientsbyorg } from "../../../../server/getpatientsbyorg"
-import { Patient } from "@/types/Patient"
-import { useRouter } from "next/navigation";
+} from "@/components/ui/table";
+import { useEffect, useMemo, useState } from "react";
+import { getpatientsbyorg } from "../../../../server/getpatientsbyorg";
+import { Patient } from "@/types/Patient";
+import { redirect, useRouter } from "next/navigation";
 import { getResource } from "@/server/getResource";
 import { updateResource } from "@/server/updateResource";
 import { DataTable } from "@/components/DataTable/DataTable";
@@ -55,8 +51,15 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Organization, organizationSchema } from "@/types/Organization";
+import { useSession } from "next-auth/react";
 
 export function Dashboard({ id }: { id: string }) {
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/api/auth/signin?callbackUrl=/client");
+    },
+  });
   const router = useRouter();
   const form = useForm<z.infer<typeof organizationSchema>>({
     resolver: zodResolver(organizationSchema),
@@ -107,6 +110,7 @@ export function Dashboard({ id }: { id: string }) {
             id: id,
             resourceType: "Organization",
             schema: organizationSchema,
+            access_token: session?.user?.access_token,
           });
           if (data !== null) {
             form.reset(data);
@@ -117,7 +121,7 @@ export function Dashboard({ id }: { id: string }) {
       };
 
       fetchData();
-    }, [form, id]);
+    }, [form, id, session?.user?.access_token]);
   } catch (error) {
     console.error("Error fetching organization data:", error);
   }
@@ -159,14 +163,18 @@ export function Dashboard({ id }: { id: string }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getpatientsbyorg({ resourceType: "Patient", id});
+        const res = await getpatientsbyorg({
+          resourceType: "Patient",
+          id: id,
+          access_token: session?.user?.access_token,
+        });
         setEntryData(res.entry || []);
       } catch (error) {
         console.error("Error fetching organizations:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [id, session?.user?.access_token]);
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -221,7 +229,9 @@ export function Dashboard({ id }: { id: string }) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{control._defaultValues.name}</div>
+              <div className="text-2xl font-bold">
+                {control._defaultValues.name}
+              </div>
             </CardContent>
           </Card>
           <Card x-chunk="dashboard-01-chunk-1">
@@ -240,36 +250,39 @@ export function Dashboard({ id }: { id: string }) {
               <CardTitle className="text-sm font-medium">Aliases</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{control._defaultValues.alias && control._defaultValues.alias
-    .filter(alias => alias && alias.trim() !== "") // Filtra los alias que no estén vacíos
-    .join(", ")}</div>
+              <div className="text-2xl font-bold">
+                {control._defaultValues.alias &&
+                  control._defaultValues.alias
+                    .filter((alias) => alias && alias.trim() !== "") // Filtra los alias que no estén vacíos
+                    .join(", ")}
+              </div>
             </CardContent>
           </Card>
           <Card x-chunk="dashboard-01-chunk-3">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Organization</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Active Organization
+              </CardTitle>
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{control._defaultValues.active ? "Active" : "Inactive"}</div>
+              <div className="text-2xl font-bold">
+                {control._defaultValues.active ? "Active" : "Inactive"}
+              </div>
             </CardContent>
           </Card>
         </div>
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-          <Card
-            className="xl:col-span-2" x-chunk="dashboard-01-chunk-4"
-          >
+          <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
                 <CardTitle>Organization Details</CardTitle>
-                <CardDescription>
-                  Data from the organization.
-                </CardDescription>
+                <CardDescription>Data from the organization.</CardDescription>
               </div>
             </CardHeader>
             <CardContent>
-            {/*parte de identifier*/}
-                <p className="mb-2">Identifier</p>
+              {/*parte de identifier*/}
+              <p className="mb-2">Identifier</p>
               <Table className="mb-5">
                 <TableHeader>
                   <TableRow>
@@ -279,7 +292,7 @@ export function Dashboard({ id }: { id: string }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                {identifierFields.map((field, index) => (
+                  {identifierFields.map((field, index) => (
                     <TableRow key={field.id}>
                       <TableCell>
                         <div className="font-medium">{field.use}</div>
@@ -296,7 +309,7 @@ export function Dashboard({ id }: { id: string }) {
               </Table>
 
               {/*parte de contact telecom*/}
-                <p className="mb-2">Contact Information Telecom</p>
+              <p className="mb-2">Contact Information Telecom</p>
               <Table className="mb-5">
                 <TableHeader>
                   <TableRow>
@@ -306,16 +319,28 @@ export function Dashboard({ id }: { id: string }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                {contactFields.map((field, index) => (
+                  {contactFields.map((field, index) => (
                     <TableRow key={field.id}>
                       <TableCell>
-                        <div className="font-medium">{field.telecom && field.telecom[0] && field.telecom[0].use}</div>
+                        <div className="font-medium">
+                          {field.telecom &&
+                            field.telecom[0] &&
+                            field.telecom[0].use}
+                        </div>
                       </TableCell>
                       <TableCell>
-                        <div className="font-medium">{field.telecom && field.telecom[0] && field.telecom[0].system}</div>
+                        <div className="font-medium">
+                          {field.telecom &&
+                            field.telecom[0] &&
+                            field.telecom[0].system}
+                        </div>
                       </TableCell>
                       <TableCell>
-                        <div className="font-medium">{field.telecom && field.telecom[0] && field.telecom[0].value}</div>
+                        <div className="font-medium">
+                          {field.telecom &&
+                            field.telecom[0] &&
+                            field.telecom[0].value}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -334,7 +359,7 @@ export function Dashboard({ id }: { id: string }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                {contactFields.map((field, index) => (
+                  {contactFields.map((field, index) => (
                     <TableRow key={field.id}>
                       <TableCell>
                         <div className="font-medium">{field.name?.use}</div>
@@ -368,7 +393,7 @@ export function Dashboard({ id }: { id: string }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                {contactFields.map((field, index) => (
+                  {contactFields.map((field, index) => (
                     <TableRow key={field.id}>
                       <TableCell>
                         <div className="font-medium">{field.address?.use}</div>
@@ -380,10 +405,14 @@ export function Dashboard({ id }: { id: string }) {
                         <div className="font-medium">{field.address?.city}</div>
                       </TableCell>
                       <TableCell>
-                        <div className="font-medium">{field.address?.country}</div>
+                        <div className="font-medium">
+                          {field.address?.country}
+                        </div>
                       </TableCell>
                       <TableCell>
-                        <div className="font-medium">{field.address?.postalCode}</div>
+                        <div className="font-medium">
+                          {field.address?.postalCode}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -393,35 +422,44 @@ export function Dashboard({ id }: { id: string }) {
           </Card>
           <Card x-chunk="dashboard-01-chunk-5">
             <CardHeader>
-                <CardTitle>Patients</CardTitle>
+              <CardTitle>Patients</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-8">
-                {entryData.map((patient) => (
-                <div key={patient.resource?.id} className="flex items-center gap-4">
-                    <Avatar className="hidden h-9 w-9 sm:flex">
+              {entryData.map((patient) => (
+                <div
+                  key={patient.resource?.id}
+                  className="flex items-center gap-4"
+                >
+                  <Avatar className="hidden h-9 w-9 sm:flex">
                     {/* Puedes modificar esto según cómo obtengas la imagen del paciente */}
                     <AvatarImage src="/avatars/05.png" alt="Avatar" />
                     <AvatarFallback>SD</AvatarFallback>
-                    </Avatar>
-                    <div className="grid gap-1">
+                  </Avatar>
+                  <div className="grid gap-1">
                     <p className="text-sm font-medium leading-none">
-                        {/* Puedes ajustar esto según cómo obtengas el nombre del paciente */}
-                        {`${patient.resource?.name?.[0]?.given?.join(" ") || ""} ${patient.resource?.name?.[0]?.family || ""}`}
+                      {/* Puedes ajustar esto según cómo obtengas el nombre del paciente */}
+                      {`${
+                        patient.resource?.name?.[0]?.given?.join(" ") || ""
+                      } ${patient.resource?.name?.[0]?.family || ""}`}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                        {/* Puedes ajustar esto según cómo obtengas el correo electrónico del paciente */}
-                        {patient.resource?.telecom?.find((contact) => contact.system === "email")?.value || ""}
+                      {/* Puedes ajustar esto según cómo obtengas el correo electrónico del paciente */}
+                      {patient.resource?.telecom?.find(
+                        (contact) => contact.system === "email"
+                      )?.value || ""}
                     </p>
-                    </div>
-                    <div className="ml-auto font-medium">{/* Puedes poner el importe aquí */}</div>
+                  </div>
+                  <div className="ml-auto font-medium">
+                    {/* Puedes poner el importe aquí */}
+                  </div>
                 </div>
-                ))}
+              ))}
             </CardContent>
-            </Card>
+          </Card>
         </div>
       </main>
     </div>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

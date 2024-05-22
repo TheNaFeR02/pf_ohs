@@ -6,15 +6,20 @@ import { FhirError } from "@/errors/FhirError";
 interface getBundleProps {
   resourceType: string;
   id: string;
+  access_token: string | undefined;
 }
 
 export async function getpatientsbyorg({
   resourceType,
-  id
+  id,
+  access_token,
 }: getBundleProps): Promise<Bundle> {
   try {
     const res = await fetch(parseURL(`/${resourceType}?organization=${id}`), {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
     });
     const data: Bundle = await res.json();
     console.log(data);

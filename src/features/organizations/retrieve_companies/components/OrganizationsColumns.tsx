@@ -67,7 +67,7 @@ const OrganizationsColumns = (
       return (
         <Link
           className="text-blue-600 hover:underline"
-          href={`/organizations/get/${row.original.resource?.id}`}
+          href={`/organizations/${row.original.resource?.id}`}
         >
           {row.original.resource?.id}
         </Link>
@@ -136,7 +136,7 @@ const OrganizationsColumns = (
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <Link href={`/organizations/get/${row.original.resource?.id}`}>
+            <Link href={`/organizations/${row.original.resource?.id}`}>
               <DropdownMenuItem>See preview</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
