@@ -10,7 +10,7 @@ export default function QuestionnaireResponseLayout({children}: {children: React
                 </h3>
             </div>
 
-            <div className="rounded-2xl border shadow-default bg-white mt-4">
+            <div className="rounded-2xl border shadow-default mt-4">
                 <div className="flex pr-2 pl-5 pt-5">
                     {children}
                 </div>

@@ -1,3 +1,4 @@
+'use client'
 import { FhirError } from "@/errors/FhirError";
 import QuestionnaireResponseForm from "@/features/questionnaires/components/QuestionnaireResponseForm";
 import { getResource } from "@/server/getResource";

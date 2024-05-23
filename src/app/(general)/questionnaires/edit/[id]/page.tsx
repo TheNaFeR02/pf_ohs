@@ -1,3 +1,4 @@
+"use client";
 import QuestionnaireForm from "@/features/questionnaire_creator/components/QuestionnaireForm";
 import { questionnaireSchema } from "@/types/Questionnaire";
 import { getResource } from "@/server/getResource";
