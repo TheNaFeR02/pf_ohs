@@ -21,11 +21,13 @@ interface DataTableViewOptionsProps<TData> {
     href: string;
     label: string;
   };
+  handleExportData?: () => void;
 }
 
 export function DataTableOptions<TData>({
   table,
   addButton,
+  handleExportData,
 }: DataTableViewOptionsProps<TData>) {
   return (
     <div className="ml-auto flex items-center gap-2">
@@ -63,7 +65,7 @@ export function DataTableOptions<TData>({
             })}
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button size="sm" variant="outline" className="h-8 gap-1">
+      <Button size="sm" variant="outline" className="h-8 gap-1" onClick={handleExportData}>
         <File className="h-3.5 w-3.5" />
         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
           Export

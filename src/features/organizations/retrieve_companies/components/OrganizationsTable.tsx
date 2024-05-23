@@ -5,8 +5,17 @@ import OrganizationsColumns from "@/features/organizations/retrieve_companies/co
 import { BundleEntry } from "@/types/Bundle";
 import { Organization } from "@/types/Organization";
 import { DataTable } from "@/components/DataTable/DataTable";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 function OrganizationsTable() {
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/api/auth/signin?callbackUrl=/client");
+    },
+  });
+
   const [entryData, setEntryData] = useState<BundleEntry<Organization>[]>([]);
 
   const tableHeader = {
@@ -32,14 +41,17 @@ function OrganizationsTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getResourceBundle({ resourceType: "Organization" });
+        const res = await getResourceBundle({
+          resourceType: "Organization",
+          access_token: session?.user?.access_token,
+        });
         setEntryData(res.entry || []);
       } catch (error) {
         console.error("Error fetching organizations:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [session?.user?.access_token]);
 
   return (
     <DataTable

@@ -10,8 +10,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { useToast } from "../ui/use-toast";
 import { BundleEntry } from "@/types/Bundle";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 interface RowDeleteAlertProps {
   id: string;
@@ -19,7 +20,11 @@ interface RowDeleteAlertProps {
   data: BundleEntry<any>[];
   setData: (data: BundleEntry<any>[]) => void;
   tableTitle: string;
-  deleteFunction: (props: { resourceType: string, id: string }) => Promise<any>;
+  deleteFunction: (props: {
+    resourceType: string;
+    id: string;
+    access_token: string | undefined;
+  }) => Promise<any>;
 }
 
 function RowDeleteAlertDialog({
@@ -30,8 +35,14 @@ function RowDeleteAlertDialog({
   tableTitle,
   deleteFunction,
 }: RowDeleteAlertProps) {
-  const { toast } = useToast();
 
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/api/auth/signin?callbackUrl=/client");
+    },
+  });
+  
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -52,20 +63,10 @@ function RowDeleteAlertDialog({
           <AlertDialogAction
             onClick={async () => {
               try {
-                await deleteFunction({ resourceType, id });
+                await deleteFunction({ resourceType, id , access_token: session?.user?.access_token });
                 setData(data.filter((entry) => entry.resource.id !== id));
-                toast({
-                  title: `${tableTitle} ${id} deleted`,
-                  description: `The ${tableTitle.toLowerCase()} has been deleted`,
-                  variant: "destructive",
-                });
               } catch (error) {
                 console.error(error);
-                toast({
-                  title: "Error",
-                  description: `Failed to delete ${tableTitle.toLowerCase()} ${id}`,
-                  variant: "destructive",
-                });
               }
             }}
           >

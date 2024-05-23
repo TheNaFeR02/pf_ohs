@@ -7,8 +7,16 @@ import { DataTable } from "@/components/DataTable/DataTable";
 import Concept from "@/types/Concept";
 import { statusObj } from "@/constants/statusCodeDisplay";
 import { getResourceBundle } from "@/server/getResourceBundle";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 function QuestionnairesTable() {
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/api/auth/signin?callbackUrl=/client");
+    },
+  });
   const [entryData, setEntryData] = useState<BundleEntry<Questionnaire>[]>([]);
 
   const tableHeader = {
@@ -44,14 +52,17 @@ function QuestionnairesTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getResourceBundle({ resourceType: "Questionnaire" });
+        const res = await getResourceBundle({
+          resourceType: "Questionnaire",
+          access_token: session?.user?.access_token,
+        });
         setEntryData(res.entry || []);
       } catch (error) {
         console.error("Error fetching questionnaires:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [session?.user?.access_token]);
 
   return (
     <DataTable

@@ -17,12 +17,23 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { createResource } from "@/server/createResource";
+import { redirect, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
 interface QuestionnaireFormProps {
   data?: Questionnaire;
   id?: string;
 }
 
 const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/api/auth/signin?callbackUrl=/client");
+    },
+  });
+  const router = useRouter();
+
   const form = useForm<Questionnaire>({
     resolver: zodResolver(questionnaireSchema),
     defaultValues: data
@@ -37,17 +48,23 @@ const QuestionnaireForm = ({ data, id }: QuestionnaireFormProps) => {
 
   async function onSubmit(questionnaire: Questionnaire) {
     try {
-      await form.handleSubmit(async (data) => {
-        if (data && id) {
-          await updateResource({
-            id: id,
-            data: questionnaire,
-            schema: questionnaireSchema,
-          });
-        } else {
-          await createResource({data:questionnaire, schema:questionnaireSchema});
-        }
-      })();
+      // await form.handleSubmit(async (data) => {
+      if (data && id) {
+        await updateResource({
+          id: id,
+          data: questionnaire,
+          schema: questionnaireSchema,
+          access_token: session?.user?.access_token,
+        });
+      } else {
+        await createResource({
+          data: questionnaire,
+          schema: questionnaireSchema,
+          access_token: session?.user?.access_token,
+        });
+      }
+      router.push("/questionnaires");
+      // })();
     } catch (error) {
       console.error("Error submitting form:", error);
     }

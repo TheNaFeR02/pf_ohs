@@ -1,5 +1,5 @@
 import bundleType from "@/data/bundleType.json";
-import Concept from "../types/Concept";
+import Concept from "@/types/Concept";
 
 // Process bundleType and create the necessary arrays in a single loop
 const bundleTypeObj: Concept[] = [];

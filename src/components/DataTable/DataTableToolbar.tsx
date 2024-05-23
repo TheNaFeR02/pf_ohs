@@ -18,12 +18,14 @@ interface DataTableToolbarProps<TData> {
     href: string;
     label: string;
   };
+  handleExportData?: () => void;
 }
 
 export function DataTableToolbar<TData>({
   table,
   filters,
   addButton,
+  handleExportData,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -60,7 +62,7 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <DataTableOptions table={table} addButton={addButton} />
+      <DataTableOptions table={table} addButton={addButton} handleExportData={handleExportData} />
     </div>
   );
 }

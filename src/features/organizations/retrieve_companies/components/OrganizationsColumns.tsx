@@ -136,7 +136,7 @@ const OrganizationsColumns = (
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <Link href={`/organizatios/${row.original.resource?.id}`}>
+            <Link href={`/organizations/${row.original.resource?.id}`}>
               <DropdownMenuItem>See preview</DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />

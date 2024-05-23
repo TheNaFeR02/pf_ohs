@@ -4,8 +4,7 @@ const nextConfig = {
         remotePatterns: [
             {
                 hostname: 'randomuser.me'
-                
-            }
+            },
         ]
     },
 };
