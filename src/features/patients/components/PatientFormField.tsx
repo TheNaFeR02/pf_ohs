@@ -520,7 +520,7 @@ export default function PatientForm() {
                       {entryData.map((item, index) => (
                         <SelectItem
                           key={index}
-                          value={`Organization/${item.resource?.id}` ?? ""}
+                          value={`Organization/${item.resource?.id}`}
                           onChange={() =>
                             setValue(
                               "managingOrganization.display",
