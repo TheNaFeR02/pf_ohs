@@ -53,12 +53,12 @@ export const options: NextAuthOptions = {
       return session;
     },
 
-    async redirect({ url, baseUrl }) {
-      console.log("redirect", url, baseUrl)
+    // async redirect({ url, baseUrl }) {
+    //   console.log("redirect ->", url, baseUrl)
 
 
-      return baseUrl;
-    }
+    //   return url;
+    // }
   },
 
   pages: {

@@ -11,11 +11,11 @@ export default withAuth(
         // Store current request url in a custom header, which you can read later
 
 
-        if(request.nextauth.token?.role === "patient" && !request.nextUrl.pathname.endsWith("patients")){
-            return NextResponse.rewrite(
-                        new URL("/error", request.url)
-            )
-        }
+        // if(request.nextauth.token?.role === "patient" && !request.nextUrl.pathname.endsWith("patients")){
+        //     return NextResponse.rewrite(
+        //                 new URL("/error", request.url)
+        //     )
+        // }
 
         // if (request.nextUrl.pathname.startsWith("/")
         //     && !request.nextauth.token?.accessAPIToken) {
@@ -56,7 +56,7 @@ export default withAuth(
 // Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
     // matcher: ["/profile", "/mails/:path*", "/client"], Protects specific pages. 
-    matcher: ["/((?!signup|password-reset|account-confirm-email|confirm-email|error).*)"], // Protects all the pages.
+    matcher: ["/((?!signup|password-reset|account-confirm-email|confirm-email|error|signin).*)"], // Protects all the pages.
 
     // matcher: ["/"],
 }

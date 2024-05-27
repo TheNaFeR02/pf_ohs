@@ -50,7 +50,7 @@ export default function Signin() {
               Login
             </Button>
             <Button variant="outline" className="w-full"
-             onClick={() => signIn("google", { callbackUrl: "https://sturdy-barnacle-4r9v6rxjw9x2q969-3000.app.github.dev" })}
+             onClick={() => signIn("google", { callbackUrl: "https://effective-giggle-4r9v6rxjqw9f77w4-3000.app.github.dev" })}
              >
               Login with Google
             </Button>

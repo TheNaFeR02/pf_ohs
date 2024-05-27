@@ -1,22 +1,22 @@
-'use client'
 import { FhirError } from "@/errors/FhirError";
 import QuestionnaireResponseForm from "@/features/questionnaires/components/QuestionnaireResponseForm";
 import { getResource } from "@/server/getResource";
 import { questionnaireSchema } from "@/types/Questionnaire";
-import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { getServerSession } from 'next-auth/next'
+import { options } from "@/app/api/auth/[...nextauth]/options";
 
 export default async function QuestionnairesIdPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const { data: session } = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect("/api/auth/signin?callbackUrl=/client");
-    },
-  });
+  const session = await getServerSession(options)
+
+  if (!session) {
+    redirect('/api/auth/signin?callbackUrl=/server')
+  }
+
   try {
     const questionnaire = await getResource({
       id: params.id,

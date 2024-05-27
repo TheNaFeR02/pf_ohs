@@ -14,6 +14,9 @@ export async function getResourceBundle({
   resourceType,
   access_token,
 }: getBundleProps): Promise<Bundle> {
+  console.log(parseURL(
+    `${resourceType}`
+  ),)
   try {
     const res = await fetch(
       parseURL(
