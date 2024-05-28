@@ -79,8 +79,10 @@ export default function PatientForm() {
   const capture = useCallback(() => {
     setCaptureEnable(false);
     const imageSrc = webcamRef.current?.getScreenshot();
+    const imageData = imageSrc?.split(",")[1];
     if (imageSrc) {
       setUrl(imageSrc);
+      setValue("photo.0.data", imageData);
     }
   }, [webcamRef]);
 
@@ -521,7 +523,7 @@ export default function PatientForm() {
                         <SelectItem
                           key={index}
                           value={`Organization/${item.resource?.id}`}
-                          onChange={() =>
+                          onClick={() =>
                             setValue(
                               "managingOrganization.display",
                               item.resource?.name
