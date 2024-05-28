@@ -79,15 +79,15 @@ export function DataTable<TData, TValue>({
     columns,
     state: {
       sorting,
-      // columnVisibility,
+      columnVisibility,
       rowSelection,
       columnFilters,
     },
-    initialState: {
-      columnVisibility: {
-        ID: false,
-      },
-    },
+    // initialState: {
+    //   columnVisibility: {
+    //     ID: false,
+    //   },
+    // },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,

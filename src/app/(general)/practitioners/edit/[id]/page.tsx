@@ -19,21 +19,25 @@ export default function PractitionersIdPage({
       },
     });
     const [practitioner, setPractitioner] = useState<Practitioner | null>(null);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<Error>();
   
     useEffect(() => {
-      getResource({
-        id: params.id,
-        resourceType: "Practitioner",
-        schema: practitionerSchema,
-        access_token: session?.user?.access_token,
-      })
-      .then((data) => {
-        setPractitioner(data);
-      })
-      .catch((error) => {
-        setError(error);
-      });
+      try {
+        getResource({
+          id: params.id,
+          resourceType: "Practitioner",
+          schema: practitionerSchema,
+          access_token: session?.user?.access_token,
+        })
+        .then((data) => {
+          setPractitioner(data);
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    } catch (error) {
+        setError(error as Error);
+    }
     }, [params.id, session]);
   
     if (error) {
