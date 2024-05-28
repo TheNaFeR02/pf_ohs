@@ -308,7 +308,7 @@ export default function PractitionerFormField() {
                   Active
                 </FormLabel>
                 <FormDescription>
-                  Whether this practitioner's record is in active use.
+                  Whether this practitioners record is in active use.
                 </FormDescription>
               </div>
             </FormItem>

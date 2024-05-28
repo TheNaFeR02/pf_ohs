@@ -84,7 +84,7 @@ export default function PatientForm() {
       setUrl(imageSrc);
       setValue("photo.0.data", imageData);
     }
-  }, [webcamRef]);
+  }, [webcamRef, setValue]);
 
   useEffect(() => {
     const fetchData = async () => {
