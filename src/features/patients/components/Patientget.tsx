@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import { Activity, Menu, Package2, Users } from "lucide-react";
 

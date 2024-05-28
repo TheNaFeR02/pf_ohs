@@ -104,26 +104,25 @@ const PatientForm = ({ data, id }: PatientFormProps) => {
   });
 
   async function onSubmit(patient: Patient) {
-    console.log("Patient", patient);
-    // try {
-    //   if (data && id) {
-    //     await updateResource({
-    //       id: id,
-    //       data: patient,
-    //       schema: patientSchema,
-    //       access_token: session?.user?.access_token,
-    //     });
-    //   } else {
-    //     await createResource({
-    //       data: patient,
-    //       schema: patientSchema,
-    //       access_token: session?.user?.access_token,
-    //     });
-    //   }
-    //   router.push("/patients");
-    // } catch (error) {
-    //   console.error("Error submitting form:", error);
-    // }
+    try {
+      if (data && id) {
+        await updateResource({
+          id: id,
+          data: patient,
+          schema: patientSchema,
+          access_token: session?.user?.access_token,
+        });
+      } else {
+        await createResource({
+          data: patient,
+          schema: patientSchema,
+          access_token: session?.user?.access_token,
+        });
+      }
+      router.push("/patients");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   }
 
   return (
