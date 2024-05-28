@@ -108,6 +108,8 @@ const PatientForm = ({ data, id }: PatientFormProps) => {
   });
 
   async function onSubmit(patient: Patient) {
+    console.log(patient)
+    
     try {
       if (data && id) {
         await updateResource({

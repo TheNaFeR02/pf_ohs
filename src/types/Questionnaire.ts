@@ -103,14 +103,14 @@ export const questionnaireItemSchema: z.ZodType<QuestionnaireItem> =
   });
 
 const baseQuestionnaireSchema = z.object({
-  resourceType: z.literal("Questionnaire"),
+  resourceType: z.literal("Questionnaire").optional(),
   url: urlSchema.optional(),
   identifier: z.array(identifierSchema).optional(),
   version: stringSchema.optional(),
   name: stringSchema.optional(),
   title: stringSchema.optional(),
   derivedFrom: z.array(canonicalSchema).optional(),
-  status: z.enum(statusCode),
+  status: z.enum(statusCode).optional(),
   experimental: booleanSchema.optional(),
   subjectType: z.array(z.enum(subjectTypesCode)).optional(),
   date: dateTimeSchema.optional(),

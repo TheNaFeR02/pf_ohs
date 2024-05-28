@@ -31,7 +31,7 @@ export async function getResource<T extends Resource>({
 
     const data = await res.json();
 
-    console
+    // console
 
     // Validar datos con Zod
     const validationResult = schema.safeParse(data);
