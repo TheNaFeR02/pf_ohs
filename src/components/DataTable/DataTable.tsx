@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const handleExportData = () => {
-    exportDataToCsv({ data: data, resourceType: tableHeader.title});
+    exportDataToCsv({ data: data, resourceType: tableHeader.title });
   };
 
   const table = useReactTable({
@@ -83,6 +83,11 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
+    // initialState: {
+    //   columnVisibility: {
+    //     ID: false,
+    //   },
+    // },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,

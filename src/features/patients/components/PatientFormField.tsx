@@ -79,10 +79,12 @@ export default function PatientForm() {
   const capture = useCallback(() => {
     setCaptureEnable(false);
     const imageSrc = webcamRef.current?.getScreenshot();
+    const imageData = imageSrc?.split(",")[1];
     if (imageSrc) {
       setUrl(imageSrc);
+      setValue("photo.0.data", imageData);
     }
-  }, [webcamRef]);
+  }, [webcamRef, setValue]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -520,8 +522,8 @@ export default function PatientForm() {
                       {entryData.map((item, index) => (
                         <SelectItem
                           key={index}
-                          value={`Organization/${item.resource?.id}` ?? ""}
-                          onChange={() =>
+                          value={`Organization/${item.resource?.id}`}
+                          onClick={() =>
                             setValue(
                               "managingOrganization.display",
                               item.resource?.name
