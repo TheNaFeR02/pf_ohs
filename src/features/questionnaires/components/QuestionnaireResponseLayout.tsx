@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 
 export default function QuestionnaireResponseLayout({children}: {children: ReactElement }): ReactElement {
     return (
-        <div className="w-1/2 mx-auto">
+        <div className="w-full lg:w-1/2 mx-auto">
 
             <div className="border-b border-stroke px-6.5">
                 <h3 className="font-medium">
