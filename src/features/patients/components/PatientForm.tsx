@@ -37,7 +37,7 @@ const PatientForm = ({ data, id }: PatientFormProps) => {
       redirect("/api/auth/signin?callbackUrl=/client");
     },
   });
-  
+
   const router = useRouter();
 
   const form = useForm<Patient>({
@@ -45,71 +45,71 @@ const PatientForm = ({ data, id }: PatientFormProps) => {
     defaultValues: data
       ? data
       : {
-          resourceType: "Patient",
-          active: true,
-          name: [{ family: "Garcia", given: ["Fernando", "Acuña"] }],
-          telecom: [
-            {
-              system: "phone",
-              value: "3114002600",
+        resourceType: "Patient",
+        active: true,
+        name: [{ family: "Garcia", given: ["Fernando", "Acuña"] }],
+        telecom: [
+          {
+            system: "phone",
+            value: "3114002600",
+          },
+          {
+            system: "email",
+            value: "acunafer.02@gmail.com",
+          },
+        ],
+        gender: "male",
+        // Only date without time
+        birthDate: new Date().toISOString().split("T")[0],
+        address: [
+          {
+            text: "Calle 64 # 45 - 23",
+            city: "Barranquilla",
+            district: "Atlántico",
+            country: "Colombia",
+          },
+        ],
+        photo: [
+          {
+            contentType: "image/png",
+            data: defaultPhoto,
+          },
+        ],
+        contact: [
+          {
+            name: {
+              family: "Barbosa",
+              given: ["Dayanna"],
             },
-            {
-              system: "email",
-              value: "acunafer.02@gmail.com",
-            },
-          ],
-          gender: "male",
-          // Only date without time
-          birthDate: new Date().toISOString().split("T")[0],
-          address: [
-            {
-              text: "Calle 64 # 45 - 23",
+            telecom: [
+              {
+                system: "phone",
+                value: "3004595355",
+              },
+              {
+                system: "email",
+                value: "dayannamin0903@gmail.com",
+              },
+            ],
+            address: {
+              text: "Calle 50 # 27 -48",
               city: "Barranquilla",
               district: "Atlántico",
-              country: "Colombia",
+              country: "170",
             },
-          ],
-          photo: [
-            {
-              contentType: "image/png",
-              data: defaultPhoto,
-            },
-          ],
-          contact: [
-            {
-              name: {
-                family: "Barbosa",
-                given: ["Dayanna"],
-              },
-              telecom: [
-                {
-                  system: "phone",
-                  value: "3004595355",
-                },
-                {
-                  system: "email",
-                  value: "dayannamin0903@gmail.com",
-                },
-              ],
-              address: {
-                text: "Calle 50 # 27 -48",
-                city: "Barranquilla",
-                district: "Atlántico",
-                country: "170",
-              },
-              gender: "female",
-            },
-          ], //use field array
-          // managingOrganization: {
-          //   reference: "/Organization/55",
-          //   display: "Medicina Laboral de la Costa IPS S.A.S.",
-          // },
-        },
+            gender: "female",
+          },
+        ], //use field array
+        // managingOrganization: {
+        //   reference: "/Organization/55",
+        //   display: "Medicina Laboral de la Costa IPS S.A.S.",
+        // },
+      },
   });
 
   async function onSubmit(patient: Patient) {
     console.log(patient)
-    
+
     try {
       if (data && id) {
         await updateResource({
@@ -134,25 +134,27 @@ const PatientForm = ({ data, id }: PatientFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card>
-          <CardHeader>
-            <CardTitle>Create patient</CardTitle>
-            <CardDescription>
-              Use the form below to create a new patient
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <PatientFormField />
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Link href="/patients">
-              <Button variant="outline" type="button">
-                Cancel
-              </Button>
-            </Link>
-            <Button type="submit">Submit</Button>
-          </CardFooter>
-        </Card>
+        <div className="flex justify-center">
+          <Card>
+            <CardHeader>
+              <CardTitle>Create patient</CardTitle>
+              <CardDescription>
+                Use the form below to create a new patient
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PatientFormField />
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Link href="/patients">
+                <Button variant="outline" type="button">
+                  Cancel
+                </Button>
+              </Link>
+              <Button type="submit">Submit</Button>
+            </CardFooter>
+          </Card>
+        </div>
       </form>
     </Form>
   );

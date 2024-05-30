@@ -32,7 +32,7 @@ import {
 import QuestionnaireResponseLayout from "@/features/questionnaires/components/QuestionnaireResponseLayout";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { BooleanField, ChoiceField, DecimalField, IntegerField, StringField, TextField } from "./QuestionnaireField";
+import { BooleanField, ChoiceField, DateField, DecimalField, IntegerField, StringField, TextField } from "./QuestionnaireField";
 
 type QuestionnaireResponseFormProps = {
   questionnaire: Questionnaire;
@@ -80,6 +80,8 @@ const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({
                   return <DecimalField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
                 case "text":
                   return <TextField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
+                case "date":
+                  return <DateField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
                 case "group":
                   return (
                     <fieldset className="border border-solid border-opacity-60 rounded-lg p-3 mb-5 w-full">

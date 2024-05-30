@@ -23,7 +23,15 @@ import { ReactElement } from "react";
 import { Control } from "react-hook-form";
 import { QuestionnaireResponse } from "@/types/QuestionnaireResponse";
 import { QuestionnaireItem } from "@/types/Questionnaire";
-
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 
 // StringField Component
 type StringFieldProps = {
@@ -242,6 +250,76 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ index, control, pref
           <FormLabel>{itemObj.text}</FormLabel>
           <FormDescription>{itemObj.text}</FormDescription>
         </div>
+      </FormItem>
+    )}
+  />
+);
+
+
+type DateFieldProps = {
+  index: number;
+  control: Control<QuestionnaireResponse>;
+  prefix: string;
+  itemObj: QuestionnaireItem;
+};
+
+export const DateField: React.FC<DateFieldProps> = ({ index, control, prefix, itemObj }) => (
+  <FormField
+    control={control}
+    name={`${prefix}item.${index}.answer.0.valueDate` as `item.${number}.answer.0.valueDate`}
+    render={({ field }) => (
+      <FormItem className="flex flex-col w-100 py-3 px-5 font-medium">
+        <FormLabel>{itemObj.text}</FormLabel>
+        <Popover>
+          <PopoverTrigger asChild>
+            <FormControl>
+              <Button
+                suppressHydrationWarning // To supress warning about Date mismatch
+                variant={"outline"}
+                className={cn(
+                  "pl-3 text-left font-normal w-full", // w-full just to match the entire width.
+                  !field.value && "text-muted-foreground"
+                )}
+              >
+                {field.value ? (
+                  // format(field.value, "PPP")
+                  format(new Date(field.value.split('-').join(' ')), "PPP") // -> This seems to show the date correctly on the input button.
+                ) : (
+                  <span>Pick a date</span>
+                )}
+                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+              </Button>
+            </FormControl>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              defaultMonth={new Date()}
+              selected={
+                field.value
+                  ? new Date(field.value.split('-').join(' '))
+                  : undefined
+                // this seems to work but field.value is not a Date object, it's a string. Therefore 
+                // field.value ? new Date(new Date(field.value).toLocaleString('es-CO', {timeZone: 'America/Bogota', day: "2-digit"})): undefined
+
+                // this is a complete Workaround to avoid the warning about Date mismatch.
+                // new Date(field.value || '').toString() !== 'Invalid Date' ? new Date(field.value as string) : undefined
+              }
+              onSelect={
+                // (e) => field.onChange(e?.toISOString().split("T")[0])
+                (date) => date ? field.onChange(format(date, 'yyyy-MM-dd')) : field.onChange('')
+              }
+              disabled={(date: Date) =>
+                date > new Date() || date < new Date("1900-01-01")
+              }
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+        <FormDescription>
+          Fecha de nacimiento del paciente.
+        </FormDescription>
+        <FormMessage />
       </FormItem>
     )}
   />

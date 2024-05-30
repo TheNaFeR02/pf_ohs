@@ -29,6 +29,8 @@ export function generateDefaultQuestionnaireResponse(questionnaire: Questionnair
           defaultItem.answer = [{ valueBoolean: false }]
         case 'decimal':
           defaultItem.answer = [{ valueDecimal: 0.00 }]
+        case 'date':
+          defaultItem.answer = [{ valueDate: new Date().toISOString().split("T")[0] }]
       }
     }
 
