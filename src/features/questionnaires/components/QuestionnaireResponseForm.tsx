@@ -41,6 +41,7 @@ import {
 import { createResource } from "@/server/createResource";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import router from "next/router";
 
 type QuestionnaireResponseFormProps = {
   questionnaire: Questionnaire;
@@ -78,6 +79,7 @@ const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({
         schema: questionnaireResponseSchema,
         access_token: session?.user?.access_token,
       });
+      router.push("/encounters");
     } catch (error) {
       console.error("Error creating resource:", error);
     }

@@ -1,12 +1,10 @@
-
-import DinamicTabs from "@/features/medical_record/MedicalRecord";
-
-import React from 'react'
+"use client";
+import { useRouter } from "next/navigation";
 
 const page = () => {
-  return (
-    <DinamicTabs />
-  )
-}
+  const router = useRouter();
 
-export default page
+  router.push("/encounters");
+};
+
+export default page;

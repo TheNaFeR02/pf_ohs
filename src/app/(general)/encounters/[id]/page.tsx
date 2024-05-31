@@ -1,10 +1,10 @@
 import React from "react";
-import MedicalRecord from "@/features/medical_record/MedicalRecord";
+import QuestionnaireResponsesTable from "@/features/medical_record/QuestionnaireResponseTable";
 
 const Page = ({ params }: { params: { id: string } }) => {
   return (
     <div>
-      <MedicalRecord />
+      <QuestionnaireResponsesTable encounterID={params.id} />
     </div>
   );
 };

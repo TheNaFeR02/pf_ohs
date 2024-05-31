@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { BundleEntry } from "@/types/Bundle";
-import { Encounter } from "@/types/Encounter";
+import { QuestionnaireResponse } from "@/types/QuestionnaireResponse";
 import Link from "next/link";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,15 +25,15 @@ import {
 } from "@/components/ui/dialog";
 import Patientget from "@/features/patients/components/Patientget";
 
-interface EncountersColumnsProps {
-  data: BundleEntry<Encounter>[];
-  setData: (data: BundleEntry<Encounter>[]) => void;
+interface QuestionnaireResponsesColumnsProps {
+  data: BundleEntry<QuestionnaireResponse>[];
+  setData: (data: BundleEntry<QuestionnaireResponse>[]) => void;
   tableTitle: string;
 }
 
-const EncountersColumns = (
-  props: EncountersColumnsProps
-): ColumnDef<BundleEntry<Encounter>>[] => [
+const QuestionnaireResponsesColumns = (
+  props: QuestionnaireResponsesColumnsProps
+): ColumnDef<BundleEntry<QuestionnaireResponse>>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -82,37 +82,6 @@ const EncountersColumns = (
     },
   },
   {
-    accessorKey: "resource.subject.reference",
-    id: "Patient",
-    header: "Patient",
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-    cell: ({ row }) => {
-      return (
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="secondary">Patient Details</Button>
-          </DialogTrigger>
-          {/* <ScrollArea> */}
-          <DialogContent className="min-w-full">
-            <DialogHeader>
-              <DialogTitle>Patient Details</DialogTitle>
-            </DialogHeader>
-            <DialogDescription>
-              <Patientget
-                id={
-                  row.original.resource?.subject?.reference?.split("/")[1] ?? ""
-                }
-              />
-            </DialogDescription>
-          </DialogContent>
-          {/* </ScrollArea> */}
-        </Dialog>
-      );
-    },
-  },
-  {
     accessorKey: "resource.status",
     id: "status",
     header: "Status",
@@ -128,17 +97,6 @@ const EncountersColumns = (
       return new Date(
         row.original.resource?.meta?.lastUpdated ?? ""
       ).toLocaleDateString();
-    },
-  },
-  {
-    id: "Questionnaires",
-    header: "Questionnaires",
-    cell: ({ row }) => {
-      return (
-        <Link href={`/encounters/${row.original.resource?.id}`}>
-          <Button variant="secondary">Questionnaires</Button>
-        </Link>
-      );
     },
   },
   {
@@ -164,7 +122,7 @@ const EncountersColumns = (
             <DropdownMenuSeparator />
             <RowDeleteAlertDialog
               id={row.original.resource?.id ?? ""}
-              resourceType={"Encounter"}
+              resourceType={"QuestionnaireResponse"}
               data={props.data}
               setData={props.setData}
               tableTitle={props.tableTitle}
@@ -177,4 +135,4 @@ const EncountersColumns = (
   },
 ];
 
-export default EncountersColumns;
+export default QuestionnaireResponsesColumns;
