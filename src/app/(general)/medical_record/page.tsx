@@ -1,10 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
 
   router.push("/encounters");
 };
 
-export default page;
+export default Page;
