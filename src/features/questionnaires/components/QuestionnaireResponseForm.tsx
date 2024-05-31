@@ -48,7 +48,6 @@ type QuestionnaireResponseFormProps = {
     reference: string;
   };
   questionnaireResponse?: QuestionnaireResponse;
-
 };
 
 const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({
@@ -68,7 +67,7 @@ const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({
     defaultValues: generateDefaultQuestionnaireResponse(
       questionnaire,
       encounter,
-      questionnaireResponse,
+      questionnaireResponse
     ),
   });
 
@@ -184,6 +183,9 @@ const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <QuestionnaireResponseLayout>
           <div className="flex flex-col justify-center pt-4">
+            <div className="text-2xl font-bold text-center mb-5">
+              {questionnaire.title}
+            </div>
             <div className="grid sm:grid-cols-2 grid-cols-1">
               {questionnaire.item &&
                 renderQuestionnaireResponse(questionnaire.item, "")}

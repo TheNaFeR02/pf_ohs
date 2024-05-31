@@ -57,7 +57,7 @@ export const StringField: React.FC<StringFieldProps> = ({ index, control, prefix
             {...field}
           />
         </FormControl>
-        <FormDescription>{itemObj.text}</FormDescription>
+        {/* <FormDescription>{itemObj.text}</FormDescription> */}
         <FormMessage />
       </FormItem>
     )}
@@ -94,7 +94,7 @@ export const IntegerField: React.FC<IntegerFieldProps> = ({ index, control, pref
             }
           />
         </FormControl>
-        <FormDescription>{itemObj.text}</FormDescription>
+        {/* <FormDescription>{itemObj.text}</FormDescription> */}
         <FormMessage />
       </FormItem>
     )}
@@ -144,9 +144,9 @@ export const ChoiceField: React.FC<ChoiceFieldProps> = ({ index, control, prefix
             )}
           </SelectContent>
         </Select>
-        <FormDescription>
+        {/* <FormDescription>
           You can manage identification types in your settings.
-        </FormDescription>
+        </FormDescription> */}
         <FormMessage />
       </FormItem>
     )}
@@ -182,9 +182,9 @@ export const DecimalField: React.FC<DecimalFieldProps> = ({ index, control, pref
             }
           />
         </FormControl>
-        <FormDescription>
+        {/* <FormDescription>
           {itemObj.text} Ej: <i>0,00</i>
-        </FormDescription>
+        </FormDescription> */}
         <FormMessage />
       </FormItem>
     )}
@@ -215,7 +215,7 @@ export const TextField: React.FC<TextFieldProps> = ({ index, control, prefix, it
             {...field}
           />
         </FormControl>
-        <FormDescription>{itemObj.text}</FormDescription>
+        {/* <FormDescription>{itemObj.text}</FormDescription> */}
         <FormMessage />
       </FormItem>
     )}
@@ -316,9 +316,9 @@ export const DateField: React.FC<DateFieldProps> = ({ index, control, prefix, it
             />
           </PopoverContent>
         </Popover>
-        <FormDescription>
+        {/* <FormDescription>
           Fecha de nacimiento del paciente.
-        </FormDescription>
+        </FormDescription> */}
         <FormMessage />
       </FormItem>
     )}
