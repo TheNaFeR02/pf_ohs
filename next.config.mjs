@@ -7,6 +7,9 @@ const nextConfig = {
             },
             {
                 hostname: 'pf-ohs.vercel.app',
+            },
+            {
+                hostname: 'images.pexels.com'
             }
         ]
     },

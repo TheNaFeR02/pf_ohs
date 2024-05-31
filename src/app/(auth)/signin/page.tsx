@@ -59,7 +59,7 @@ export default function Signin() {
       </div>
       <div className="hidden bg-muted lg:block">
         <Image
-          src="/portrait.png"
+          src="https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
           alt="Image"
           width="1920"
           height="1080"
