@@ -45,6 +45,9 @@ export async function createResource<T extends Resource>({
       description: `The ${data.resourceType?.toLowerCase()} has been created`,
       variant: "default",
     });
+
+    return response;
+
   } catch (error) {
     console.error(error);
     toast({

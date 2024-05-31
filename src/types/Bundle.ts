@@ -66,7 +66,7 @@ export const bundleEntrySchema = <T>(resourceSchema: z.ZodType<T>) =>
     response: bundleResponseSchema.optional(),
   });
 
-export const bundleSchema = z.object({
+const baseBundleSchema = z.object({
   resourceType: z.literal("Bundle"),
   identifier: z.array(identifierSchema).optional(),
   type: z.enum(bundleTypeCode), // R!  document | message | transaction | transaction-response | batch | batch-response | history | searchset | collection
@@ -76,5 +76,9 @@ export const bundleSchema = z.object({
   entry: z.array(bundleEntrySchema(z.any())).optional(),
   signature: signatureSchema.optional(),
 });
+
+export const bundleSchema = resourceSchema
+  .omit({ resourceType: true })
+  .merge(baseBundleSchema);
 
 export type Bundle = z.infer<typeof bundleSchema>;

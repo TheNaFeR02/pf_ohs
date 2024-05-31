@@ -12,6 +12,7 @@ import { domainResourceSchema } from "@/types/DomainResource";
 import { resourceSchema } from "@/types/Resource";
 
 const baseEncounterSchema = z.object({
+  resourceType: z.literal("Encounter"),
   identifier: z.array(identifierSchema).optional(),
   status: z.enum(encounterStatusCode), // R!
   statusHistory: z

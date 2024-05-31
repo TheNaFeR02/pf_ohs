@@ -36,12 +36,14 @@ export async function deleteResource({
     });
 
     // Validar datos con Zod
-    const validationResult = operationOutcomeSchema.safeParse(response);
-    if (!validationResult.success) {
-      console.error("Validation error:", validationResult.error.errors);
-      throw new Error("Validation error")
-    }
-    return validationResult.data;
+    // const validationResult = operationOutcomeSchema.safeParse(response);
+    // if (!validationResult.success) {
+    //   console.error("Validation error:", validationResult.error.errors);
+    //   throw new Error("Validation error")
+    // }
+    // return validationResult.data;
+
+    return response;
 
   } catch (error) {
     console.error(error);

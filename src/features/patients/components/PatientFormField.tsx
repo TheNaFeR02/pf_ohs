@@ -55,7 +55,7 @@ const videoConstraints = {
   facingMode: "user",
 };
 
-export default function PatientForm() {
+export default function PatientFormField() {
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
@@ -79,10 +79,12 @@ export default function PatientForm() {
   const capture = useCallback(() => {
     setCaptureEnable(false);
     const imageSrc = webcamRef.current?.getScreenshot();
+    const imageData = imageSrc?.split(",")[1];
     if (imageSrc) {
       setUrl(imageSrc);
+      setValue("photo.0.data", imageData);
     }
-  }, [webcamRef]);
+  }, [webcamRef, setValue]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -275,7 +277,7 @@ export default function PatientForm() {
                     selected={
                       field.value instanceof Date ? field.value : undefined
                     }
-                    onSelect={field.onChange}
+                    onSelect={(e) => field.onChange(e?.toISOString().split("T")[0])}
                     // onSelect={(date) => field.onChange(date as Matcher)}
                     disabled={(date: Date) =>
                       date > new Date() || date < new Date("1900-01-01")
@@ -520,8 +522,8 @@ export default function PatientForm() {
                       {entryData.map((item, index) => (
                         <SelectItem
                           key={index}
-                          value={`Organization/${item.resource?.id}` ?? ""}
-                          onChange={() =>
+                          value={`Organization/${item.resource?.id}`}
+                          onClick={() =>
                             setValue(
                               "managingOrganization.display",
                               item.resource?.name

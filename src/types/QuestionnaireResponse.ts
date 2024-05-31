@@ -64,6 +64,7 @@ export const baseQuestionnaireResponseSchema = z.object({
   questionnaire: canonicalSchema.optional(), // Canonical to the Questionnaire
   status: z.enum(questionnaireAnswersStatusCode),
   subject: referenceSchema.optional(), // Reference to any
+  encounter: referenceSchema.optional(), // Reference to Encounter
   authored: dateTimeSchema.optional(),
   author: referenceSchema.optional(), // Reference to Device|Practitioner|PractitionerRole|Patient|RelatedPerson|Organization
   source: referenceSchema.optional(), // Reference to Patient|Practitioner|PractitionerRole|RelatedPerson
