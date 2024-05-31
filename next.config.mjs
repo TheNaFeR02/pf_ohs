@@ -3,8 +3,11 @@ const nextConfig = {
     images: {
         remotePatterns: [
             {
-                hostname: 'randomuser.me'
+                hostname: 'randomuser.me',
             },
+            {
+                hostname: 'pf-ohs.vercel.app',
+            }
         ]
     },
 };
