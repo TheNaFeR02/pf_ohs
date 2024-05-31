@@ -55,7 +55,7 @@ const videoConstraints = {
   facingMode: "user",
 };
 
-export default function PatientForm() {
+export default function PatientFormField() {
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {

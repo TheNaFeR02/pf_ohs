@@ -1,9 +1,6 @@
 "use client";
 import React, { FC, ReactElement } from "react";
-import {
-  QuestionnaireItem,
-  Questionnaire,
-} from "../../../types/Questionnaire";
+import { QuestionnaireItem, Questionnaire } from "../../../types/Questionnaire";
 import {
   QuestionnaireResponse,
   questionnaireResponseSchema,
@@ -32,26 +29,59 @@ import {
 import QuestionnaireResponseLayout from "@/features/questionnaires/components/QuestionnaireResponseLayout";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { BooleanField, ChoiceField, DateField, DecimalField, IntegerField, StringField, TextField } from "./QuestionnaireField";
+import {
+  BooleanField,
+  ChoiceField,
+  DateField,
+  DecimalField,
+  IntegerField,
+  StringField,
+  TextField,
+} from "./QuestionnaireField";
+import { createResource } from "@/server/createResource";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 type QuestionnaireResponseFormProps = {
   questionnaire: Questionnaire;
+  encounter?: {
+    reference: string;
+  };
+  questionnaireResponse?: QuestionnaireResponse;
+
 };
 
 const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({
   questionnaire,
+  questionnaireResponse,
+  encounter,
 }): ReactElement => {
-  // console.log("response from q: ", generateDefaultQuestionnaireResponse(questionnaire))
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect("/api/auth/signin?callbackUrl=/client");
+    },
+  });
   const form = useForm<QuestionnaireResponse>({
     resolver: zodResolver(questionnaireResponseSchema),
     // defaultValues: initializeResponseWithQuestionnaireDefaults(questionnaire)
-    defaultValues: generateDefaultQuestionnaireResponse(questionnaire),
+    defaultValues: generateDefaultQuestionnaireResponse(
+      questionnaire,
+      encounter,
+      questionnaireResponse,
+    ),
   });
 
   function onSubmit(values: QuestionnaireResponse) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    try {
+      createResource({
+        data: values,
+        schema: questionnaireResponseSchema,
+        access_token: session?.user?.access_token,
+      });
+    } catch (error) {
+      console.error("Error creating resource:", error);
+    }
   }
 
   function renderQuestionnaireResponse<T extends QuestionnaireItem>(
@@ -65,34 +95,81 @@ const QuestionnaireResponseForm: FC<QuestionnaireResponseFormProps> = ({
             key={index}
             className={`${itemObj.type === "group" ? "col-span-full" : ""}`}
           >
-
             {(() => {
               switch (itemObj.type) {
                 case "string":
-                  return <StringField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
+                  return (
+                    <StringField
+                      index={index}
+                      control={form.control}
+                      prefix={prefix}
+                      itemObj={itemObj}
+                    />
+                  );
                 case "integer":
-                  return <IntegerField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
+                  return (
+                    <IntegerField
+                      index={index}
+                      control={form.control}
+                      prefix={prefix}
+                      itemObj={itemObj}
+                    />
+                  );
                 case "choice":
-                  return <ChoiceField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
+                  return (
+                    <ChoiceField
+                      index={index}
+                      control={form.control}
+                      prefix={prefix}
+                      itemObj={itemObj}
+                    />
+                  );
                 case "boolean":
-                  return <BooleanField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
+                  return (
+                    <BooleanField
+                      index={index}
+                      control={form.control}
+                      prefix={prefix}
+                      itemObj={itemObj}
+                    />
+                  );
                 case "decimal":
-                  return <DecimalField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
+                  return (
+                    <DecimalField
+                      index={index}
+                      control={form.control}
+                      prefix={prefix}
+                      itemObj={itemObj}
+                    />
+                  );
                 case "text":
-                  return <TextField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
-                case "date":
-                  return <DateField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
+                  return (
+                    <TextField
+                      index={index}
+                      control={form.control}
+                      prefix={prefix}
+                      itemObj={itemObj}
+                    />
+                  );
+                // case "date":
+                //   return <DateField index={index} control={form.control} prefix={prefix} itemObj={itemObj} />;
                 case "group":
                   return (
                     <fieldset className="border border-solid border-opacity-60 rounded-lg p-3 mb-5 w-full">
-                      <legend className="text-sm opacity-60">{itemObj.text}</legend>
+                      <legend className="text-sm opacity-60">
+                        {itemObj.text}
+                      </legend>
                       <div className="grid sm:grid-cols-2 grid-cols-1">
-                        {itemObj.item && renderQuestionnaireResponse(itemObj.item, `${prefix}item.${index}.`)}
+                        {itemObj.item &&
+                          renderQuestionnaireResponse(
+                            itemObj.item,
+                            `${prefix}item.${index}.`
+                          )}
                       </div>
                     </fieldset>
                   );
                 default:
-                  return <React.Fragment />
+                  return <React.Fragment />;
               }
             })()}
           </div>

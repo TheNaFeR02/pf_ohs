@@ -1,9 +1,19 @@
-import { QuestionnaireResponseItem, QuestionnaireResponse } from "../../../types/QuestionnaireResponse"
-import { Questionnaire, QuestionnaireItem } from "../../../types/Questionnaire"
+import {
+  QuestionnaireResponseItem,
+  QuestionnaireResponse,
+} from "../../../types/QuestionnaireResponse";
+import { Questionnaire, QuestionnaireItem } from "../../../types/Questionnaire";
 
-
-export function generateDefaultQuestionnaireResponse(questionnaire: Questionnaire): QuestionnaireResponse {
-  function generateDefaultItem(item: QuestionnaireItem): QuestionnaireResponseItem {
+export function generateDefaultQuestionnaireResponse(
+  questionnaire: Questionnaire,
+  encounter?: {
+    reference: string;
+  },
+  questionnaireResponse?: QuestionnaireResponse
+): QuestionnaireResponse {
+  function generateDefaultItem(
+    item: QuestionnaireItem
+  ): QuestionnaireResponseItem {
     const defaultItem: QuestionnaireResponseItem = {
       linkId: item.linkId,
     };
@@ -12,25 +22,38 @@ export function generateDefaultQuestionnaireResponse(questionnaire: Questionnair
       defaultItem.text = item.text;
     }
 
-    if (item.type === 'group' && item.item) {
-      defaultItem.item = item.item.map(subItem => generateDefaultItem(subItem));
+    if (item.type === "group" && item.item) {
+      defaultItem.item = item.item.map((subItem) =>
+        generateDefaultItem(subItem)
+      );
     } else {
+      const existingAnswer = questionnaireResponse?.item?.find(
+        (qrItem) => qrItem.linkId === item.linkId
+      )?.answer;
       switch (item.type) {
-        case 'string' || 'text':
-          defaultItem.answer = [{ valueString: '' }];
+        case "string":
+        case "text":
+          defaultItem.answer = existingAnswer ?? [{ valueString: "" }];
           break;
-        case 'integer':
-          defaultItem.answer = [{ valueInteger: 0 }];
+        case "integer":
+          defaultItem.answer = existingAnswer ?? [{ valueInteger: 0 }];
           break;
-        case 'choice':
-          defaultItem.answer = [{ valueCoding: { code: '', display: '' } }]
+        case "choice":
+          defaultItem.answer = existingAnswer ?? [
+            { valueCoding: { code: "", display: "" } },
+          ];
           break;
-        case 'boolean':
-          defaultItem.answer = [{ valueBoolean: false }]
-        case 'decimal':
-          defaultItem.answer = [{ valueDecimal: 0.00 }]
-        case 'date':
-          defaultItem.answer = [{ valueDate: new Date().toISOString().split("T")[0] }]
+        case "boolean":
+          defaultItem.answer = existingAnswer ?? [{ valueBoolean: false }];
+          break;
+        case "decimal":
+          defaultItem.answer = existingAnswer ?? [{ valueDecimal: 0.0 }];
+          break;
+        case "date":
+          defaultItem.answer = existingAnswer ?? [
+            { valueDate: new Date().toISOString().split("T")[0] },
+          ];
+          break;
       }
     }
 
@@ -38,15 +61,10 @@ export function generateDefaultQuestionnaireResponse(questionnaire: Questionnair
   }
 
   return {
-    // ...questionnaire, // The data from the questionnaire does not match exactly the data from the questionnaire response.
-    resourceType: "QuestionnaireResponse", // In questionnaire for example the resourceType is "Questionnaire".
-    questionnaire: 'http://hl7.org/fhir/Questionnaire/patient_information02',
-    status: 'completed',
-    authored: '2024-04-26T14:30:00Z',
-    author: {
-      reference: "Practitioner/355",
-      type: "Practitioner"
-    },
-    item: questionnaire.item?.map(item => generateDefaultItem(item)),
+    resourceType: "QuestionnaireResponse",
+    questionnaire: questionnaire.id,
+    encounter: encounter,
+    status: "completed",
+    item: questionnaire.item?.map((item) => generateDefaultItem(item)),
   };
 }

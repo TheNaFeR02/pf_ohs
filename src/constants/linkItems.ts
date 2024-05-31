@@ -18,4 +18,5 @@ export const items = [
   { name: "Organizations", icon: Building, href: "/organizations" },
   { name: "Appointments", icon: CalendarClock, href: "/appointments" },
   { name: "Practitioners", icon: UserX, href: "/practitioners" },
+  { name: "Encounters", icon: ClipboardPenLineIcon, href: "/encounters"}
 ];

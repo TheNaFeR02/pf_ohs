@@ -4,17 +4,17 @@ import { Resource } from "@/types/Resource";
 import { parseURL } from "@/utils/parseURL";
 import { ZodSchema } from "zod";
 
-export interface createResourceProps<T extends Resource> {
+export interface executeBundleProps<T extends Resource> {
   data: T;
   schema: ZodSchema<T>;
   access_token: string | undefined;
 }
 
-export async function createResource<T extends Resource>({
+export async function executeBundle<T extends Resource>({
   data,
   schema,
   access_token,
-}: createResourceProps<T>) {
+}: executeBundleProps<T>) {
   // Validar datos con Zod
   const validationResult = schema.safeParse(data);
   if (!validationResult.success) {
@@ -23,7 +23,7 @@ export async function createResource<T extends Resource>({
   }
 
   try {
-    const res = await fetch(parseURL(`${data.resourceType}`), {
+    const res = await fetch('https://healthcare.googleapis.com/v1/projects/pf-ohs/locations/northamerica-northeast1/datasets/pf-ohs-test/fhirStores/pf-ohs-datastore/fhir/', {
       method: "POST",
       headers: {
         "Content-Type": "application/fhir+json;charset=utf-8",

@@ -20,14 +20,12 @@ import { createResource } from "@/server/createResource";
 import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-
 interface PatientFormProps {
   data?: Patient;
   id?: string;
 }
 
 const PatientForm = ({ data, id }: PatientFormProps) => {
-
   const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
@@ -103,19 +101,19 @@ const PatientForm = ({ data, id }: PatientFormProps) => {
         },
   });
 
-  async function onSubmit(patient: Patient) {
-    console.log(patient)
-    
+  function onSubmit(patient: Patient) {
+    console.log(patient);
+
     try {
       if (data && id) {
-        await updateResource({
+        updateResource({
           id: id,
           data: patient,
           schema: patientSchema,
           access_token: session?.user?.access_token,
         });
       } else {
-        await createResource({
+        createResource({
           data: patient,
           schema: patientSchema,
           access_token: session?.user?.access_token,

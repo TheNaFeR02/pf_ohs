@@ -6,19 +6,25 @@ import { FhirError } from "@/errors/FhirError";
 interface getBundleProps {
   resourceType: string;
   access_token: string | undefined;
+  query?: string;
 }
 
-
+interface Response {
+  result: {}
+  status: string
+}
 
 export async function getResourceBundle({
   resourceType,
   access_token,
-}: getBundleProps): Promise<Bundle> {
+  query,
+}: getBundleProps): Promise<Bundle > {
   try {
+    console.log(parseURL(`${resourceType}`) + (query ? `?${query}` : ""));
     const res = await fetch(
       parseURL(
         `${resourceType}`
-      ),
+      ) + (query ? `?${query}` : ""),
       {
         method: "GET",
         headers: {
